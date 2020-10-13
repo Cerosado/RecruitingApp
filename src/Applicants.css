@@ -1,0 +1,81 @@
+.MainTitle {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 1.5rem !important;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.334;
+    letter-spacing: 0em;
+    color: black !important;
+}
+
+.Rank {
+    font-size: 5.875rem !important;
+    text-align: center;
+    color: orange;
+    margin-top: -12px !important;
+    grid-column-start: 7;
+}
+.RankTitle{
+    padding-left: 30%;
+    grid-column-start: 7;
+    grid-row-start: 2;
+}
+
+.name {
+    grid-row-start: 2;
+}
+
+.university {
+    grid-row-start: 2;
+    grid-column-start: 2;
+}
+
+.gpa {
+    grid-row-start: 2;
+    grid-column-start: 3;
+}
+
+.container {
+    display: inline-grid;
+    width: 100%;
+    grid-template-columns: 30% 30% 5% 4% 11% 8% 10%;
+    grid-template-rows: 10% 15% 15%;
+}
+
+.titleContainer {
+    display: inline-grid;
+    width: 84%;
+    grid-template-columns: 30% 30% 5% 6% 9% 8% 10%;
+    grid-template-rows: 10% 15% 15%;
+    height: 15px;
+    margin: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.MuiCard-root {
+    overflow: hidden;
+    margin: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.icon {
+    height: 150px;
+    width: 150px;
+}
+
+.Icon {
+    grid-column-start: 5;
+    grid-column-end: 7;
+    grid-row-start: 2;
+}
+
+
+.MuiCardContent-root:last-child {
+    height: 100px;
+}
