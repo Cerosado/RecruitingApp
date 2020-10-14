@@ -1,6 +1,5 @@
 
-#Databse configuration information
-
+#Database Access information
 pg_config = {
     'user' : 'gbxrvscvbgnrfj',
     'passwd' : 'b4b81ffde7b3f9148b3bdc017063c4c706bef179663a188dedae12f22aa5a13f',
