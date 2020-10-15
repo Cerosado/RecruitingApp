@@ -1,0 +1,38 @@
+{
+  "jobPostings":
+  [
+    {
+      "id": 1,
+      "position_name": "Jr Frontend Developer",
+      "location": "San Juan",
+      "description": "Code millions of lines",
+      "key_details": "React, Flask, Css",
+      "pay_type": "lorem ipsum",
+      "pay_amount": 50000,
+      "user_id": 1,
+      "deadline": "11/15/2020"
+    },
+    {
+      "id": 2,
+      "position_name": "Jr Software Tester",
+      "location": "Ponce",
+      "description": "Test millions of functions",
+      "key_details": "Selenium, Java, Webdriver",
+      "pay_type": "lorem ipsum",
+      "pay_amount": 40000,
+      "user_id": 1,
+      "deadline": "11/12/2020"
+    },
+    {
+      "id": 3,
+      "position_name": "Jr Backend Developer",
+      "location": "Mayaguez",
+      "description": "Code millions of dbs",
+      "key_details": "SQL, PostgreSQL, Microsoft SQL Server",
+      "pay_type": "lorem ipsum",
+      "pay_amount": 45000,
+      "user_id": 1,
+      "deadline": "11/20/2020"
+    }
+  ]
+}
