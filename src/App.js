@@ -1,26 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ApplicantsList from "./Applicants";
+import JobPostingsList from "./CompanyPostings";
+import PrimarySearchAppBar from "./NavBar";
+import {Container} from "@material-ui/core";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Holis <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+  render() {
+    return (
+        <Router>
+          <div>
+            <PrimarySearchAppBar/>
+            <Container maxWidth={"md"}>
+              <Switch>
+                <Route path="/JobPostings/:id">
+                  <ApplicantsList/>
+                </Route>
+                <Route path="/JobPostings">
+                  <JobPostingsList/>
+                </Route>
+                <Route path="/">
+                  <JobPostingsList/>
+                </Route>
+              </Switch>
+            </Container>
+          </div>
+        </Router>
+    );
+  }
 }
 
 export default App;
