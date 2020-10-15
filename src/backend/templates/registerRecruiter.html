@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	
+	<br>
+	<h1>Register</h1>
+	{% from "formhelper.html" import render_field %}
+	<form method="POST" action="">
+		<div class="form-group" >
+			{{render_field(form.firstName, class="form-control", placeholder="Company Name", id="firstName")}}
+		</div>
+		<div class="form-group" >
+			{{render_field(form.email, class="form-control", placeholder="company@company.com", id="email")}}
+		</div>
+		<div class="form-group" >
+			{{render_field(form.username, class="form-control", placeholder="companyUser", id="username")}}
+		</div>
+		<div class="form-group" >
+			{{render_field(form.password, class="form-control", placeholder="password", id="password")}}
+		</div>
+		<div class="form-group" >
+			{{render_field(form.confirm, class="form-control", placeholder="password", id = "confirm_password")}}
+		</div>
+		<p><input type="submit" class="btn btn-primary"value="Submit" id="submit"></p>
+	</form>
+
+{% endblock %}

@@ -1,5 +1,5 @@
 import csv
-from config.dbconfig import pg_config
+from .config.dbconfig import pg_config
 import psycopg2
 import psycopg2.extras
 
@@ -79,7 +79,7 @@ class UserDao:
         cursor.close()
         return user_id
     #Edits user by ID, requires all info
-    def editUser(self, username, password, first_name, last_name, email, is_recruiter,user_id):
+    def editUser(self, username, password, first_name, last_name, email, is_recruiter, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "UPDATE account SET username=%s, password=%s, first_name=%s, last_name=%s, email=%s, is_recruiter=%s WHERE user_id =%s RETURNING user_id;"
         cursor.execute(query, (username, password, first_name, last_name, email, is_recruiter,user_id))

@@ -10,7 +10,6 @@ class ApplicationsDao:
                                                 pg_config['user'],
                                                 pg_config['passwd'],
                                                 pg_config['host'])
-
         self.conn = psycopg2._connect(connection_url)
 
     def getAllApplications(self):

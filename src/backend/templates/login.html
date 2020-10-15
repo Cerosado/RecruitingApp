@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+	<br>
+	<h1>Login</h1>
+	{% from "formhelper.html" import render_field %}
+
+	<form method="POST" action="" >
+		<div class="form-group" >
+			{{ render_field(form.username, class="form-control", id="username") }}
+		</div>
+		<div class="form-group" >
+			{{ render_field(form.password, class="form-control", id="password") }}
+		</div>
+		<p><input type="submit" class="btn btn-primary"value="Submit" id="submit"></p>
+	</form>
+
+{% endblock %}

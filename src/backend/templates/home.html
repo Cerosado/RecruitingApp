@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	
+	<br>
+	<div class="jumbotron text-center">
+		<h1>Welcome to Resource Manager</h1>
+	</div>
+
+	<hr>
+
+	<div class="container">
+		<h2>About Resource Manager</h2>
+		<p>This is a website designed so that essential resources can be sold and shared during times of duress</p>
+		<p> Please register or login</p>
+	</div>
+
+	<hr>
+
+	<div class="container text-center">
+		{% if session.logged_in == NULL %}
+			<a href="/login" class="btn btn-success btn-lg" id = "login_link">Login</a>
+		{% endif %}
+	</div>
+
+{% endblock %}

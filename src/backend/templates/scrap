@@ -1,0 +1,27 @@
+layout
+<!--<div class="container">
+			{% include 'messages.html' %}
+			{% block body %}{% endblock %}
+		</div>-->
+
+layout
+<script type="text/javascript">
+	ClassicEditor
+                                .create( document.querySelector( '#editor' ) )
+                                .then( editor => {
+                                        console.log( editor );
+                                } )
+                                .catch( error => {
+                                        console.error( error );
+                                } );
+		</script>
+		<script>
+		$(document).ready(function(){
+		  $("#myInput").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#searchableTable tr").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
+		</script>

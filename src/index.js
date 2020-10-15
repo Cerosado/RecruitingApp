@@ -5,18 +5,14 @@ import Applicants from './Applicants.js';
 import PrimarySearchAppBar from './NavBar.js'
 import * as serviceWorker from './serviceWorker';
 
-
 ReactDOM.render(
     <Applicants/>,
     document.getElementById('root')
 );
-
 ReactDOM.render(
-    <PrimarySearchAppBar />,
+    <PrimarySearchAppBar/>,
     document.getElementById('navbar')
 );
-
-
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
