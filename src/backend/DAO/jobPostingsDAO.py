@@ -27,6 +27,13 @@ class JobPostingsDao:
         result = cursor.fetchone()
         cursor.close()
         return result
+    def getJobPostingByUserId(self, user_id):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "SELECT * from jobpostings WHERE user_id = %s;"
+        cursor.execute(query, (user_id,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result
     def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "INSERT INTO jobpostings(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING posting_id;"
@@ -59,6 +66,18 @@ class JobPostingsDao:
         self.conn.commit()
         cursor.close()
         return user_id
+    def getRankedApplicationsByJobPostingId(self, posting_id):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "SELECT * " \
+                "FROM jobPostings " \
+                "     INNER JOIN applications ON jobPostings.posting_id = applications.posting_id" \
+                "     INNER JOIN resumes ON applications.user_id = resumes.user_id" \
+                "WHERE jobPostings.posting_id=%s" \
+                "ORDERY BY resumes.rank;"
+        cursor.execute(query, (posting_id,))
+        self.conn.commit()
+        cursor.close()
+        return posting_id
         
 #debugging script
 if __name__=='__main__':
