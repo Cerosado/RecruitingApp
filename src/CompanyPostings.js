@@ -35,7 +35,7 @@ class JobPostingsList extends React.Component{
     }
 
     componentDidMount() {
-        let url = 'http://localhost:3000/jobPostings';
+        let url = 'http://localhost:3004/jobPostings';
         fetch(url)
             .then(response => response.json())
             .then(

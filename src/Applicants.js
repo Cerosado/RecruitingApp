@@ -7,6 +7,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import {List} from "@material-ui/core";
+import ListItem from "@material-ui/core/ListItem";
 
 
 class Applicant extends React.Component {
@@ -51,6 +53,15 @@ class Applicant extends React.Component {
 
 
 class ApplicantsList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: null,
+            isLoaded: false,
+            applicants: []
+        }
+    }
+
     renderApplicant(Name, University, Gpa, Rank) {
         return (
             <Applicant
@@ -62,33 +73,69 @@ class ApplicantsList extends React.Component {
         );
     }
 
+    componentDidMount() {
+        let url = 'http://localhost:3004/Applicants?posting_id=1&_sort=rank&_order=desc';
+        fetch(url)
+            .then(response => response.json())
+            .then(
+                (data) => {
+                    this.setState({
+                        isLoaded: true,
+                        applicants: data
+                    })
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
+    }
+
     render() {
-        return (
-            <div>
-                <h1 className="MainTitle"> Job Posting #1 Applicants List</h1>
-                <div className='titleContainer' row>
-                    <Typography className='name title' gutterBottom variant="h5" component="h2">
-                        Name
-                    </Typography>
-                    <Typography className='university title' variant="h5" component="h2">
-                        University
-                    </Typography>
-                    <Typography className='gpa title' color="textSecondary" variant="h5">
-                        GPA
-                    </Typography>
-                    <Typography className='Icon title' variant="h5">
-                        View Resume
-                    </Typography>
-                    <Typography className="RankTitle title" variant="h5">
-                        Rank
-                    </Typography>
-                </div>
+        const { error, isLoaded, applicants } = this.state;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return <div>Loading...</div>;
+        } else {
+            return (
                 <div>
-                    {this.renderApplicant('Eduardo A. Perez Vega', 'Popac', '4.00', '99')}
-                    {this.renderApplicant('Cristian E. Rosado Montes', 'Universidad de Puerto Rico Mayaguez', '2.00', '54')}
+                    <h1 className="MainTitle"> Job Posting #1 Applicants List</h1>
+                    <div className='titleContainer' row>
+                        <Typography className='name title' gutterBottom variant="h5" component="h2">
+                            Name
+                        </Typography>
+                        <Typography className='university title' variant="h5" component="h2">
+                            University
+                        </Typography>
+                        <Typography className='gpa title' color="textSecondary" variant="h5">
+                            GPA
+                        </Typography>
+                        <Typography className='Icon title' variant="h5">
+                            View Resume
+                        </Typography>
+                        <Typography className="RankTitle title" variant="h5">
+                            Rank
+                        </Typography>
+                    </div>
+                    <div>
+                        <List>
+                            {applicants.map(applicant => (
+                                <li key={applicant.id}>
+                                    <Applicant
+                                        Name={applicant.name}
+                                        University={applicant.university}
+                                        Gpa={applicant.gpa}
+                                        Rank={applicant.rank}/>
+                                </li>
+                            ))}
+                        </List>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 

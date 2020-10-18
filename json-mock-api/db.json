@@ -34,5 +34,43 @@
       "user_id": 1,
       "deadline": "11/20/2020"
     }
+  ],
+  "Applicants": [
+    {
+      "id": 1,
+      "name": "Eduardo Perez",
+      "posting_id": 1,
+      "university": "Popac",
+      "gpa": 4.00,
+      "resume": "dfgdfgdfgdf",
+      "rank": 70
+    },
+    {
+      "id": 2,
+      "name": "Cristian Rosado",
+      "posting_id": 1,
+      "university": "Upi",
+      "gpa": 3.00,
+      "resume": "dfgdfgdfgdf",
+      "rank": 60
+    },
+    {
+      "id": 3,
+      "name": "Moises Garip",
+      "posting_id": 1,
+      "university": "UPR Mayagüez",
+      "gpa": 3.85,
+      "resume": "dfgdfgdfgdf",
+      "rank": 90
+    },
+    {
+      "id": 4,
+      "name": "Juan del Pueblo",
+      "posting_id": 1,
+      "university": "MIT",
+      "gpa": 4.00,
+      "resume": "dfgdfgdfgdf",
+      "rank": 99
+    }
   ]
 }
