@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Applicants from './Applicants.js';
-import PrimarySearchAppBar from './NavBar.js'
+import App from "./App";
 import * as serviceWorker from './serviceWorker';
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
-    <Applicants/>,
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>,
     document.getElementById('root')
 );
 ReactDOM.render(
