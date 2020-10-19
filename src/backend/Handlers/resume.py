@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import jsonify
 from src.backend.DAO.resumeDAO import ResumeDao
-from src.resume_parser.custom_resume_parser import CustomResumeParser
+from src.backend.resume_parser.custom_resume_parser import CustomResumeParser
 
 
 class ResumeHandler:

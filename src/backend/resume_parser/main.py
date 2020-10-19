@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 import pandas
 from sklearn.model_selection import train_test_split
 
-from src.resume_parser.custom_resume_parser import CustomResumeParser
+from src.backend.resume_parser.custom_resume_parser import CustomResumeParser
 from pyresparser.command_line import print_cyan
 from pprint import pprint as pp
 
