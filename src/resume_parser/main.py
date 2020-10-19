@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 import pandas
 from sklearn.model_selection import train_test_split
 
-from src.resume_parser.resume_parser.custom_resume_parser import CustomResumeParser
+from src.resume_parser.custom_resume_parser import CustomResumeParser
 from pyresparser.command_line import print_cyan
 from pprint import pprint as pp
 
@@ -20,7 +20,7 @@ def print_parsed_resume(file, skills_file=None):
 
 def parse_resume_directory(directory, custom_regex=None):
     results = []
-    skills_file = 'resume_parser/skills_dataset.csv'
+    skills_file = 'skills_dataset.csv'
     if os.path.exists(directory):
         # pool = mp.Pool(mp.cpu_count())
 
@@ -47,7 +47,7 @@ def parse_dataset_to_csv():
     Function parses resumes from a directory and writes the parsed information in a csv file
     :return: None
     """
-    csv_file = 'resume_parser/parsed_results.csv'
+    csv_file = 'parsed_results.csv'
     with open(csv_file, mode='w') as parse_results_file:
         field_names = ['skills', 'education', 'college_name', 'degree',
                        'designation', 'experience', 'company_names',
@@ -81,7 +81,7 @@ def parse_directory_to_csv(directory, csv_file):
 
 def test_model():
     # Retrieve dataset from csv file
-    dataset = pandas.read_csv("resume_parser/parsed_results.csv", encoding='cp1252')
+    dataset = pandas.read_csv("parsed_results.csv", encoding='cp1252')
     data = dataset.iloc[:, 0]  # Retrieve skills column
     target = dataset['label']  # Retrieve label column
 
@@ -91,8 +91,8 @@ def test_model():
 
     # Parse other resumes to use model.predict
     parse_directory_to_csv('resume_parser/resumes/additional',
-                           csv_file='resume_parser/my_resume.csv')
-    my_resume = pandas.read_csv("resume_parser/my_resume.csv", encoding='cp1252')
+                           csv_file='my_resume.csv')
+    my_resume = pandas.read_csv("my_resume.csv", encoding='cp1252')
     my_resume_data = my_resume.iloc[:, 0]
     my_resume_vectorized = count_vect.transform(my_resume_data)
 
@@ -113,6 +113,11 @@ if __name__ == '__main__':
 
     # Parse training set resumes
     # parse_dataset_to_csv()
+
+    # parse_dict = CustomResumeParser(
+    #     'C:/Users/Eduardo Perez/Documents/Resume/RESUME_EduardoAPerezVega2020sinAcentos.pdf',
+    #     skills_file='src/resume_parser/resume_parser/skills_dataset.csv'
+    # ).get_extracted_data()
 
     test_model()
 
