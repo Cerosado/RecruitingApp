@@ -1,6 +1,5 @@
-import json
 from flask import jsonify
-from DAO.resumeDAO import ResumeDao
+from src.backend.DAO.resumeDAO import ResumeDao
 
 
 class ResumeHandler:

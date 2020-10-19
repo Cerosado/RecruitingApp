@@ -1,6 +1,5 @@
-import json
 from flask import jsonify
-from DAO.applicationsDAO import ApplicationsDao
+from src.backend.DAO.applicationsDAO import ApplicationsDao
 
 
 class ApplicationsHandler:

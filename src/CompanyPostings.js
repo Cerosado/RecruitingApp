@@ -36,7 +36,7 @@ class JobPostingsList extends React.Component{
     }
 
     componentDidMount() {
-        let url = 'http://localhost:3004/jobPostings';
+        let url = 'http://localhost:3004/jobPostings?user_id=2';
         fetch(url)
             .then(response => response.json())
             .then(
@@ -64,9 +64,9 @@ class JobPostingsList extends React.Component{
             return <div>Loading...</div>
         } else {
             return (
-                <Paper elevation={0}>
-                    <h1>Job Postings</h1>
-                    <div><p>Select job posting to see ranked applicants</p></div>
+                <Paper className='jobPostingsList' elevation={0}>
+                    <h1>My Job Postings</h1>
+                    {/*<div><p>Select job posting to see ranked applicants</p></div>*/}
                     <List>
                         {postings.map(posting => (
                             <ListItemLink

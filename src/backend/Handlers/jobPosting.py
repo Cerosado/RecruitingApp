@@ -1,6 +1,5 @@
 from flask import jsonify
-from DAO.jobPostingsDAO import JobPostingsDao
-import sys
+from src.backend.DAO.jobPostingsDAO import JobPostingsDao
 
 
 class JobPostingHandler:
@@ -47,9 +46,9 @@ class JobPostingHandler:
         result = self.build_jobPosting_dict(result)
         return jsonify(result)
 
-    def getJobPostingsByUserId(self, userId):
+    def getJobPostingsByUserId(self, user_Id):
         dao = JobPostingsDao()
-        applicants_list = dao.getJobPostingByUserId(user_id)
+        applicants_list = dao.getJobPostingByUserId(user_Id)
         result_list = []
         for row in applicants_list:
             result = self.build_jobPosting_dict(row)

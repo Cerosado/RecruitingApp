@@ -1,5 +1,7 @@
-.MuiPaper-root {
+.jobPostingsList {
     background-color: #14274e !important;
+    min-height: 816px;
+
 }
 
 p, .MuiListItemText-primary {
