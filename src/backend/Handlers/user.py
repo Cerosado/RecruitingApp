@@ -65,10 +65,12 @@ class UserHandler:
         result = self.map_to_User(result)
         return jsonify(result)
 
-    def editUser(self, data):
-        if len(data) < 7:
-            return jsonify(Error="Missing Information")
+    def editUser(self, data, user_id):
         dao = UserDao()
+        original = dao.getUserById(user_id)
+        for item in original:
+            if (data.get(item)==None):
+                data[item]=original[item]
         result = dao.editUser(data['username'], data['password'], data['first_name'], data['last_name'], data['email'],
                                 data['is_recruiter'], data['user_id'])
         return jsonify(Result=result)

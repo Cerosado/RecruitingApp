@@ -44,9 +44,9 @@ class ApplicationsDao:
         result = cursor.fetchone()
         cursor.close()
         return result
-    def registerApplication(self, user_id, posting_id):
+    def registerApplication(self, user_id, posting_id, rank):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "INSERT INTO applications(user_id, posting_id) VALUES (%s, %s) RETURNING user_id;"
+        query = "INSERT INTO applications(user_id, posting_id, rank) VALUES (%s, %s,%s) RETURNING user_id;"
         cursor.execute(query, (user_id, posting_id))
         user_id = cursor.fetchone()['user_id']
         self.conn.commit()

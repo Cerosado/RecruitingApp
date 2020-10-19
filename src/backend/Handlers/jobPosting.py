@@ -15,9 +15,10 @@ class JobPostingHandler:
         result['pay_amount'] = row[5]
         result['user_id'] = row[6]
         result['deadline'] = row[7]
+        result['presentationDate'] = row[8]
         return result
 
-    def build_jobPosting_attributes(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline):
+    def build_jobPosting_attributes(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, presentationDate):
         result = {}
         result['position_name'] = position_name
         result['location'] = location
@@ -27,6 +28,7 @@ class JobPostingHandler:
         result['pay_amount'] = pay_amount
         result['user_id'] = user_id
         result['deadline'] = deadline
+        result['presentationDate'] = presentationDate
         return result
 
     ###########################################
@@ -41,15 +43,15 @@ class JobPostingHandler:
             result_list.append(result)
         return jsonify(JobPostings=result_list)
 
-    def getJobPostingById(self, uid):
+    def getJobPostingById(self, posting_id):
         dao = JobPostingsDao()
-        result = dao.getJobPostingById(uid)
+        result = dao.getJobPostingById(posting_id)
         result = self.build_jobPosting_dict(result)
         return jsonify(result)
 
-    def getJobPostingsByUserId(self, userId):
+    def getJobPostingsByUserId(self, user_id):
         dao = JobPostingsDao()
-        result = dao.getJobPostingByUserId(userId)
+        result = dao.getJobPostingByUserId(user_id)
         result = self.build_jobPosting_dict(result)
         return jsonify(result)
 
@@ -79,14 +81,14 @@ class JobPostingHandler:
             # result = self.build_chat_attributes(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline)
             return jsonify(CreatedJobPosting=jid), 201
 
-    def editJobPosting(self, data):
-        if len(data) < 8:
-            return jsonify(Error="Malformed update request"), 400
-        else:
-            dao = JobPostingsDao()
-            result = dao.editJobPosting(data['position_name'], data['location'], data['description'], data['key_details'],
-                                  data['pay_type'], data['pay_amount'], data['user_id'], data['deadline'])
-            return jsonify(Result=result)
+    def editJobPosting(self, data, posting_id):
+        dao = JobPostingsDao()
+        original = dao.getJobPostingById(posting_id)
+        for item in original:
+            if (data.get(item)==None):
+                data[item]=original[item]
+        result = dao.editJobPosting(data['position_name'], data['location'], data['description'], data['key_details'], data['pay_type'], data['pay_amount'], data['user_id'], data['deadline'])
+        return jsonify(Result=result)
 
     # def deleteChat(self, data):
     #     dao = ChatsDAO()
