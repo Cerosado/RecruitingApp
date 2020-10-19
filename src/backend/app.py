@@ -1,3 +1,4 @@
+from io import BytesIO
 from functools import wraps
 from flask import Flask, request, render_template, flash, redirect, url_for, session, logging, jsonify
 # from passlib.hash import sha256_crypt
@@ -5,6 +6,9 @@ from flask import Flask, request, render_template, flash, redirect, url_for, ses
 # from forms import RegisterForm, LoginForm
 from src.backend.DAO.userDAO import UserDao
 from src.backend.Handlers.jobPosting import JobPostingHandler
+from src.backend.Handlers.resume import ResumeHandler
+from src.resume_parser.resume_parser.custom_resume_parser import CustomResumeParser
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -26,6 +30,29 @@ def jobPostings():
         return JobPostingHandler().getJobPostingsByUserId(user_id)
     else:
         return jsonify(Error="Method not allowed"), 405
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ('pdf', 'doc', 'docx')
+
+
+@app.route('/Applications', methods=['POST'])
+def parse_resume():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify(Error="File error")
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify(Error="File error")
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            if filename:
+                resume = BytesIO(file.read())
+                resume.name = filename
+                return ResumeHandler().parse_resume(resume, 
+                                                    skills_file='src/resume_parser/resume_parser/skills_dataset.csv')
+            return jsonify(Error="Filename not secure")
+    return jsonify(Error="Method not allowed")
 
 
 def is_logged_in(f):
