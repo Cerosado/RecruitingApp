@@ -1,13 +1,14 @@
 import os
 import csv
 
-# from joblib._multiprocessing_helpers import mp
+from joblib._multiprocessing_helpers import mp
+from joblib import dump, load
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 import pandas
 from sklearn.model_selection import train_test_split
 
-from resume_parser.custom_resume_parser import CustomResumeParser
+from src.resume_parser.resume_parser.custom_resume_parser import CustomResumeParser
 from pyresparser.command_line import print_cyan
 from pprint import pprint as pp
 
@@ -97,7 +98,9 @@ def test_model():
 
     # Split data for training and testing, train and then get accuracy score
     x_train, x_test, y_train, y_test = train_test_split(vectorized_data, target, stratify=target, random_state=5)
-    ranking_model = LogisticRegression(C=1).fit(x_train, y_train)
+    # ranking_model = LogisticRegression(C=1).fit(x_train, y_train)
+    # dump(ranking_model, 'ranking_model.joblib')
+    ranking_model = load('ranking_model.joblib')
     print("Test set score: {:3f}".format(ranking_model.score(x_test, y_test)))
     print(ranking_model.predict(my_resume_vectorized))
 
@@ -117,6 +120,3 @@ if __name__ == '__main__':
     # skills = pandas.read_csv("C:/Users/Eduardo Perez/Downloads/linkedin_skills.txt",
     #                          names=('technical skills',), sep='\n')
     # skills.to_csv('skills_dataset.csv', index=None)
-
-
-
