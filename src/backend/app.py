@@ -7,7 +7,6 @@ from flask import Flask, request, render_template, flash, redirect, url_for, ses
 from src.backend.DAO.userDAO import UserDao
 from src.backend.Handlers.jobPosting import JobPostingHandler
 from src.backend.Handlers.resume import ResumeHandler
-from src.resume_parser.resume_parser.custom_resume_parser import CustomResumeParser
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
