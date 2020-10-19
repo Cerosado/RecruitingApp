@@ -6,15 +6,16 @@ class JobPostingHandler:
 
     def build_jobPosting_dict(self, row):
         result = {}
-        result['position_name'] = row[0]
-        result['location'] = row[1]
-        result['description'] = row[2]
-        result['key_details'] = row[3]
-        result['pay_type'] = row[4]
-        result['pay_amount'] = row[5]
-        result['user_id'] = row[6]
-        result['deadline'] = row[7]
-        result['presentationDate'] = row[8]
+        result['posting_id'] = row[0]
+        result['position_name'] = row[1]
+        result['location'] = row[2]
+        result['description'] = row[3]
+        result['key_details'] = row[4]
+        result['pay_type'] = row[5]
+        result['pay_amount'] = row[6]
+        result['user_id'] = row[7]
+        result['deadline'] = row[8]
+        result['presentationDate'] = row[9]
         return result
 
     def build_jobPosting_attributes(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, presentationDate):
@@ -51,19 +52,19 @@ class JobPostingHandler:
     def getJobPostingsByUserId(self, user_id):
         dao = JobPostingsDao()
         applicants_list = dao.getJobPostingByUserId(user_id)
-        result_list = []
-        for row in applicants_list:
-            result = self.build_jobPosting_dict(row)
-            result_list.append(result)
-        return jsonify(result_list)
+        # result_list = []
+        # for row in applicants_list:
+        #     result = self.build_jobPosting_dict(row)
+        #     result_list.append(result)
+        return jsonify(applicants_list)
 
     def getRankedApplicationsByJobPostingId(self, posting_id):
         dao = JobPostingsDao()
-        applicants_list = dao.getRankedApplicationsByJobPostingId(posting_id)
-        result_list = []
-        for row in applicants_list:
-                    result = self.build_jobPosting_dict(row)
-                    result_list.append(result)
+        result_list = dao.getRankedApplicationsByJobPostingId(posting_id)
+        # result_list = []
+        # for row in applicants_list:
+        #     result = self.build_applicants_dict(row)
+        #     result_list.append(result)
         return jsonify(result_list)
 
     ###########################################

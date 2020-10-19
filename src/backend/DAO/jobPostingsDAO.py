@@ -30,7 +30,7 @@ class JobPostingsDao:
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * from jobpostings WHERE user_id = %s;"
         cursor.execute(query, (user_id,))
-        result = cursor.fetchone()
+        result = cursor.fetchall()
         cursor.close()
         return result
     def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline):
@@ -67,17 +67,18 @@ class JobPostingsDao:
         return user_id
     def getRankedApplicationsByJobPostingId(self, posting_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT first_name, last_name, college_name, education, resume_data, resume_extension, rank" \
+        query = "SELECT first_name, last_name, college_name, education, " \
+                "encode(resume_data, 'base64') as resume_data, resume_extension, rank " \
                 "FROM jobPostings " \
-                "     INNER JOIN applications ON jobPostings.posting_id = applications.posting_id" \
-                "     INNER JOIN resumes ON applications.user_id = resumes.user_id" \
-                "     INNER JOIN accounts ON applications.user_id = accounts.user_id" \
-                "WHERE jobPostings.posting_id=%s" \
-                "ORDER BY applications.rank DESC;"
+                "     INNER JOIN applications ON jobPostings.posting_id = applications.posting_id " \
+                "     INNER JOIN resumes ON applications.user_id = resumes.user_id " \
+                "     INNER JOIN accounts ON applications.user_id = accounts.user_id " \
+                "WHERE jobPostings.posting_id=%s " \
+                "ORDER BY applications.rank DESC "
         cursor.execute(query, (posting_id,))
-        self.conn.commit()
+        results = cursor.fetchall()
         cursor.close()
-        return posting_id
+        return results
         
 #debugging script
 if __name__=='__main__':
