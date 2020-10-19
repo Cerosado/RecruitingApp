@@ -1,5 +1,5 @@
 /venv/
-/resume_parser/resumes/
+/resumes/
 /parsed_results.csv
 /my_resume.csv
 /.idea/
