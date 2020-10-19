@@ -1,14 +1,14 @@
-from src.backend.config import dbconfig
+from src.backend.config.dbconfig import pg_config
 import psycopg2
 import psycopg2.extras
 
 class ResumeDao:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s host=%s" % (dbconfig['dbname'],
-                                                dbconfig['user'],
-                                                dbconfig['passwd'],
-                                                dbconfig['host'])
+        connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
+                                                pg_config['user'],
+                                                pg_config['passwd'],
+                                                pg_config['host'])
 
         self.conn = psycopg2._connect(connection_url)
 
@@ -28,7 +28,7 @@ class ResumeDao:
         return result
     def registerResume(self, resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "INSERT INTO resumes(resume_data, resume_extension, last_updated, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING user_id;"
+        query = "INSERT INTO resumes(resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING user_id;"
         cursor.execute(query, (resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id))
         user_id = cursor.fetchone()['user_id']
         self.conn.commit()
