@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import ListItemLink from "./ListItemLink";
 import List from "@material-ui/core/List";
 import {Paper} from "@material-ui/core";
+import './CompanyPostings.css';
 
 // function JobPostingList() {
 //     const [postingList, setPostingList] = useState([])
@@ -65,7 +66,7 @@ class JobPostingsList extends React.Component{
             return (
                 <Paper elevation={0}>
                     <h1>Job Postings</h1>
-                    <div>Select job posting to see ranked applicants</div>
+                    <div><p>Select job posting to see ranked applicants</p></div>
                     <List>
                         {postings.map(posting => (
                             <ListItemLink

@@ -49,15 +49,21 @@ class JobPostingHandler:
 
     def getJobPostingsByUserId(self, userId):
         dao = JobPostingsDao()
-        result = dao.getJobPostingByUserId(userId)
-        result = self.build_jobPosting_dict(result)
-        return jsonify(result)
+        applicants_list = dao.getJobPostingByUserId(user_id)
+        result_list = []
+        for row in applicants_list:
+            result = self.build_jobPosting_dict(row)
+            result_list.append(result)
+        return jsonify(result_list)
 
     def getRankedApplicationsByJobPostingId(self, posting_id):
         dao = JobPostingsDao()
-        result = dao.getRankedApplicationsByJobPostingId(posting_id)
-        result = self.build_jobPosting_dict(result)
-        return jsonify(result)
+        applicants_list = dao.getRankedApplicationsByJobPostingId(posting_id)
+        result_list = []
+        for row in applicants_list:
+                    result = self.build_jobPosting_dict(row)
+                    result_list.append(result)
+        return jsonify(result_list)
 
     ###########################################
     #             POST                        #
