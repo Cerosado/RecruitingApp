@@ -36,7 +36,7 @@ class JobPostingsList extends React.Component{
     }
 
     componentDidMount() {
-        let url = 'http://localhost:3004/jobPostings?user_id=2';
+        let url = 'http://localhost:5000/JobPosting?user_id=2';
         fetch(url)
             .then(response => response.json())
             .then(
@@ -44,7 +44,7 @@ class JobPostingsList extends React.Component{
                     this.setState({
                         isLoaded: true,
                         postings: data
-                    })
+                    });
                 },
                 (error) => {
                     this.setState({
@@ -70,7 +70,7 @@ class JobPostingsList extends React.Component{
                     <List>
                         {postings.map(posting => (
                             <ListItemLink
-                                key={posting.id}
+                                key={posting.posting_id}
                                 primary={posting.position_name}
                                 to={'/jobPostings/' + posting.id}
                             >

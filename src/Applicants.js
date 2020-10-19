@@ -38,7 +38,11 @@ class Applicant extends React.Component {
                             {this.props.Gpa}
                         </Typography>
                         <CardActions className='Icon'>
-                            <Button><img className='icon' src={icon} alt="View resume"/>
+                            <Button
+                                href={`data:application/${this.props.File};base64,${this.props.Ext}`}
+                                target="_blank"
+                            >
+                                <img className='icon' src={icon} alt="View resume"/>
                             </Button>
                         </CardActions>
                         <Typography className="Rank" variant="body2" component="p">
@@ -74,7 +78,7 @@ class ApplicantsList extends React.Component {
     }
 
     componentDidMount() {
-        let url = 'http://localhost:3004/Applicants?posting_id=1&_sort=rank&_order=desc';
+        let url = 'http://localhost:5000/JobPosting/1';
         fetch(url)
             .then(response => response.json())
             .then(
@@ -123,12 +127,15 @@ class ApplicantsList extends React.Component {
                     <div>
                         <List>
                             {applicants.map(applicant => (
-                                <li key={applicant.id}>
+                                <li key={applicant.user_id}>
                                     <Applicant
-                                        Name={applicant.name}
-                                        University={applicant.university}
-                                        Gpa={applicant.gpa}
-                                        Rank={applicant.rank}/>
+                                        Name={applicant.first_name + applicant.last_name}
+                                        University={'Placeholder university'}
+                                        Gpa={'4.00'}
+                                        Rank={applicant.rank}
+                                        File={applicant.resume_data}
+                                        Ext={applicant.resume_extension}
+                                    />
                                 </li>
                             ))}
                         </List>
