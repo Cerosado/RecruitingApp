@@ -1,3 +1,4 @@
+import copy
 import inspect
 import os
 from datetime import datetime
@@ -68,10 +69,12 @@ class ResumeHandler:
         result = self.map_to_Resume(result)
         return jsonify(result)
 
-    def parse_and_rank_resume(self, file, skills_file=None):
-        resume = CustomResumeParser(file, skills_file=skills_file).get_extracted_data()
-        resume_data = file
-        resume_extension = file.name.split('.')[1]
+    def parse_and_rank_resume(self, resume_file, resume_filename, skills_file=None):
+        resume_file_copy = copy.deepcopy(resume_file)
+        resume_file_copy.name = resume_filename
+        resume = CustomResumeParser(resume_file_copy, skills_file=skills_file).get_extracted_data()
+        resume_data = resume_file
+        resume_extension = resume_filename.split('.')[1]
         education = resume['education']
         college_name = resume['college_name']
         degree = resume['degree']

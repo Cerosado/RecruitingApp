@@ -50,7 +50,7 @@ def parse_resume():
                 resume = BytesIO(file.read())
                 resume.name = filename
                 return ResumeHandler().parse_and_rank_resume(
-                    resume,
+                    resume_file=resume, resume_filename=filename,
                     skills_file='./resume_parser/skills_dataset.csv')
             return jsonify(Error="Filename not secure")
     return jsonify(Error="Method not allowed")
