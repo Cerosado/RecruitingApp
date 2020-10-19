@@ -1,10 +1,9 @@
 from io import BytesIO
 from functools import wraps
-from flask import Flask, request, render_template, flash, redirect, url_for, session, logging, jsonify
+from flask import Flask, request, flash, redirect, url_for, session, jsonify
 # from passlib.hash import sha256_crypt
 # from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 # from forms import RegisterForm, LoginForm
-from src.backend.DAO.userDAO import UserDao
 from src.backend.Handlers.jobPosting import JobPostingHandler
 from src.backend.Handlers.resume import ResumeHandler
 from werkzeug.utils import secure_filename
