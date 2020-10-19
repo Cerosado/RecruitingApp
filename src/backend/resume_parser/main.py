@@ -91,7 +91,7 @@ def test_model():
     dump(vectorized_data, 'vectorizer.joblib')
 
     # Parse other resumes to use model.predict
-    parse_directory_to_csv('resume_parser/resumes/additional',
+    parse_directory_to_csv('resumes/additional',
                            csv_file='my_resume.csv')
     my_resume = pandas.read_csv("my_resume.csv", encoding='cp1252')
     my_resume_data = my_resume.iloc[:, 0]
