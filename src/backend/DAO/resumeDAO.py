@@ -43,6 +43,8 @@ class ResumeDao:
         self.conn.commit()
         cursor.close()
         return uid
+
+    #resume pkey is user_id:
     def deleteResume(self, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "DELETE FROM resumes WHERE user_id=%s RETURNING user_id;"

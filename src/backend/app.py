@@ -4,10 +4,26 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from forms import RegisterForm, LoginForm
 from DAOs.userDAO import UserDao
+from Handlers import jobPosting
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'ciic4060'
+
+
+@app.route('/jobposting/<int:posting_id>', methods=['GET'])
+def jobPostingDetail(posting_id):
+    if request.method == 'GET':
+        return jobPosting.getRankedApplicationsByJobPostingId(posting_id)
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
+@app.route('/jobposting/<int:uid>', methods=['GET'])
+def jobPostings(uid):
+    if request.method == 'GET':
+        return jobPosting.getJobPostingsByUserId(uid)
+    else:
+        return jsonify(Error="Method not allowed"), 405
 
 def is_logged_in(f):
     @wraps(f)
@@ -24,11 +40,6 @@ def home():
     #to change to whatever home is in react
     return render_template('home.html')
 
-@app.route('/account')
-@is_logged_in
-def profile():
-    #go to account settings with user_ID, not home
-    return render_template('home.html')
 @app.route('/applications')
 @is_logged_in
 def applications():

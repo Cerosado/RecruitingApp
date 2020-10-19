@@ -28,23 +28,26 @@ class ResumeHandler:
         return jsonify(result)
 
     #Create resume, must provide all data.
-    def createResume(self, data): 
-        resume_data = data['resume_data']
-        resume_extension = data['resume_extension']
-        education = data['education']
-        college_name = data['college_name']
-        degree = data['degree']
-        designation = data['designation']
-        experience = data['experience']
-        company_names = data['company_names']
-        skills = data['skills']
-        total_experience = data['total_experience']
-        last_updated = data['last_updated']
-        user_id = data['user_id']
-        dao = ResumeDao()
-        result = dao.registerResume(resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id)
-        result = self.map_to_Resume(result)
-        return jsonify(result)
+    def createResume(self, data):
+        if len(data) != 12:
+            return jsonify(Error="Malformed post request"), 400
+        else:
+            resume_data = data['resume_data']
+            resume_extension = data['resume_extension']
+            education = data['education']
+            college_name = data['college_name']
+            degree = data['degree']
+            designation = data['designation']
+            experience = data['experience']
+            company_names = data['company_names']
+            skills = data['skills']
+            total_experience = data['total_experience']
+            last_updated = data['last_updated']
+            user_id = data['user_id']
+            dao = ResumeDao()
+            result = dao.registerResume(resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id)
+            result = self.map_to_Resume(result)
+            return jsonify(result)
 
     #Edit resume, data can have less than the amount of data needed. Defaults original data.
     def editResume(self, data):

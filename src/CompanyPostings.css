@@ -1,0 +1,7 @@
+.MuiPaper-root {
+    background-color: #14274e !important;
+}
+
+p, .MuiListItemText-primary {
+    color: white;
+}

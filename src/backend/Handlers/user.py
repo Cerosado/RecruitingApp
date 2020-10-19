@@ -16,7 +16,7 @@ class UserHandler:
         return user
 
     def createAccount(self, data):
-        if len(data) < 6:
+        if len(data) != 6:
             return jsonify(Error="Missing Information")
         username = data["username"]
         password = data["password"]

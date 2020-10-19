@@ -68,12 +68,13 @@ class JobPostingsDao:
         return user_id
     def getRankedApplicationsByJobPostingId(self, posting_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT * " \
+        query = "SELECT first_name, last_name, college_name, education, resume_data, resume_extension, rank" \
                 "FROM jobPostings " \
                 "     INNER JOIN applications ON jobPostings.posting_id = applications.posting_id" \
                 "     INNER JOIN resumes ON applications.user_id = resumes.user_id" \
+                "     INNER JOIN accounts ON applications.user_id = accounts.user_id" \
                 "WHERE jobPostings.posting_id=%s" \
-                "ORDERY BY resumes.rank;"
+                "ORDER BY applications.rank DESC;"
         cursor.execute(query, (posting_id,))
         self.conn.commit()
         cursor.close()

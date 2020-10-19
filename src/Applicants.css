@@ -15,7 +15,8 @@
 .Rank {
     font-size: 5.875rem !important;
     text-align: center;
-    color: orange;
+    color: #373a40;
+            /*darkcyan;*/
     margin-top: -12px !important;
     grid-column-start: 7;
 }
@@ -49,24 +50,36 @@
 .titleContainer {
     display: inline-grid;
     width: 84%;
-    grid-template-columns: 30% 30% 5% 6% 9% 8% 10%;
+    grid-template-columns: 34% 34% 0% 11% 8% 16% 0%;
     grid-template-rows: 10% 15% 15%;
     height: 15px;
     margin: 20px;
-    margin-left: 100px;
-    margin-right: 100px;
 }
 
 .MuiCard-root {
     overflow: hidden;
     margin: 20px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.MuiContainer-root {
+    background-color: #14274e;
+    /*outline-style: auto;*/
+    /*outline-color: #14274e;*/
+}
+
+.MuiToolbar-root {
+    background-color: #394867;
 }
 
 .icon {
     height: 150px;
     width: 150px;
+}
+
+h1, .title{
+    color: white !important;
 }
 
 .Icon {
@@ -78,4 +91,18 @@
 
 .MuiCardContent-root:last-child {
     height: 100px;
+}
+
+.applicant {
+    background-color: #eeeeee;
+    outline-style: auto;
+    outline-color: #eeeeee;
+}
+
+body {
+    background-color: #9ba4b4;
+}
+
+.MuiPaper-root {
+    background-color: #14274e;
 }
