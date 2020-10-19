@@ -88,7 +88,8 @@ def test_model():
     # Vectorizer used to transform text data to a format that the model can use
     count_vect = CountVectorizer()
     vectorized_data = count_vect.fit_transform(data)
-    dump(vectorized_data, 'vectorizer.joblib')
+    dump(count_vect, 'vectorizer.joblib')
+    dump(vectorized_data, 'vectorized_data.joblib')
 
     # Parse other resumes to use model.predict
     parse_directory_to_csv('resumes/additional',

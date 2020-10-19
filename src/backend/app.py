@@ -1,6 +1,7 @@
 from io import BytesIO
 from functools import wraps
 from flask import Flask, request, flash, redirect, url_for, session, jsonify
+from flask_cors import CORS
 # from passlib.hash import sha256_crypt
 # from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 # from forms import RegisterForm, LoginForm
@@ -9,6 +10,7 @@ from src.backend.Handlers.resume import ResumeHandler
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+CORS(app)
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'ciic4060'
 
@@ -47,8 +49,9 @@ def parse_resume():
             if filename:
                 resume = BytesIO(file.read())
                 resume.name = filename
-                return ResumeHandler().parse_resume(resume, 
-                                                    skills_file='src/resume_parser/resume_parser/skills_dataset.csv')
+                return ResumeHandler().parse_and_rank_resume(
+                    resume,
+                    skills_file='./resume_parser/skills_dataset.csv')
             return jsonify(Error="Filename not secure")
     return jsonify(Error="Method not allowed")
 
