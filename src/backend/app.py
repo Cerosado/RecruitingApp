@@ -18,6 +18,7 @@ def jobPostingDetail(posting_id):
     else:
         return jsonify(Error="Method not allowed"), 405
 
+
 @app.route('/jobposting', methods=['GET'])
 def jobPostings():
     user_id = request.args.get('user_id')
@@ -25,6 +26,7 @@ def jobPostings():
         return JobPostingHandler().getJobPostingsByUserId(user_id)
     else:
         return jsonify(Error="Method not allowed"), 405
+
 
 def is_logged_in(f):
     @wraps(f)
@@ -36,21 +38,24 @@ def is_logged_in(f):
             return redirect(url_for('login'))
     return wrap
 
+
 @app.route('/')
 def home():
-    #to change to whatever home is in react
+    # to change to whatever home is in react
     return render_template('home.html')
 
 
 @app.route('/applications')
 @is_logged_in
 def applications():
-    #go to account settings with user_ID, not home
+    # go to account settings with user_ID, not home
     return render_template('home.html')
+
+
 @app.route('/jobPostings')
 @is_logged_in
 def jobPostings():
-    #go to account settings with user_ID, not home
+    # go to account settings with user_ID, not home
     return render_template('home.html')
 
 # @app.route('/logout')
@@ -114,6 +119,7 @@ def jobPostings():
 #     form.isRecruiter.data='TRUE'
 #     form.lastName.data=''
 #     return render_template('registerRecruiter.html', form=form)
+
 
 if __name__ == '__main__':
     app.run()
