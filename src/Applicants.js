@@ -39,7 +39,7 @@ class Applicant extends React.Component {
                         </Typography>
                         <CardActions className='Icon'>
                             <Button
-                                href={`data:application/${this.props.File};base64,${this.props.Ext}`}
+                                href={this.props.Link}
                                 target="_blank"
                             >
                                 <img className='icon' src={icon} alt="View resume"/>
@@ -133,8 +133,7 @@ class ApplicantsList extends React.Component {
                                         University={'Placeholder university'}
                                         Gpa={'4.00'}
                                         Rank={applicant.rank}
-                                        File={applicant.resume_data}
-                                        Ext={applicant.resume_extension}
+                                        Link={base64ToLink(applicant.resume_data, applicant.resume_extension)}
                                     />
                                 </li>
                             ))}
@@ -144,6 +143,18 @@ class ApplicantsList extends React.Component {
             );
         }
     }
+}
+
+function base64ToLink(base64, ext) {
+    let binaryString = window.atob(base64);
+    let binaryLen = binaryString.length;
+    let bytes = new Uint8Array(binaryLen);
+    for (let i = 0; i < binaryLen; i++) {
+        let ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+    }
+    let blob = new Blob([bytes], {type: `application/${ext}`});
+    return window.URL.createObjectURL(blob);
 }
 
 export default ApplicantsList;
