@@ -11,7 +11,7 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'ciic4060'
 
 
-@app.route('/jobposting/<int:posting_id>', methods=['GET'])
+@app.route('/JobPosting/<int:posting_id>', methods=['GET'])
 def jobPostingDetail(posting_id):
     if request.method == 'GET':
         return JobPostingHandler().getRankedApplicationsByJobPostingId(posting_id)
@@ -19,7 +19,7 @@ def jobPostingDetail(posting_id):
         return jsonify(Error="Method not allowed"), 405
 
 
-@app.route('/jobposting', methods=['GET'])
+@app.route('/JobPosting', methods=['GET'])
 def jobPostings():
     user_id = request.args.get('user_id')
     if request.method == 'GET' and user_id:
@@ -38,25 +38,6 @@ def is_logged_in(f):
             return redirect(url_for('login'))
     return wrap
 
-
-@app.route('/')
-def home():
-    # to change to whatever home is in react
-    return render_template('home.html')
-
-
-@app.route('/applications')
-@is_logged_in
-def applications():
-    # go to account settings with user_ID, not home
-    return render_template('home.html')
-
-
-@app.route('/jobPostings')
-@is_logged_in
-def jobPostings():
-    # go to account settings with user_ID, not home
-    return render_template('home.html')
 
 # @app.route('/logout')
 # @is_logged_in
