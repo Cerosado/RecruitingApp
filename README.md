@@ -1,9 +1,27 @@
+# Streamline: A Platform to Enable an Efficient Recruitment Process Proposal
+
+A web application for screening/ranking resumes while also providing a platform for straightforward job recruitment and applications.
+
+## Description
+Created using React and the Material UI framework as front end, with Python's Flask framework providing a RESTful api for backend database handling. The resume ranking algorithm is a logistic regression algorithm trained using SKLearn.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-#How to run
+## Dependencies
+#### Javascript
+    material-ui
+    json-server
+    react-router-dom
+#### Python
+    Pyreparser
+    Spacy
+    Sklearn
+    pandas
+    joblib
+    flask
+    pyscopg2
 ## Available Scripts
 
 In the project directory, you can run:
-
 ### `npm start`
 
 Runs the app in the development mode.<br />
