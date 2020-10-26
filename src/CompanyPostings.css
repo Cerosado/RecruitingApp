@@ -1,3 +1,8 @@
+h1 {
+    text-align: center !important;
+    margin-bottom: 30px;
+}
+
 .jobPostingsList {
     background-color: #14274e !important;
     min-height: 816px;
@@ -6,4 +11,32 @@
 
 p, .MuiListItemText-primary {
     color: white;
+}
+
+.Deadline, .PresentationDate {
+    color: black !important;
+}
+
+.positionName {
+    width: 220px;
+    margin-left: 15px;
+}
+
+.JobPostingsContainer {
+    display: inline-grid;
+    width: 100%;
+    grid-template-columns: 27.6% 20.4% 27.6% 11%;
+}
+
+.JobPostingTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.MuiListItemText-root {
+    width: 25%;
+}
+
+.Location {
+    width: 20%;
 }
