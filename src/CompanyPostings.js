@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import icon from "./Resources/resume.jpg";
+import {withRouter} from "react-router";
 
 // function JobPostingList() {
 //     const [postingList, setPostingList] = useState([])
@@ -80,7 +81,7 @@ class JobPostingsList extends React.Component{
     }
 
     componentDidMount() {
-        let url = 'http://localhost:5000/JobPosting?user_id=2';
+        let url = `http://localhost:5000/JobPosting?user_id=2`;
         fetch(url)
             .then(response => response.json())
             .then(
@@ -116,13 +117,13 @@ class JobPostingsList extends React.Component{
                     <div className='JobPostingTitle'><p>Presentation Date</p></div>
                     <div className='JobPostingTitle'><p>Deadline</p></div>
                     </div>
-                    <Divider></Divider>
+                    <Divider/>
                     <List>
                         {postings.map(posting => (
                             <ListItemLink
                                 key={posting.posting_id}
                                 primary={posting.position_name}
-                                to={'/jobPostings/' + posting.id}
+                                to={'/jobPostings/' + posting.posting_id}
                                 location={posting.location}
                                 presentationDate={formatDate(posting.presentationdate)}
                                 deadline={formatDate(posting.deadline)}
@@ -157,4 +158,4 @@ function formatDate(timestamp) {
     return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
 }
 
-export default JobPostingsList;
+export default withRouter(JobPostingsList);

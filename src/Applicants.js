@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {List} from "@material-ui/core";
-import ListItem from "@material-ui/core/ListItem";
+import {withRouter} from "react-router-dom";
 
 
 class Applicant extends React.Component {
@@ -62,30 +62,21 @@ class ApplicantsList extends React.Component {
         this.state = {
             error: null,
             isLoaded: false,
+            posting: null,
             applicants: []
         }
     }
 
-    renderApplicant(Name, University, Gpa, Rank) {
-        return (
-            <Applicant
-                Name = {Name}
-                University = {University}
-                Gpa = {Gpa}
-                Rank = {Rank}
-            />
-        );
-    }
-
     componentDidMount() {
-        let url = 'http://localhost:5000/JobPosting/1';
-        fetch(url)
+        let url_applicants = `http://localhost:5000/JobPosting/${this.props.match.params.id}`;
+        fetch(url_applicants)
             .then(response => response.json())
             .then(
                 (data) => {
                     this.setState({
                         isLoaded: true,
-                        applicants: data
+                        posting: data.posting,
+                        applicants: data.applicants
                     })
                 },
                 (error) => {
@@ -98,7 +89,7 @@ class ApplicantsList extends React.Component {
     }
 
     render() {
-        const { error, isLoaded, applicants } = this.state;
+        const { error, isLoaded, posting, applicants } = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
@@ -106,7 +97,7 @@ class ApplicantsList extends React.Component {
         } else {
             return (
                 <div>
-                    <h1 className="MainTitle"> Job Posting #1 Applicants List</h1>
+                    <h1 className="MainTitle"> {`${posting.position_name} (${posting.location})`} Applicants List</h1>
                     <div className='titleContainer' row>
                         <Typography className='name title' gutterBottom variant="h5" component="h2">
                             Name
@@ -157,7 +148,7 @@ function base64ToLink(base64, ext) {
     return window.URL.createObjectURL(blob);
 }
 
-export default ApplicantsList;
+export default withRouter(ApplicantsList);
 
 
 
