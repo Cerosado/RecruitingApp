@@ -19,6 +19,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     joblib
     flask
     pyscopg2
+#### Additional steps for python
+    python -m spacy download en_core_web_sm
+    python -m nltk.downloader words
 ## Available Scripts
 In ./src/backend, you can run:
 ## set FLASK_APP=app.py
