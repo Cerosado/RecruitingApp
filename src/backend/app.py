@@ -5,8 +5,8 @@ from flask_cors import CORS
 # from passlib.hash import sha256_crypt
 # from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 # from forms import RegisterForm, LoginForm
-from src.backend.Handlers.jobPosting import JobPostingHandler
-from src.backend.Handlers.resume import ResumeHandler
+from .Handlers.jobPosting import JobPostingHandler
+from .Handlers.resume import ResumeHandler
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
