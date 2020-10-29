@@ -2,8 +2,8 @@ from src.backend.config.dbconfig import pg_config
 import psycopg2
 import psycopg2.extras
 
-class UserDao:
 
+class UserDao:
     def __init__(self):
         connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
                                                 pg_config['user'],
@@ -19,6 +19,7 @@ class UserDao:
         result = cursor.fetchall()
         cursor.close()
         return result
+
     def getAllRecruiters(self):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM accounts WHERE is_recruiter=TRUE"
@@ -26,6 +27,7 @@ class UserDao:
         result = cursor.fetchall()
         cursor.close()
         return result
+
     def getAllApplicants(self):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * FROM accounts WHERE is_recruiter=FALSE"
@@ -33,6 +35,7 @@ class UserDao:
         result = cursor.fetchall()
         cursor.close()
         return result
+
     def getUserByUsername(self, username):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * from accounts WHERE username = %s;"
@@ -40,6 +43,7 @@ class UserDao:
         result = cursor.fetchone()
         cursor.close()
         return result
+
     def getUserById(self, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * from accounts WHERE user_id = %s;"
@@ -47,28 +51,33 @@ class UserDao:
         result = cursor.fetchone()
         cursor.close()
         return result
+
     def getUsersByFirstName(self, firstName):
         cursor = self.conn.cursor()
         query = "select * from accounts where first_name = %s;"
         result = cursor.fetchall()
         return result
+
     def getUsersByLastName(self, lastName):
         cursor = self.conn.cursor()
         query = "select * from accounts where last_name = %s;"
         result = cursor.fetchall()
         return result
+
     def getUsersByName(self, firstName, lastName):
         cursor = self.conn.cursor()
         query = "select * from accounts where first_name = %s and last_name = %s;"
         cursor.execute(query, (firstName,lastName,))
         result = cursor.fetchall()
+
     def getUserByEmail(self, email):
         cursor = self.conn.cursor()
         query = "select * from accounts where email = %s;"
         cursor.execute(query, (email,))
         result = cursor.fetchone()
         return result
-    #Registers using by all info
+
+    # Registers using by all info
     def registerUser(self, username, password, first_name, last_name, email, is_recruiter):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "INSERT INTO accounts(username, password, first_name, last_name, email, is_recruiter) VALUES (%s, %s, %s, %s, %s,%s) RETURNING user_id;"
@@ -77,16 +86,18 @@ class UserDao:
         self.conn.commit()
         cursor.close()
         return user_id
-    #Edits user by ID, requires all info
+
+    # Edits user by ID, requires all info
     def editUser(self, username, password, first_name, last_name, email, is_recruiter,user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "UPDATE account SET username=%s, password=%s, first_name=%s, last_name=%s, email=%s, is_recruiter=%s WHERE user_id =%s RETURNING user_id;"
+        query = "UPDATE accounts SET username = %s, password = %s, first_name = %s, last_name = %s, email  =%s, is_recruiter = %s WHERE user_id = %s RETURNING user_id;"
         cursor.execute(query, (username, password, first_name, last_name, email, is_recruiter,user_id))
         uid = cursor.fetchone()['user_id']
         self.conn.commit()
         cursor.close()
         return uid
-    #Deletes user by ID
+
+    # Deletes user by ID
     def deleteUser(self, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "DELETE FROM accounts WHERE user_id=%s RETURNING user_id;"
@@ -96,9 +107,10 @@ class UserDao:
         cursor.close()
         return uid
 
-#debugging script
-if __name__=='__main__':
-    dao=UserDao()
+
+# debugging script
+if __name__ == '__main__':
+    dao = UserDao()
     print("Accounts:\n")
     print(dao.getAllAccounts())
     # print("Adding Moyi:")
