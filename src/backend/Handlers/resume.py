@@ -9,6 +9,7 @@ from joblib import load
 
 from ..DAO.applicationsDAO import ApplicationsDao
 from ..DAO.resumeDAO import ResumeDao
+from ..DAO.userDAO import UserDao
 from ..resume_parser.custom_resume_parser import CustomResumeParser
 
 
@@ -69,7 +70,7 @@ class ResumeHandler:
         result = self.map_to_Resume(result)
         return jsonify(result)
 
-    def parse_and_rank_resume(self, resume_file, resume_filename, skills_file=None):
+    def parse_and_rank_resume(self, resume_file, resume_filename, form, skills_file=None):
         resume_file_copy = copy.deepcopy(resume_file)
         resume_file_copy.name = resume_filename
         resume = CustomResumeParser(resume_file_copy, skills_file=skills_file).get_extracted_data()
@@ -84,15 +85,28 @@ class ResumeHandler:
         skills = resume['skills']
         total_experience = resume['total_experience']
         last_updated = datetime.now()
-        user_id = 1
+
+        username = form['username']
+        email = form['email']
+        first = form['fname']
+        last = form['lname']
+        user_dao = UserDao()
+        user_id = user_dao.registerUser(
+            username=username,
+            password="testpass",
+            first_name=first,
+            last_name=last,
+            email=email,
+            is_recruiter=False
+        )
 
         df = pandas.DataFrame.from_dict([resume])
 
         # Load ML model
-        ranking_model = load('./resume_parser/ranking_model.joblib')
+        ranking_model = load('./resume_parser/ranking_model_sm.joblib')
 
         # Load Vectorizer
-        vect = load('./resume_parser/vectorizer.joblib')
+        vect = load('./resume_parser/sm_vectorizer.joblib')
 
         # Get skills column and transform with Vectorizer
         skills_col = df['skills'].map(lambda skills_list: str(skills_list))

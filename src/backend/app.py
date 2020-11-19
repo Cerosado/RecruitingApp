@@ -51,7 +51,8 @@ def parse_resume():
                 resume.name = filename
                 return ResumeHandler().parse_and_rank_resume(
                     resume_file=resume, resume_filename=filename,
-                    skills_file='./resume_parser/skills_dataset.csv')
+                    skills_file='./resume_parser/skills_dataset.csv',
+                    form=request.form)
             return jsonify(Error="Filename not secure")
     return jsonify(Error="Method not allowed")
 

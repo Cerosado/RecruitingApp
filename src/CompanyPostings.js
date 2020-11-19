@@ -49,7 +49,7 @@ class JobPosting extends React.Component {
             <Card className='applicant' variant="outlined">
                 <CardContent>
                     <div className='container' row>
-                        <Typography className='positionName' gutterBottom variant="h5" component="h2">
+                        <Typography className='positionName' variant="h5" component="h2">
                             {this.props.PositionName}
                         </Typography>
                         <Typography className='location' variant="h5" component="h2">
@@ -63,7 +63,7 @@ class JobPosting extends React.Component {
                         </Typography>
                     </div>
                 </CardContent>
-                <Divider></Divider>
+                <Divider/>
             </Card>
         );
     }

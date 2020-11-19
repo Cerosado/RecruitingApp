@@ -47,15 +47,15 @@ def parse_dataset_to_csv():
     Function parses resumes from a directory and writes the parsed information in a csv file
     :return: None
     """
-    csv_file = 'parsed_results.csv'
+    csv_file = 'parsed_results_without_kaggle.csv'
     with open(csv_file, mode='w') as parse_results_file:
         field_names = ['skills', 'education', 'college_name', 'degree',
                        'designation', 'experience', 'company_names',
                        'total_experience', 'label']
         parse_writer = csv.DictWriter(parse_results_file, fieldnames=field_names)
         parse_writer.writeheader()
-        for resume_type in ('Experienced', 'Inexperienced', 'kaggle_dataset'):
-            results = parse_resume_directory('resume_parser/%s/%s' % ('resumes', resume_type))
+        for resume_type in ('Experienced', 'Inexperienced'):
+            results = parse_resume_directory('resumes/%s' % (resume_type,))
             for parse_result in results:
                 parse_result['label'] = 1 if resume_type in ('Experienced', 'kaggle_dataset') else 0
                 parse_writer.writerow(parse_result)
@@ -114,14 +114,14 @@ if __name__ == '__main__':
     # pp(parse_resume_directory('resume_parser/resumes/Experienced', skills_file='resume_parser/skills_dataset.csv'))
 
     # Parse training set resumes
-    # parse_dataset_to_csv()
+    parse_dataset_to_csv()
 
     # parse_dict = CustomResumeParser(
     #     'C:/Users/Eduardo Perez/Documents/Resume/RESUME_EduardoAPerezVega2020sinAcentos.pdf',
     #     skills_file='src/resume_parser/resume_parser/skills_dataset.csv'
     # ).get_extracted_data()
 
-    test_model()
+    # test_model()
 
     # Convert skills txt file to csv
     # skills = pandas.read_csv("C:/Users/Eduardo Perez/Downloads/linkedin_skills.txt",
