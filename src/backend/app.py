@@ -104,17 +104,6 @@ def parse_resume():
     return jsonify(Error="Method not allowed")
 
 
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Unauthorized, please log in.', 'danger')
-            return redirect(url_for('login'))
-    return wrap
-
-
 ###########################################
 #             Authentication              #
 ###########################################
@@ -127,7 +116,7 @@ def login():
        $ curl http://localhost:5000/api/login -X POST \
          -d '{"username":"Yasoob","password":"strongpassword"}'
     """
-    req = request.form
+    req = request.get_json(force=True)
     username = req.get('username', None)
     password = req.get('password', None)
     user = guard.authenticate(username, password)
