@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {List} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
+import {authFetch} from "./auth";
 
 
 class Applicant extends React.Component {
@@ -69,7 +70,7 @@ class ApplicantsList extends React.Component {
 
     componentDidMount() {
         let url_applicants = `http://localhost:5000/JobPosting/${this.props.match.params.id}`;
-        fetch(url_applicants)
+        authFetch(url_applicants)
             .then(response => response.json())
             .then(
                 (data) => {

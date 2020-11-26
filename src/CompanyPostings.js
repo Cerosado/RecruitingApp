@@ -11,6 +11,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import icon from "./Resources/resume.jpg";
 import {withRouter} from "react-router";
+import {authFetch} from "./auth";
 
 // function JobPostingList() {
 //     const [postingList, setPostingList] = useState([])
@@ -82,7 +83,7 @@ class JobPostingsList extends React.Component{
 
     componentDidMount() {
         let url = `http://localhost:5000/JobPosting?user_id=2`;
-        fetch(url)
+        authFetch(url)
             .then(response => response.json())
             .then(
                 (data) => {

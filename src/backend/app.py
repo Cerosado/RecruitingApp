@@ -63,6 +63,7 @@ guard.init_app(app, User)
 #             Job Postings                #
 ###########################################
 @app.route('/JobPosting/<int:posting_id>', methods=['GET'])
+@flask_praetorian.roles_required("recruiter")
 def jobPostingDetail(posting_id):
     if request.method == 'GET':
         return JobPostingHandler().getRankedApplicationsByJobPostingId(posting_id)
@@ -71,6 +72,7 @@ def jobPostingDetail(posting_id):
 
 
 @app.route('/JobPosting', methods=['GET'])
+@flask_praetorian.roles_required("recruiter")
 def jobPostings():
     user_id = request.args.get('user_id')
     if request.method == 'GET' and user_id:

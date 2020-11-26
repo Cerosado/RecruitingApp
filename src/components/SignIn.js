@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link as RouterLink} from "react-router-dom";
-import {login, useAuth, logout} from "../auth"
+import {login, useAuth, logout} from "../auth";
 
 
 function Copyright() {
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Login() {
+export default function Login(props) {
     const classes = useStyles();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -70,7 +70,7 @@ export default function Login() {
             .then(token => {
                 if (token.access_token){
                     login(token)
-                    console.log(token)
+                    history.replace(from)
                 }
                 else {
                     // TODO: Display error in ui, delete logs...
@@ -87,7 +87,11 @@ export default function Login() {
         setPassword(e.target.value)
     }
 
-    const [logged] = useAuth();
+    let [logged] = useAuth();
+    let history = props.history
+    let location = props.location
+
+    let { from } = location.state || { from : { pathname: "/" } };
 
     return (
         <Container component="main" maxWidth="xs">

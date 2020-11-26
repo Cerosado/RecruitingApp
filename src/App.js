@@ -1,19 +1,53 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Redirect
 } from "react-router-dom";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import ApplicantsList from "./Applicants";
 import JobPostingsList from "./CompanyPostings";
 import PrimarySearchAppBar from "./NavBar";
 import {Container} from "@material-ui/core";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import {authFetch, useAuth} from "./auth";
+import Homepage from "./components/Homepage";
+
+function Secret() {
+    const [message, setMessage] = useState('')
+
+    useEffect(() => {
+        authFetch("http://localhost:5000/api/protected").then(response => {
+            if (response.status === 401){
+                setMessage("Sorry you aren't authorized!")
+                return null
+            }
+            return response.json()
+        }).then(response => {
+            if (response && response.message){
+                setMessage(response.message)
+            }
+        })
+    }, [])
+    return (
+        <h2>Secret: {message}</h2>
+    )
+}
+
+function PrivateRoute({component: Component, ...rest}){
+    const [logged] = useAuth();
+
+    return (
+        <Route {...rest} render={(props) => (
+            logged
+                ? <Component {...props} />
+                : <Redirect to={{pathname:'/login', state: {from: props.location}}}/>
+        )}
+        />
+    );
+}
 
 class App extends React.Component{
     render() {
@@ -23,16 +57,10 @@ class App extends React.Component{
                     <PrimarySearchAppBar/>
                     <Container maxWidth={"md"}>
                         <Switch>
-                            <Route path="/JobPostings/:id"
-                                   render={routerProps => (
-                                       <ApplicantsList {...routerProps}/>
-                                   )}>
-                            </Route>
-                            <Route path="/JobPostings"
-                                   render={routerProps => (
-                                       <JobPostingsList {...routerProps}/>
-                                   )}>
-                            </Route>
+                            <PrivateRoute path="/JobPostings/:id" component={ApplicantsList}>
+                            </PrivateRoute>
+                            <PrivateRoute path="/JobPostings" component={JobPostingsList}>
+                            </PrivateRoute>
                             <Route path="/Login"
                                    render={routerProps => (
                                        <SignIn {...routerProps}/>
@@ -43,9 +71,13 @@ class App extends React.Component{
                                        <SignUp {...routerProps}/>
                                    )}>
                             </Route>
-                            <Route path="/">
-                                <JobPostingsList/>
+                            <PrivateRoute path="/secret"
+                                          component={Secret}>
+                            </PrivateRoute>
+                            <Route path="/home" component={Homepage}>
                             </Route>
+                            <PrivateRoute path="/" component={JobPostingsList}>
+                            </PrivateRoute>
                         </Switch>
                     </Container>
                 </div>
