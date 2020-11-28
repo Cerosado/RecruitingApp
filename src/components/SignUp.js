@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link as RouterLink} from "react-router-dom";
+import Switch from "@material-ui/core/Switch";
+import {withFormik} from "formik";
 
 function Copyright() {
     return (
@@ -47,7 +49,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUp() {
+function SignUpForm({
+                        errors,
+                        handleBlur,
+                        handleChange,
+                        handleSubmit,
+                        touched,
+                        values,
+                        setFieldValue,
+                    }) {
     const classes = useStyles();
 
     return (
@@ -60,29 +70,57 @@ export default function SignUp() {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={!values.isCompany? 6 : 12}>
                             <TextField
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="outlined"
                                 required
                                 fullWidth
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.firstName}
                                 id="firstName"
-                                label="First Name"
-                                autoFocus
+                                label={!values.isCompany? "First Name" : "Company Name"}
+                                error={touched.firstName && Boolean(errors.firstName)}
+                                helperText={touched.firstName && errors.firstName}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        {!values.isCompany
+                            ? <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.lastName}
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    error={touched.lastName && Boolean(errors.lastName)}
+                                    helperText={touched.lastName && errors.lastName}
+                                    autoComplete="lname"
+                                />
+                            </Grid>
+                            : null}
+
+                        <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.username}
+                                id="username"
+                                label="Username"
+                                name="username"
+                                error={touched.username && Boolean(errors.username)}
+                                helperText={touched.username && errors.username}
+                                autoComplete="username"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -90,9 +128,14 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.email}
                                 id="email"
                                 label="Email Address"
                                 name="email"
+                                error={touched.email && Boolean(errors.email)}
+                                helperText={touched.email && errors.email}
                                 autoComplete="email"
                             />
                         </Grid>
@@ -101,17 +144,44 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.password}
                                 name="password"
                                 label="Password"
                                 type="password"
                                 id="password"
+                                error={touched.password && Boolean(errors.password)}
+                                helperText={touched.password && errors.password}
+                                autoComplete="current-password"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.cPassword}
+                                name="cPassword"
+                                label="Confirm Password"
+                                type="password"
+                                id="cPassword"
+                                error={touched.password && Boolean(errors.password)}
                                 autoComplete="current-password"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
+                                control={
+                                    <Switch checked={values.isCompany}
+                                            onChange={() => setFieldValue("isCompany", !values.isCompany)}
+                                            onBlur={handleBlur}
+                                            name="isCompany"
+                                    />
+                                }
+                                label="I am a company's recruiter"
                             />
                         </Grid>
                     </Grid>
@@ -139,3 +209,66 @@ export default function SignUp() {
         </Container>
     );
 }
+
+const SignUp = withFormik({
+    mapPropsToValues: () => ({
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        password: '',
+        cPassword: '',
+        isCompany: false,
+    }),
+
+    validate: values => {
+        let errors = {};
+        const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+        if (!values.firstName) {
+            errors.firstName = `${!values.isCompany? "First Name":"Company Name"} is required`;
+        }
+        if (!values.lastName && !values.isCompany) {
+            errors.lastName = "Last Name is required";
+        }
+        if (!values.username) {
+            errors.username = "Username is required";
+        } else if (values.username.length > 50){
+            errors.username = "Username is too long"
+        }
+        if (!values.email) {
+            errors.email = "Email is required";
+        } else if (!email_regex.test(values.email)){
+            errors.email = "Invalid Email";
+        }
+        if (!values.password) {
+            errors.password = "Password is required";
+        } else if (values.password !== values.cPassword){
+            errors.password = "Passwords must match"
+        }
+
+        return errors;
+    },
+
+    handleSubmit: (values ) => {
+        let opts = {
+            firstName: values.firstName,
+            lastName: !values.isCompany? values.lastName : '',
+            username: values.username,
+            email: values.email,
+            password: values.password,
+            cPassword: values.cPassword,
+            isCompany: values.isCompany,
+        }
+        let url = `http://localhost:5000/api/register`;
+        fetch(url, {
+            method: 'post',
+            body: JSON.stringify(opts)
+        }).then(r => r.json())
+            .then(token => {
+                //TODO: Redirect to login with verify email message
+            })
+    },
+})(SignUpForm);
+
+export default SignUp;
