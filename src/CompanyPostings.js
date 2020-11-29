@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import ListItemLink from "./ListItemLink";
 import List from "@material-ui/core/List";
 import {Paper} from "@material-ui/core";
@@ -7,32 +7,8 @@ import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
-import icon from "./Resources/resume.jpg";
 import {withRouter} from "react-router";
 import {authFetch} from "./auth";
-
-// function JobPostingList() {
-//     const [postingList, setPostingList] = useState([])
-//
-//
-//     useEffect(() => {
-//         fetch(url).then(response => response.json()).then(data => {
-//            setPostingList(data.results);
-//         });
-//     })
-//
-//     return (
-//         <div>
-//             <ul>
-//                 {postingList.map(posting => (
-//                     <li key={posting.id}>{posting.position_name}</li>
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// }
 
 class JobPosting extends React.Component {
     constructor(props) {

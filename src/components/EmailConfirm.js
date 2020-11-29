@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useState} from 'react'
-import {authFetch, login} from "../auth";
+import React, {useEffect, useState} from 'react'
+import {login} from "../auth";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {Redirect} from "react-router-dom";
 import {useLocation} from "react-router-dom";

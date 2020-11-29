@@ -18,7 +18,6 @@ import {Link as RouterLink} from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import {useAuth, logout} from "./auth";
 import Button from "@material-ui/core/Button";
-import {func} from "prop-types";
 import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
