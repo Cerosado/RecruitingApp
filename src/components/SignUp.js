@@ -266,7 +266,11 @@ const SignUp = withFormik({
             body: JSON.stringify(opts)
         }).then(r => r.json())
             .then(token => {
-                //TODO: Redirect to login with verify email message
+                // this.props.history.push({
+                //     pathname: '/Login',
+                //     state: { message: "Please confirm your email address"}
+                // });
+                console.log(token)
             })
     },
 })(SignUpForm);

@@ -14,6 +14,7 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import {authFetch, useAuth} from "./auth";
 import Homepage from "./components/Homepage";
+import EmailConfirm from "./components/EmailConfirm";
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -70,6 +71,8 @@ class App extends React.Component{
                                    render={routerProps => (
                                        <SignUp {...routerProps}/>
                                    )}>
+                            </Route>
+                            <Route path="/Auth/Confirm" component={EmailConfirm}>
                             </Route>
                             <PrivateRoute path="/secret"
                                           component={Secret}>

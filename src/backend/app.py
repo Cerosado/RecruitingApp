@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 from io import BytesIO
 
@@ -5,6 +6,7 @@ import flask_praetorian
 import flask_sqlalchemy
 from flask import Flask, request, flash, redirect, url_for, session, jsonify
 from flask_cors import CORS
+from flask_mail import Mail
 from werkzeug.utils import secure_filename
 
 from .Handlers.jobPosting import JobPostingHandler
@@ -16,10 +18,23 @@ guard = flask_praetorian.Praetorian()
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 CORS(app)
+app.config.update(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=os.environ.get('MAIL_USERNAME', None),
+    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD', None),
+    MAIL_DEFAULT_SENDER=os.environ.get('MAIL_USERNAME', None),
+    MAIL_DEBUG=True,
+    MAIL_SUPPRESS_SEND=False
+)
+Mail(app)
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'top secret'
 app.config["JWT_ACCESS_LIFESPAN"] = {"hours": 24}
 app.config["JWT_REFRESH_LIFESPAN"] = {"days": 30}
+app.config["PRAETORIAN_CONFIRMATION_SENDER"] = os.environ.get('MAIL_USERNAME', None)
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     'postgresql+psycopg2://gbxrvscvbgnrfj:b4b81ffde7b3f9148b3bdc017063c4c706bef179663a188dedae12f22aa5a13f@' \
@@ -124,6 +139,58 @@ def login():
     user = guard.authenticate(username, password)
     ret = {'access_token': guard.encode_jwt_token(user)}
     return ret, 200
+
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    req = request.get_json(force=True)
+    first_name = req.get('firstName', None)
+    last_name = req.get('lastName', None)
+    username = req.get('username', None)
+    email = req.get('email', None)
+    password = req.get('password', None)
+    is_company = req.get('isCompany', None)
+    # TODO: Validate fields
+    if User.query.filter_by(username=username).one_or_none() or \
+            User.query.filter_by(email=email).one_or_none():
+        return jsonify(Error='Account with same username or email already exists'), 409
+    else:
+        new_user = User(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            password=guard.hash_password(password),
+            is_recruiter=is_company,
+            roles='recruiter' if is_company else 'applicant',
+            is_active=False,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        guard.send_registration_email(
+            email=email, user=new_user, confirmation_uri='http://localhost:3000/Auth/Confirm'
+        )
+        ret = {'message': 'successfully sent registration email to user {}'.format(
+            new_user.username
+        )}
+        return jsonify(ret), 201
+
+
+@app.route('/finalize', methods=['POST'])
+def finalize():
+    """
+    Finalizes a user registration with the token that they were issued in their
+    registration email
+    .. example::
+       $ curl http://localhost:5000/finalize -X GET \
+         -H "Authorization: Bearer <your_token>"
+    """
+    registration_token = guard.read_token_from_header()
+    user = guard.get_user_from_registration_token(registration_token)
+    user.is_active = True
+    db.session.commit()
+    ret = {'access_token': guard.encode_jwt_token(user)}
+    return jsonify(ret), 200
 
 
 @app.route('/api/refresh', methods=['POST'])
