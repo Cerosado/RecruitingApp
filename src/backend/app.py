@@ -155,6 +155,7 @@ def register():
             User.query.filter_by(email=email).one_or_none():
         return jsonify(Error='Account with same username or email already exists'), 409
     else:
+        validate_email = os.environ.get('EMAIL_VALIDATION', 0) == 1
         new_user = User(
             first_name=first_name,
             last_name=last_name,
@@ -163,16 +164,17 @@ def register():
             password=guard.hash_password(password),
             is_recruiter=is_company,
             roles='recruiter' if is_company else 'applicant',
-            is_active=False,
+            is_active=not validate_email,
         )
         db.session.add(new_user)
         db.session.commit()
-        guard.send_registration_email(
-            email=email, user=new_user, confirmation_uri='http://localhost:3000/Auth/Confirm'
-        )
-        ret = {'message': 'successfully sent registration email to user {}'.format(
-            new_user.username
-        )}
+        if validate_email:
+            guard.send_registration_email(
+                email=email, user=new_user, confirmation_uri='http://localhost:3000/Auth/Confirm'
+            )
+        result_message = 'successfully sent registration email to user {}' if validate_email else \
+            'successfully registered user {}'
+        ret = {'message': result_message.format(new_user.username)}
         return jsonify(ret), 201
 
 
