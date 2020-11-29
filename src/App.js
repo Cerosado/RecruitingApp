@@ -15,6 +15,7 @@ import SignUp from "./components/SignUp";
 import {authFetch, useAuth} from "./auth";
 import Homepage from "./components/Homepage";
 import EmailConfirm from "./components/EmailConfirm";
+import jwtDecode from "jwt-decode";
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -37,17 +38,22 @@ function Secret() {
     )
 }
 
-function PrivateRoute({component: Component, ...rest}){
+function PrivateRoute({component: Component, roles, ...rest}){
     const [logged] = useAuth();
 
-    return (
-        <Route {...rest} render={(props) => (
-            logged
-                ? <Component {...props} />
-                : <Redirect to={{pathname:'/login', state: {from: props.location}}}/>
-        )}
-        />
-    );
+    if (!logged) {
+        return <Redirect to={{pathname:'/login', state: {from: rest.location}}}/>
+    }
+
+    const localToken = localStorage.getItem('jwt_token');
+    const decoded = jwtDecode(localToken);
+    console.log(roles)
+
+    if (roles && roles.indexOf(decoded['rls']) === -1){
+        return <Redirect to={{ pathname: '/Home'}} />
+    }
+
+    return <Component {...rest}/>
 }
 
 class App extends React.Component{
@@ -58,9 +64,9 @@ class App extends React.Component{
                     <PrimarySearchAppBar/>
                     <Container maxWidth={"md"}>
                         <Switch>
-                            <PrivateRoute path="/JobPostings/:id" component={ApplicantsList}>
+                            <PrivateRoute path="/JobPostings/:id" component={ApplicantsList} roles={["recruiter"]}>
                             </PrivateRoute>
-                            <PrivateRoute path="/JobPostings" component={JobPostingsList}>
+                            <PrivateRoute path="/JobPostings" component={JobPostingsList} roles={["recruiter"]}>
                             </PrivateRoute>
                             <Route path="/Login"
                                    render={routerProps => (
@@ -75,11 +81,12 @@ class App extends React.Component{
                             <Route path="/Auth/Confirm" component={EmailConfirm}>
                             </Route>
                             <PrivateRoute path="/secret"
-                                          component={Secret}>
+                                          component={Secret}
+                                          roles={["applicant"]}>
                             </PrivateRoute>
                             <Route path="/home" component={Homepage}>
                             </Route>
-                            <PrivateRoute path="/" component={JobPostingsList}>
+                            <PrivateRoute path="/" component={JobPostingsList} roles={["recruiter"]}>
                             </PrivateRoute>
                         </Switch>
                     </Container>
