@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import ListItemLink from "./ListItemLink";
 import List from "@material-ui/core/List";
 import {Paper} from "@material-ui/core";
@@ -7,31 +7,8 @@ import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
-import icon from "./Resources/resume.jpg";
 import {withRouter} from "react-router";
-
-// function JobPostingList() {
-//     const [postingList, setPostingList] = useState([])
-//
-//
-//     useEffect(() => {
-//         fetch(url).then(response => response.json()).then(data => {
-//            setPostingList(data.results);
-//         });
-//     })
-//
-//     return (
-//         <div>
-//             <ul>
-//                 {postingList.map(posting => (
-//                     <li key={posting.id}>{posting.position_name}</li>
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// }
+import {authFetch} from "./auth";
 
 class JobPosting extends React.Component {
     constructor(props) {
@@ -82,7 +59,7 @@ class JobPostingsList extends React.Component{
 
     componentDidMount() {
         let url = `http://localhost:5000/JobPosting?user_id=2`;
-        fetch(url)
+        authFetch(url)
             .then(response => response.json())
             .then(
                 (data) => {
@@ -112,7 +89,7 @@ class JobPostingsList extends React.Component{
                 <Paper className='jobPostingsList' elevation={0}>
                     <h1>My Job Postings</h1>
                     <div className='JobPostingsContainer' row>
-                    <div className='positionName JobPostingTitle' ><p>Position Name</p></div>
+                    <div className='positionName JobPostingTitle'><p>Position Name</p></div>
                     <div className='JobPostingTitle'><p>Location</p></div>
                     <div className='JobPostingTitle'><p>Presentation Date</p></div>
                     <div className='JobPostingTitle'><p>Deadline</p></div>

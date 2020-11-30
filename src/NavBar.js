@@ -16,6 +16,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import {Link as RouterLink} from "react-router-dom";
 import Link from "@material-ui/core/Link";
+import {useAuth, logout} from "./auth";
+import Button from "@material-ui/core/Button";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -89,6 +92,9 @@ export default function PrimarySearchAppBar() {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    let [logged] = useAuth();
+    const history = useHistory();
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -119,6 +125,12 @@ export default function PrimarySearchAppBar() {
         >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={ () => {
+                handleMenuClose();
+                logout();
+                history.push("/Home");
+            }
+            }>Sign out</MenuItem>
         </Menu>
     );
 
@@ -176,7 +188,7 @@ export default function PrimarySearchAppBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography className={classes.title} variant="h6" noWrap>
-                        <Link component={RouterLink} to={'/jobPostings'} color="inherit" variant="inherit">
+                        <Link component={RouterLink} to={'/'} color="inherit" variant="inherit">
                             Streamline
                         </Link>
                     </Typography>
@@ -194,28 +206,31 @@ export default function PrimarySearchAppBar() {
                         />
                     </div>
                     <div className={classes.grow} />
-                    <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton aria-label="show 17 new notifications" color="inherit">
-                            <Badge badgeContent={17} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </div>
+                    {logged?
+                        <div className={classes.sectionDesktop}>
+                            <IconButton aria-label="show 4 new mails" color="inherit">
+                                <Badge badgeContent={4} color="secondary">
+                                    <MailIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton aria-label="show 17 new notifications" color="inherit">
+                                <Badge badgeContent={17} color="secondary">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        </div>
+                        : <Button component={RouterLink} color="inherit" to="/Login">Sign in</Button>
+                    }
                     <div className={classes.sectionMobile}>
                         <IconButton
                             aria-label="show more"
