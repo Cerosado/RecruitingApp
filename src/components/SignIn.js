@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,11 +10,16 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link as RouterLink} from "react-router-dom";
 import {login, useAuth, logout} from "../auth";
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props}/>;
+}
 
 function Copyright() {
     return (
@@ -53,6 +58,9 @@ export default function Login(props) {
     const classes = useStyles();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertSeverity, setAlertSeverity] = useState('info')
+    const [alertMessage, setAlertMessage] = useState('')
 
     const onSubmitClick = (e)=> {
         e.preventDefault()
@@ -61,7 +69,6 @@ export default function Login(props) {
             'username': username,
             'password': password
         }
-        console.log(opts)
         let url = `http://localhost:5000/api/login`;
         fetch(url, {
             method: 'post',
@@ -73,8 +80,9 @@ export default function Login(props) {
                     history.replace(from)
                 }
                 else {
-                    // TODO: Display error in ui, delete logs...
-                    console.log("Please type in correct username/password")
+                    setAlertSeverity("error")
+                    setAlertMessage("Please type in correct username/password")
+                    setShowAlert(true)
                 }
             })
     }
@@ -88,13 +96,27 @@ export default function Login(props) {
     }
 
     let [logged] = useAuth();
-    let history = props.history
-    let location = props.location
+    let history = props.history;
+    let location = props.location;
 
     let { from } = location.state || { from : { pathname: "/" } };
 
+    useEffect(() => {
+        const msg = location.state && location.state.message;
+        if (msg){
+            setAlertMessage(msg);
+            setShowAlert(true)
+        }
+    });
+
+
     return (
         <Container component="main" maxWidth="xs">
+            <Snackbar open={showAlert}>
+                <Alert severity={alertSeverity}>
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>

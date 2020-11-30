@@ -249,7 +249,7 @@ const SignUp = withFormik({
         return errors;
     },
 
-    handleSubmit: (values ) => {
+    handleSubmit: (values, { props} ) => {
         let opts = {
             firstName: values.firstName,
             lastName: !values.isCompany? values.lastName : '',
@@ -265,10 +265,11 @@ const SignUp = withFormik({
             body: JSON.stringify(opts)
         }).then(r => r.json())
             .then(token => {
-                // this.props.history.push({
-                //     pathname: '/Login',
-                //     state: { message: "Please confirm your email address"}
-                // });
+                props.history.push({
+                    pathname: '/Login',
+                    state: { message: "Please confirm your email address"},
+                    from: '/'
+                });
                 console.log(token)
             })
     },
