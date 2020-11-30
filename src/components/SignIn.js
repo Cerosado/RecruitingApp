@@ -105,9 +105,9 @@ export default function Login(props) {
         const msg = location.state && location.state.message;
         if (msg){
             setAlertMessage(msg);
-            setShowAlert(true)
+            setShowAlert(true);
         }
-    });
+    }, [location.state]);
 
 
     return (

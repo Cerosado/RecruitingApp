@@ -14,6 +14,8 @@ import Container from '@material-ui/core/Container';
 import {Link as RouterLink} from "react-router-dom";
 import Switch from "@material-ui/core/Switch";
 import {withFormik} from "formik";
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 function Copyright() {
     return (
@@ -26,6 +28,10 @@ function Copyright() {
             {'.'}
         </Typography>
     );
+}
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props}/>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -56,12 +62,20 @@ function SignUpForm({
                         touched,
                         values,
                         setFieldValue,
+                        status
                     }) {
     const classes = useStyles();
 
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
+            {status && status.msg &&
+                <Snackbar open={status.error}>
+                    <Alert severity={status.error? "error": "info"}>
+                        {status.msg}
+                    </Alert>
+                </Snackbar>
+            }
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -249,7 +263,7 @@ const SignUp = withFormik({
         return errors;
     },
 
-    handleSubmit: (values, { props} ) => {
+    handleSubmit: (values, { props, setStatus} ) => {
         let opts = {
             firstName: values.firstName,
             lastName: !values.isCompany? values.lastName : '',
@@ -263,14 +277,28 @@ const SignUp = withFormik({
         fetch(url, {
             method: 'post',
             body: JSON.stringify(opts)
-        }).then(r => r.json())
-            .then(token => {
-                props.history.push({
-                    pathname: '/Login',
-                    state: { message: "Please confirm your email address"},
-                    from: '/'
-                });
-                console.log(token)
+        })
+            .then(response => {
+                if (!response.ok) { throw response}
+                return response.json()
+            })
+            .then(
+                json_response => {
+                    props.history.push({
+                        pathname: '/Login',
+                        state: { message: json_response.message, from: {pathname: "/"}},
+                        from: '/'
+                    });
+                    console.log(json_response.message)
+                }
+            )
+            .catch(error => {
+                error.json().then(err => {
+                    setStatus({
+                        error: true,
+                        msg: err.Error
+                    })
+                })
             })
     },
 })(SignUpForm);
