@@ -89,7 +89,7 @@ class JobPostingsList extends React.Component{
                 <Paper className='jobPostingsList' elevation={0}>
                     <h1>My Job Postings</h1>
                     <div className='JobPostingsContainer' row>
-                    <div className='positionName JobPostingTitle' ><p>Position Name</p></div>
+                    <div className='positionName JobPostingTitle'><p>Position Name</p></div>
                     <div className='JobPostingTitle'><p>Location</p></div>
                     <div className='JobPostingTitle'><p>Presentation Date</p></div>
                     <div className='JobPostingTitle'><p>Deadline</p></div>
