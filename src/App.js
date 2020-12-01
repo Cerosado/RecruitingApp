@@ -47,13 +47,14 @@ function PrivateRoute({component: Component, roles, ...rest}){
 
     const localToken = localStorage.getItem('jwt_token');
     const decoded = jwtDecode(localToken);
-    console.log(roles)
 
     if (roles && roles.indexOf(decoded['rls']) === -1){
         return <Redirect to={{ pathname: '/Home'}} />
     }
 
-    return <Component {...rest}/>
+    return <Route {...rest}
+                  render={({location, ...routeProps}) => <Component {...routeProps}/>}
+    />
 }
 
 class App extends React.Component{
