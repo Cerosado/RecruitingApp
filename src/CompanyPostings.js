@@ -11,28 +11,8 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import icon from "./Resources/resume.jpg";
 import {withRouter} from "react-router";
+import {authFetch} from "./auth";
 import jwtDecode from "jwt-decode";
-
-// function JobPostingList() {
-//     const [postingList, setPostingList] = useState([])
-//
-//
-//     useEffect(() => {
-//         fetch(url).then(response => response.json()).then(data => {
-//            setPostingList(data.results);
-//         });
-//     })
-//
-//     return (
-//         <div>
-//             <ul>
-//                 {postingList.map(posting => (
-//                     <li key={posting.id}>{posting.position_name}</li>
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// }
 
 class JobPosting extends React.Component {
     constructor(props) {
@@ -83,7 +63,7 @@ class JobPostingsList extends React.Component{
 
     componentDidMount() {
         let url = `http://localhost:5000/JobPosting?user_id=2`;
-        fetch(url)
+        authFetch(url)
             .then(response => response.json())
             .then(
                 (data) => {
@@ -109,82 +89,82 @@ class JobPostingsList extends React.Component{
         } else if (!isLoaded) {
             return <div>Loading...</div>
         } else {
-            const localToken = localStorage.getItem('jwt_token');
-            const decoded = jwtDecode(localToken);
-
-            if (decoded['rls'] === 'recruiter') {
+            // const localToken = localStorage.getItem('jwt_token');
+            // const decoded = jwtDecode(localToken);
+            //
+            // if (decoded['rls'] === 'recruiter') {
                 return (
-                    <Paper className='jobPostingsList' elevation={0}>
-                        <h1>My Job Postings</h1>
-                        <div className='JobPostingsContainer' row>
-                            <div className='positionName JobPostingTitle'><p>Position Name</p></div>
-                            <div className='JobPostingTitle'><p>Location</p></div>
-                            <div className='JobPostingTitle'><p>Presentation Date</p></div>
-                            <div className='JobPostingTitle'><p>Deadline</p></div>
-                        </div>
-                        <Divider/>
-                        <List>
-                            {postings.map(posting => (
-                                <ListItemLink
-                                    key={posting.posting_id}
-                                    primary={posting.position_name}
-                                    to={'/jobPostings/' + posting.posting_id}
-                                    location={posting.location}
-                                    presentationDate={formatDate(posting.presentationdate)}
-                                    deadline={formatDate(posting.deadline)}
-                                >
-                                </ListItemLink>
-                                // <li key={posting.posting_id}>
-                                //     <JobPosting
-                                //         PositionName={posting.position_name}
-                                //         Location={posting.location}
-                                //         PresentationDate={posting.presentationDate}
-                                //         Deadline={posting.deadline}
-                                //         // new Intl.DateTimeFormat('en-US').format(date)
-                                //     />
-                                // </li>
-                            ))}
-                        </List>
-                    </Paper>
-                );
-            }
-            else {
-                return (
-                    <Paper className='jobPostingsList' elevation={0}>
-                        <h1>My Job Postings</h1>
-                        <div className='JobPostingsContainer' row>
-                            <div className='companyName JobPostingTitle'><p>Company Name</p></div>
-                            <div className='positionName JobPostingTitle'><p>Position Name</p></div>
-                            <div className='JobPostingTitle'><p>Location</p></div>
-                            <div className='JobPostingTitle'><p>Presentation Date</p></div>
-                            <div className='JobPostingTitle'><p>Deadline</p></div>
-                        </div>
-                        <Divider/>
-                        <List>
-                            {postings.map(posting => (
-                                <ListItemLink
-                                    key={posting.posting_id}
-                                    primary={posting.position_name}
-                                    to={'/jobPostings/' + posting.posting_id}
-                                    location={posting.location}
-                                    presentationDate={formatDate(posting.presentationdate)}
-                                    deadline={formatDate(posting.deadline)}
-                                >
-                                </ListItemLink>
-                                // <li key={posting.posting_id}>
-                                //     <JobPosting
-                                //         PositionName={posting.position_name}
-                                //         Location={posting.location}
-                                //         PresentationDate={posting.presentationDate}
-                                //         Deadline={posting.deadline}
-                                //         // new Intl.DateTimeFormat('en-US').format(date)
-                                //     />
-                                // </li>
-                            ))}
-                        </List>
-                    </Paper>
-                );
-            }
+                <Paper className='jobPostingsList' elevation={0}>
+                    <h1>My Job Postings</h1>
+                    <div className='JobPostingsContainer' row>
+                    <div className='positionName JobPostingTitle' ><p>Position Name</p></div>
+                    <div className='JobPostingTitle'><p>Location</p></div>
+                    <div className='JobPostingTitle'><p>Presentation Date</p></div>
+                    <div className='JobPostingTitle'><p>Deadline</p></div>
+                    </div>
+                    <Divider/>
+                    <List>
+                        {postings.map(posting => (
+                            <ListItemLink
+                                key={posting.posting_id}
+                                primary={posting.position_name}
+                                to={'/jobPostings/' + posting.posting_id}
+                                location={posting.location}
+                                presentationDate={formatDate(posting.presentationdate)}
+                                deadline={formatDate(posting.deadline)}
+                            >
+                            </ListItemLink>
+                            // <li key={posting.posting_id}>
+                            //     <JobPosting
+                            //         PositionName={posting.position_name}
+                            //         Location={posting.location}
+                            //         PresentationDate={posting.presentationDate}
+                            //         Deadline={posting.deadline}
+                            //         // new Intl.DateTimeFormat('en-US').format(date)
+                            //     />
+                            // </li>
+                        ))}
+                    </List>
+                </Paper>
+            );
+        // }
+        // else {
+        //         return (
+        //             <Paper className='jobPostingsList' elevation={0}>
+        //                 <h1>My Job Postings</h1>
+        //                 <div className='JobPostingsContainer' row>
+        //                     <div className='companyName JobPostingTitle'><p>Company Name</p></div>
+        //                     <div className='positionName JobPostingTitle'><p>Position Name</p></div>
+        //                     <div className='JobPostingTitle'><p>Location</p></div>
+        //                     <div className='JobPostingTitle'><p>Presentation Date</p></div>
+        //                     <div className='JobPostingTitle'><p>Deadline</p></div>
+        //                 </div>
+        //                 <Divider/>
+        //                 <List>
+        //                     {postings.map(posting => (
+        //                         <ListItemLink
+        //                             key={posting.posting_id}
+        //                             primary={posting.position_name}
+        //                             to={'/jobPostings/' + posting.posting_id}
+        //                             location={posting.location}
+        //                             presentationDate={formatDate(posting.presentationdate)}
+        //                             deadline={formatDate(posting.deadline)}
+        //                         >
+        //                         </ListItemLink>
+        //                         // <li key={posting.posting_id}>
+        //                         //     <JobPosting
+        //                         //         PositionName={posting.position_name}
+        //                         //         Location={posting.location}
+        //                         //         PresentationDate={posting.presentationDate}
+        //                         //         Deadline={posting.deadline}
+        //                         //         // new Intl.DateTimeFormat('en-US').format(date)
+        //                         //     />
+        //                         // </li>
+        //                     ))}
+        //                 </List>
+        //             </Paper>
+        //         );
+        //     }
         }
     }
 }
