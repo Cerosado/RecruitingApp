@@ -1,3 +1,4 @@
+import flask_praetorian
 from flask import jsonify
 from src.backend.DAO.jobPostingsDAO import JobPostingsDao
 
@@ -59,7 +60,10 @@ class JobPostingHandler:
         return jsonify(applicants_list)
 
     def getRankedApplicationsByJobPostingId(self, posting_id):
+        current_user = flask_praetorian.current_user()
         dao = JobPostingsDao()
+        if current_user.identity != dao.get_recruiter_id(posting_id):
+            return jsonify(Error="Access denied"), 403
         applicants_list = dao.getRankedApplicationsByJobPostingId(posting_id)
         posting_details = dao.getJobPostingById(posting_id)
         return jsonify(posting=posting_details, applicants=applicants_list)
