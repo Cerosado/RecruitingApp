@@ -1,0 +1,47 @@
+.MuiContainer-maxWidthMd {
+    max-width: 960px;
+    min-height: 960px;
+    background-color: aliceblue;
+}
+
+#AdditionalDetails{
+    min-width: 100%;
+}
+
+#PositionName, #Location{
+    width: 412px;
+}
+
+/*#Datetime {*/
+/*    padding-left: 50px;*/
+/*}*/
+
+.MuiFormControl-root {
+    min-width: 100%;
+}
+
+.MuiOutlinedInput-root {
+    margin-top: 12px;
+    border-color: aliceblue;
+}
+
+.MuiFormControl-root {
+    margin: 8px !important;
+}
+
+.makeStyles-formControl-14 {
+    width: 75%;
+    margin-top: 15px;
+}
+
+.h3 {
+    margin-top: 55px !important;
+}
+
+#Submit {
+    background-color: cornflowerblue !important;
+}
+
+#SubmitDiv {
+    text-align: right;
+}

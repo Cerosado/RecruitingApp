@@ -9,6 +9,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {List} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
+import Select from '@material-ui/core/Select';
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import {classes} from "istanbul-lib-coverage";
+import Dropdown from "./Dropdown";
 
 
 class Applicant extends React.Component {
@@ -154,3 +160,4 @@ export default withRouter(ApplicantsList);
 
 //install material - npm install @material-ui/core
 //install material icons - npm install  @material-ui/icons
+

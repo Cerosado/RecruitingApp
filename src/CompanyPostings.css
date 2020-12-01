@@ -4,13 +4,13 @@ h1 {
 }
 
 .jobPostingsList {
-    background-color: #14274e !important;
+    background-color: aliceblue !important;
     min-height: 816px;
 
 }
 
 p, .MuiListItemText-primary {
-    color: white;
+    color: black;
 }
 
 .Deadline, .PresentationDate {

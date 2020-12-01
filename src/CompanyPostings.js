@@ -11,6 +11,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import icon from "./Resources/resume.jpg";
 import {withRouter} from "react-router";
+import jwtDecode from "jwt-decode";
 
 // function JobPostingList() {
 //     const [postingList, setPostingList] = useState([])
@@ -108,40 +109,82 @@ class JobPostingsList extends React.Component{
         } else if (!isLoaded) {
             return <div>Loading...</div>
         } else {
-            return (
-                <Paper className='jobPostingsList' elevation={0}>
-                    <h1>My Job Postings</h1>
-                    <div className='JobPostingsContainer' row>
-                    <div className='positionName JobPostingTitle' ><p>Position Name</p></div>
-                    <div className='JobPostingTitle'><p>Location</p></div>
-                    <div className='JobPostingTitle'><p>Presentation Date</p></div>
-                    <div className='JobPostingTitle'><p>Deadline</p></div>
-                    </div>
-                    <Divider/>
-                    <List>
-                        {postings.map(posting => (
-                            <ListItemLink
-                                key={posting.posting_id}
-                                primary={posting.position_name}
-                                to={'/jobPostings/' + posting.posting_id}
-                                location={posting.location}
-                                presentationDate={formatDate(posting.presentationdate)}
-                                deadline={formatDate(posting.deadline)}
-                            >
-                            </ListItemLink>
-                            // <li key={posting.posting_id}>
-                            //     <JobPosting
-                            //         PositionName={posting.position_name}
-                            //         Location={posting.location}
-                            //         PresentationDate={posting.presentationDate}
-                            //         Deadline={posting.deadline}
-                            //         // new Intl.DateTimeFormat('en-US').format(date)
-                            //     />
-                            // </li>
-                        ))}
-                    </List>
-                </Paper>
-            );
+            const localToken = localStorage.getItem('jwt_token');
+            const decoded = jwtDecode(localToken);
+
+            if (decoded['rls'] === 'recruiter') {
+                return (
+                    <Paper className='jobPostingsList' elevation={0}>
+                        <h1>My Job Postings</h1>
+                        <div className='JobPostingsContainer' row>
+                            <div className='positionName JobPostingTitle'><p>Position Name</p></div>
+                            <div className='JobPostingTitle'><p>Location</p></div>
+                            <div className='JobPostingTitle'><p>Presentation Date</p></div>
+                            <div className='JobPostingTitle'><p>Deadline</p></div>
+                        </div>
+                        <Divider/>
+                        <List>
+                            {postings.map(posting => (
+                                <ListItemLink
+                                    key={posting.posting_id}
+                                    primary={posting.position_name}
+                                    to={'/jobPostings/' + posting.posting_id}
+                                    location={posting.location}
+                                    presentationDate={formatDate(posting.presentationdate)}
+                                    deadline={formatDate(posting.deadline)}
+                                >
+                                </ListItemLink>
+                                // <li key={posting.posting_id}>
+                                //     <JobPosting
+                                //         PositionName={posting.position_name}
+                                //         Location={posting.location}
+                                //         PresentationDate={posting.presentationDate}
+                                //         Deadline={posting.deadline}
+                                //         // new Intl.DateTimeFormat('en-US').format(date)
+                                //     />
+                                // </li>
+                            ))}
+                        </List>
+                    </Paper>
+                );
+            }
+            else {
+                return (
+                    <Paper className='jobPostingsList' elevation={0}>
+                        <h1>My Job Postings</h1>
+                        <div className='JobPostingsContainer' row>
+                            <div className='companyName JobPostingTitle'><p>Company Name</p></div>
+                            <div className='positionName JobPostingTitle'><p>Position Name</p></div>
+                            <div className='JobPostingTitle'><p>Location</p></div>
+                            <div className='JobPostingTitle'><p>Presentation Date</p></div>
+                            <div className='JobPostingTitle'><p>Deadline</p></div>
+                        </div>
+                        <Divider/>
+                        <List>
+                            {postings.map(posting => (
+                                <ListItemLink
+                                    key={posting.posting_id}
+                                    primary={posting.position_name}
+                                    to={'/jobPostings/' + posting.posting_id}
+                                    location={posting.location}
+                                    presentationDate={formatDate(posting.presentationdate)}
+                                    deadline={formatDate(posting.deadline)}
+                                >
+                                </ListItemLink>
+                                // <li key={posting.posting_id}>
+                                //     <JobPosting
+                                //         PositionName={posting.position_name}
+                                //         Location={posting.location}
+                                //         PresentationDate={posting.presentationDate}
+                                //         Deadline={posting.deadline}
+                                //         // new Intl.DateTimeFormat('en-US').format(date)
+                                //     />
+                                // </li>
+                            ))}
+                        </List>
+                    </Paper>
+                );
+            }
         }
     }
 }
