@@ -47,14 +47,15 @@ def parse_dataset_to_csv():
     Function parses resumes from a directory and writes the parsed information in a csv file
     :return: None
     """
-    csv_file = 'parsed_results_without_kaggle.csv'
+    csv_file = 'parsed_skills_experience_education.csv'
     with open(csv_file, mode='w') as parse_results_file:
-        field_names = ['skills', 'education', 'college_name', 'degree',
-                       'designation', 'experience', 'company_names',
-                       'total_experience', 'label']
+        # field_names = ['skills', 'education', 'college_name', 'degree',
+        #                'designation', 'experience', 'company_names',
+        #                'total_experience', 'label']
+        field_names = ['skills', 'education_section', 'experience_section', 'label']
         parse_writer = csv.DictWriter(parse_results_file, fieldnames=field_names)
         parse_writer.writeheader()
-        for resume_type in ('Experienced', 'Inexperienced'):
+        for resume_type in ('Experienced', 'Inexperienced', 'kaggle_dataset'):
             results = parse_resume_directory('resumes/%s' % (resume_type,))
             for parse_result in results:
                 parse_result['label'] = 1 if resume_type in ('Experienced', 'kaggle_dataset') else 0
@@ -69,9 +70,10 @@ def parse_directory_to_csv(directory, csv_file):
     :return: None
     """
     with open(csv_file, mode='w') as parse_csv:
-        field_names = ['skills', 'education', 'college_name', 'degree',
-                       'designation', 'experience', 'company_names',
-                       'total_experience', 'label']
+        # field_names = ['skills', 'education', 'college_name', 'degree',
+        #                'designation', 'experience', 'company_names',
+        #                'total_experience', 'label']
+        field_names = ['skills', 'education_section', 'experience_section', 'label']
         parse_writer = csv.DictWriter(parse_csv, fieldnames=field_names)
         parse_writer.writeheader()
         results = parse_resume_directory(directory)
@@ -117,8 +119,8 @@ if __name__ == '__main__':
     parse_dataset_to_csv()
 
     # parse_dict = CustomResumeParser(
-    #     'C:/Users/Eduardo Perez/Documents/Resume/RESUME_EduardoAPerezVega2020sinAcentos.pdf',
-    #     skills_file='src/resume_parser/resume_parser/skills_dataset.csv'
+    #     resume='resumes/additional/RESUME_EduardoAPerezVega2020sinAcentos.pdf',
+    #     skills_file='skills_dataset.csv'
     # ).get_extracted_data()
 
     # test_model()

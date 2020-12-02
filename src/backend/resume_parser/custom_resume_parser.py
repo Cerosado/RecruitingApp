@@ -2,6 +2,8 @@ import io
 import os
 import inspect
 import re
+
+import docx2txt
 import pandas as pd
 
 import spacy
@@ -30,13 +32,15 @@ class CustomResumeParser(ResumeParser):
             'experience': None,
             'company_names': None,
             'total_experience': None,   # todo: remove??
+            'education_section': None,
+            'experience_section': None
         }
         self.__resume = resume
         if not isinstance(self.__resume, io.BytesIO):
             ext = os.path.splitext(self.__resume)[1].split('.')[1]
         else:
             ext = self.__resume.name.split('.')[1]
-        self.__text_raw = utils.extract_text(self.__resume, '.' + ext)
+        self.__text_raw = extract_text(self.__resume, '.' + ext)
         self.__text = ' '.join(self.__text_raw.split())
         self.__nlp = nlp(self.__text)
         self.__custom_nlp = custom_nlp(self.__text_raw)
@@ -44,7 +48,8 @@ class CustomResumeParser(ResumeParser):
         self.__get_basic_details()
 
     def get_extracted_data(self):
-        return self.__details
+        # return self.__details
+        return dict((key, self.__details[key]) for key in ['skills', 'education_section', 'experience_section'])
 
     def __get_basic_details(self):
         cust_ent = utils.extract_entities_wih_custom_model(
@@ -59,7 +64,13 @@ class CustomResumeParser(ResumeParser):
                       [sent.string.strip() for sent in self.__nlp.sents]
               )
         # TODO: Extract concentration, gpa, work experiences from entities
-        entities = utils.extract_entity_sections_grad(self.__text_raw)
+        entities = extract_entity_sections_grad(self.__text_raw)
+
+        self.__details['education_section'] = entities.get('education', None)
+        if 'experience' in entities:
+            self.__details['experience_section'] = entities.get('experience', None)
+        elif 'professional experience' in entities:
+            self.__details['experience_section'] = entities.get('professional experience', None)
 
         # if 'education' in entities:
         #     gpa = extract_gpa(entities['education'])
@@ -107,6 +118,39 @@ class CustomResumeParser(ResumeParser):
         except KeyError:
             self.__details['total_experience'] = 0
         return
+
+
+def extract_text(file_path, extension):
+    '''
+    Wrapper function to detect the file extension and call text
+    extraction function accordingly
+
+    :param file_path: path of file of which text is to be extracted
+    :param extension: extension of file `file_name`
+    '''
+    text = ''
+    if extension == '.pdf':
+        for page in utils.extract_text_from_pdf(file_path):
+            text += ' ' + page
+    elif extension == '.docx':
+        text = extract_text_from_docx(file_path)
+    elif extension == '.doc':
+        text = utils.extract_text_from_doc(file_path)
+    return text
+
+
+def extract_text_from_docx(doc_path):
+    '''
+    Helper function to extract plain text from .docx files
+
+    :param doc_path: path to .docx file to be extracted
+    :return: string of extracted text
+    '''
+    try:
+        text = docx2txt.process(doc_path)
+        return text
+    except KeyError:
+        return ' '
 
 
 def extract_education_with_gpa(nlp_text):
@@ -179,3 +223,48 @@ def extract_skills(nlp_text, noun_chunks, skills_file=None):
     return [i.capitalize() for i in set([i.lower() for i in list(dict.fromkeys(skillset))])]
 
 
+def extract_entity_sections_grad(text):
+    '''
+    Helper function to extract all the raw text from sections of
+    resume specifically for graduates and undergraduates
+
+    :param text: Raw text of resume
+    :return: dictionary of entities
+    '''
+    text_split = [i.strip() for i in text.split('\n')]
+    # sections_in_resume = [i for i in text_split if i.lower() in sections]
+    entities = {}
+    key = False
+    for phrase in text_split:
+        if len(phrase) == 1:
+            p_key = phrase.replace(':', '')
+        else:
+            p_key = set(word.replace(':', '') for word in phrase.lower().split()) & set(cs.RESUME_SECTIONS_GRAD)
+        try:
+            p_key = list(p_key)[0]
+        except IndexError:
+            pass
+        if p_key in cs.RESUME_SECTIONS_GRAD:
+            entities[p_key] = []
+            key = p_key
+        elif key and phrase.strip():
+            entities[key].append(phrase)
+
+    # entity_key = False
+    # for entity in entities.keys():
+    #     sub_entities = {}
+    #     for entry in entities[entity]:
+    #         if u'\u2022' not in entry:
+    #             sub_entities[entry] = []
+    #             entity_key = entry
+    #         elif entity_key:
+    #             sub_entities[entity_key].append(entry)
+    #     entities[entity] = sub_entities
+
+    # pprint.pprint(entities)
+
+    # make entities that are not found None
+    # for entity in cs.RESUME_SECTIONS:
+    #     if entity not in entities.keys():
+    #         entities[entity] = None
+    return entities
