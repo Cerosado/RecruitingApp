@@ -10,6 +10,27 @@ import spacy
 from pyresparser import ResumeParser, utils, constants as cs
 from spacy.matcher import Matcher
 
+EXPERIENCE_KEYWORDS = [
+        "professional background",
+        "career progression",
+        "work history",
+        "past employment",
+        "experiences",
+        "career overview",  # ?
+        "work summary",
+        "employment",
+    ]
+
+EDUCATION_KEYWORDS = [
+    "qualifications",
+    "academic qualifications",
+    "qualification",
+    "educational",
+]
+
+cs.RESUME_SECTIONS_GRAD.extend(EXPERIENCE_KEYWORDS)
+cs.RESUME_SECTIONS_GRAD.extend(EDUCATION_KEYWORDS)
+
 
 class CustomResumeParser(ResumeParser):
     def __init__(
@@ -31,9 +52,10 @@ class CustomResumeParser(ResumeParser):
             'designation': None,
             'experience': None,
             'company_names': None,
-            'total_experience': None,   # todo: remove??
+            'total_experience': None,
             'education_section': None,
-            'experience_section': None
+            'experience_section': None,
+            'resume': resume
         }
         self.__resume = resume
         if not isinstance(self.__resume, io.BytesIO):
@@ -48,8 +70,11 @@ class CustomResumeParser(ResumeParser):
         self.__get_basic_details()
 
     def get_extracted_data(self):
-        # return self.__details
-        return dict((key, self.__details[key]) for key in ['skills', 'education_section', 'experience_section'])
+        return self.__details
+        # fields_to_return = ['skills', 'education_section', 'experience_section']
+        # if os.environ.get('INCLUDE_RESUME_PATHS', None):
+        #     fields_to_return.append('resume')
+        # return dict((key, self.__details[key]) for key in fields_to_return)
 
     def __get_basic_details(self):
         cust_ent = utils.extract_entities_wih_custom_model(
@@ -63,14 +88,12 @@ class CustomResumeParser(ResumeParser):
         edu = extract_education_with_gpa(
                       [sent.string.strip() for sent in self.__nlp.sents]
               )
-        # TODO: Extract concentration, gpa, work experiences from entities
+
         entities = extract_entity_sections_grad(self.__text_raw)
 
-        self.__details['education_section'] = entities.get('education', None)
-        if 'experience' in entities:
-            self.__details['experience_section'] = entities.get('experience', None)
-        elif 'professional experience' in entities:
-            self.__details['experience_section'] = entities.get('professional experience', None)
+        for keyword in [*EDUCATION_KEYWORDS, 'education']:
+            if keyword in entities and entities[keyword]:
+                self.__details['education_section'] = entities[keyword]
 
         # if 'education' in entities:
         #     gpa = extract_gpa(entities['education'])
@@ -78,7 +101,7 @@ class CustomResumeParser(ResumeParser):
         # extract skills
         self.__details['skills'] = skills
 
-        # TODO: Currently extracting degree and year, not concentration nor university
+        # Tuple of Degree,Year and Gpa
         self.__details['education'] = edu
 
         # extract college name
@@ -106,14 +129,21 @@ class CustomResumeParser(ResumeParser):
             pass
 
         try:
-            self.__details['experience'] = entities['experience']
+            for keyword in [*EXPERIENCE_KEYWORDS, 'experience', 'professional experience']:
+                if keyword in entities and entities[keyword]:
+                    if self.__details['experience'] is None:
+                        self.__details['experience'] = entities[keyword]
+                        self.__details['experience_section'] = entities[keyword]
+                    else:
+                        self.__details['experience'].extend(entities[keyword])
+                        self.__details['experience_section'].extend(entities[keyword])
             try:
                 exp = round(
-                    utils.get_total_experience(entities['experience']) / 12,
+                    utils.get_total_experience(self.__details['experience']) / 12,
                     2
                 )
                 self.__details['total_experience'] = exp
-            except KeyError:
+            except (KeyError, TypeError):
                 self.__details['total_experience'] = 0
         except KeyError:
             self.__details['total_experience'] = 0
@@ -235,36 +265,33 @@ def extract_entity_sections_grad(text):
     # sections_in_resume = [i for i in text_split if i.lower() in sections]
     entities = {}
     key = False
+    edu_pattern = re.compile(
+        r"(?P<before_colon>Education):(?P<after_colon>.+)",
+        re.IGNORECASE
+    )
     for phrase in text_split:
-        if len(phrase) == 1:
-            p_key = phrase.replace(':', '')
-        else:
-            p_key = set(word.replace(':', '') for word in phrase.lower().split()) & set(cs.RESUME_SECTIONS_GRAD)
-        try:
-            p_key = list(p_key)[0]
-        except IndexError:
-            pass
+        p_key = ''
+        if len(phrase.split()) <= 3:
+            p_key = phrase.replace(':', '').lower()
+            if p_key not in cs.RESUME_SECTIONS_GRAD:
+                p_key = set(p_key.split()) & set(cs.RESUME_SECTIONS_GRAD)
+        # else:
+        #     p_key = set(word.replace(':', '') for word in phrase.lower().split()) & set(cs.RESUME_SECTIONS_GRAD)
+                try:
+                    p_key = list(p_key)[0]
+                except IndexError:
+                    pass
+        elif re.search('education', phrase, flags=re.IGNORECASE):
+            edu_match = re.search(edu_pattern, phrase)
+            if edu_match:
+                key = 'education'
+                after = edu_match['after_colon'].strip()
+                entities['education'] = [after]
+                continue
         if p_key in cs.RESUME_SECTIONS_GRAD:
-            entities[p_key] = []
+            if p_key not in entities:
+                entities[p_key] = []
             key = p_key
         elif key and phrase.strip():
             entities[key].append(phrase)
-
-    # entity_key = False
-    # for entity in entities.keys():
-    #     sub_entities = {}
-    #     for entry in entities[entity]:
-    #         if u'\u2022' not in entry:
-    #             sub_entities[entry] = []
-    #             entity_key = entry
-    #         elif entity_key:
-    #             sub_entities[entity_key].append(entry)
-    #     entities[entity] = sub_entities
-
-    # pprint.pprint(entities)
-
-    # make entities that are not found None
-    # for entity in cs.RESUME_SECTIONS:
-    #     if entity not in entities.keys():
-    #         entities[entity] = None
     return entities
