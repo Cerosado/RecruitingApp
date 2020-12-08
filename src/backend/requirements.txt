@@ -7,3 +7,4 @@ Flask-Cors~=3.0.9
 scikit-learn~=0.23.2
 Werkzeug~=1.0.1
 psycopg2~=2.8.6
+docx2txt~=0.7
