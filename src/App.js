@@ -16,6 +16,7 @@ import {authFetch, useAuth} from "./auth";
 import Homepage from "./components/Homepage";
 import EmailConfirm from "./components/EmailConfirm";
 import jwtDecode from "jwt-decode";
+import Profile from "./components/Profile"
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -68,6 +69,8 @@ class App extends React.Component{
                             <PrivateRoute path="/JobPostings/:id" component={ApplicantsList} roles={["recruiter"]}>
                             </PrivateRoute>
                             <PrivateRoute path="/JobPostings" component={JobPostingsList} roles={["recruiter"]}>
+                            </PrivateRoute>
+                            <PrivateRoute path="/Profile" component={Profile}>
                             </PrivateRoute>
                             <Route path="/Login"
                                    render={routerProps => (

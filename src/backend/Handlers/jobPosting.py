@@ -1,5 +1,5 @@
 from flask import jsonify
-from src.backend.DAO.jobPostingsDAO import JobPostingsDao
+from ..DAO.jobPostingsDAO import JobPostingsDao
 
 
 class JobPostingHandler:
