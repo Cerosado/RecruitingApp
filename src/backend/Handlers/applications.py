@@ -28,9 +28,11 @@ class ApplicationsHandler:
         result = self.map_to_Application(result)
         return jsonify(result)
 
-    def createApplication(self, data):
-        user_id = data['user_id']
-        posting_id = data['posting_id']
+    def createApplication(self, user_id, posting_id):
+    #TODO ADD RANK
+        user_id = user_id
+        posting_id = posting_id
+        rank = 70
         dao = ApplicationsDao()
-        id = dao.registerApplication(user_id, posting_id)
+        id = dao.registerApplication(user_id, posting_id, rank)
         return jsonify(Appplicationid=id)

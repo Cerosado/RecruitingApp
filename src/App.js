@@ -18,6 +18,7 @@ import EmailConfirm from "./components/EmailConfirm";
 import JobPostingForm from "./JobPostingForm";
 import EventForm from "./EventForm";
 import jwtDecode from "jwt-decode";
+import JobPostingApplication from "./Resources/JobPostingApplication";
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -58,8 +59,6 @@ function PrivateRoute({component: Component, roles, ...rest}){
                   render={({location, ...routeProps}) => <Component {...routeProps}/>}
     />
 }
-import JobPostingForm from "./JobPostingForm";
-import EventForm from "./EventForm";
 
 class App extends React.Component{
     render() {
@@ -71,7 +70,7 @@ class App extends React.Component{
                         <Switch>
                             <PrivateRoute path="/JobPostings/:id" component={ApplicantsList} roles={["recruiter"]}>
                             </PrivateRoute>
-                            <PrivateRoute path="/JobPostings" component={JobPostingsList} roles={["recruiter"]}>
+                            <PrivateRoute path="/JobPostings" component={JobPostingsList} >
                             </PrivateRoute>
                             <Route path="/Login"
                                    render={routerProps => (
@@ -89,9 +88,14 @@ class App extends React.Component{
                                           component={Secret}
                                           roles={["applicant"]}>
                             </PrivateRoute>
-                            <Route path="/JobPostingForm"
+                            <Route path="/JobPostingForm/:id" component={JobPostingForm} roles={["recruiter"]}
                                    render={routerProps => (
                                        <JobPostingForm {...routerProps}/>
+                                   )}>
+                            </Route>
+                            <Route path="/JobPostingApplication/:id" component={JobPostingApplication} roles={["applicant"]}
+                                   render={routerProps => (
+                                       <JobPostingApplication {...routerProps}/>
                                    )}>
                             </Route>
                             <Route path="/EventForm"

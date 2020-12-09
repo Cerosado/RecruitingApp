@@ -9,6 +9,7 @@ from flask_cors import CORS
 from flask_mail import Mail
 from werkzeug.utils import secure_filename
 
+from backend.Handlers.applications import ApplicationsHandler
 from .Handlers.jobPosting import JobPostingHandler
 from .Handlers.resume import ResumeHandler
 
@@ -86,39 +87,70 @@ def jobPostingDetail(posting_id):
         return jsonify(Error="Method not allowed"), 405
 
 
-@app.route('/JobPosting', methods=['GET'])
-@flask_praetorian.roles_required("recruiter")
+@app.route('/JobPosting', methods=['GET', 'POST'])
+@flask_praetorian.roles_accepted("recruiter", "applicant")
 def jobPostings():
-    user_id = request.args.get('user_id')
+    user_id = flask_praetorian.current_user().identity
     if request.method == 'GET' and user_id:
-        return JobPostingHandler().getJobPostingsByUserId(user_id)
+        if (flask_praetorian.current_user().rolenames[0] == 'recruiter'):
+            return JobPostingHandler().getJobPostingsByUserId(user_id)
+        else:
+            test = JobPostingHandler().getAllJobPostings()
+            return test
     else:
         return jsonify(Error="Method not allowed"), 405
 
+@app.route('/JobPostingForm', methods=['POST'])
+@flask_praetorian.roles_required("recruiter")
+def jobPostingForm():
+    user_id = flask_praetorian.current_user().identity
+    if request.method == 'POST' and user_id:
+        return JobPostingHandler().createJobPosting(request.get_json(force=True), user_id)
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
+@app.route('/JobPostingForm/<int:posting_id>', methods=['GET'])
+@flask_praetorian.roles_required("applicant")
+def getJobPosting(posting_id):
+    user_id = flask_praetorian.current_user().identity
+    if request.method == 'GET' and user_id:
+        test = JobPostingHandler().getJobPostingById(posting_id)
+        return test
+    else:
+        return jsonify(Error="Method not allowed"), 405
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ('pdf', 'doc', 'docx')
 
 
-@app.route('/Applications', methods=['POST'])
-def parse_resume():
+@app.route('/Applications/<int:posting_id>', methods=['POST'])
+@flask_praetorian.roles_required("applicant")
+def create_application(data):
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return jsonify(Error="File error")
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify(Error="File error")
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            if filename:
-                resume = BytesIO(file.read())
-                resume.name = filename
-                return ResumeHandler().parse_and_rank_resume(
-                    resume_file=resume, resume_filename=filename,
-                    skills_file='./resume_parser/skills_dataset.csv',
-                    form=request.form)
-            return jsonify(Error="Filename not secure")
-    return jsonify(Error="Method not allowed")
+        user_id = flask_praetorian.current_user().identity
+        #TODO CHECK
+        posting_id = data['posting_id']
+        return ApplicationsHandler().createApplication(user_id, posting_id)
+    else:
+        return jsonify(Error="Method not allowed"), 405
+# def parse_resume():
+#     if request.method == 'POST':
+#         if 'file' not in request.files:
+#             return jsonify(Error="File error")
+#         file = request.files['file']
+#         if file.filename == '':
+#             return jsonify(Error="File error")
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             if filename:
+#                 resume = BytesIO(file.read())
+#                 resume.name = filename
+#                 return ResumeHandler().parse_and_rank_resume(
+#                     resume_file=resume, resume_filename=filename,
+#                     skills_file='./resume_parser/skills_dataset.csv',
+#                     form=request.form)
+#             return jsonify(Error="Filename not secure")
+#     return jsonify(Error="Method not allowed")
 
 
 ###########################################
