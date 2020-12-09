@@ -14,7 +14,8 @@ class JobPostingsDao:
 
     def getAllJobPostings(self):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT first_name, position_name, location, presentationDate, deadline FROM jobpostings INNER JOIN accounts ON jobpostings.user_id = accounts.user_id ;" #TODO WHERE deadline > CURRENT_DATE
+        query = "SELECT posting_id, first_name, position_name, location, presentationDate, deadline " \
+                "FROM jobpostings INNER JOIN accounts ON jobpostings.user_id = accounts.user_id ;"  #TODO WHERE deadline > CURRENT_DATE
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
@@ -46,10 +47,10 @@ class JobPostingsDao:
         cursor.close()
         return result['user_id'] if result else None
 
-    def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline):
+    def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "INSERT INTO jobpostings(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING posting_id;"
-        cursor.execute(query, (position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline))
+        query = "INSERT INTO jobpostings(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING posting_id;"
+        cursor.execute(query, (position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education))
         posting_id = cursor.fetchone()['posting_id']
         self.conn.commit()
         cursor.close()

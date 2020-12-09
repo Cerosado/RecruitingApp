@@ -12,6 +12,7 @@ from backend.Handlers.applications import ApplicationsHandler
 from .Handlers.jobPosting import JobPostingHandler
 from .Handlers.user import UserHandler
 from .Handlers.resume import ResumeHandler
+from .Handlers.models import ModelsHandler
 
 guard = flask_praetorian.Praetorian()
 
@@ -143,34 +144,47 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ('pdf', 'doc', 'docx')
 
 
+@app.route('/Models', methods=['GET'])
+@flask_praetorian.roles_required("recruiter")
+def get_fields_of_work():
+    if request.method == 'GET':
+        return ModelsHandler().get_all_models()
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
+
+###########################################
+#        Resumes and Applications         #
+###########################################
 @app.route('/Applications/<int:posting_id>', methods=['POST'])
 @flask_praetorian.roles_required("applicant")
-def create_application(data):
+def create_application(posting_id):
     if request.method == 'POST':
         user_id = flask_praetorian.current_user().identity
-        #TODO CHECK
-        posting_id = data['posting_id']
         return ApplicationsHandler().createApplication(user_id, posting_id)
     else:
         return jsonify(Error="Method not allowed"), 405
-# def parse_resume():
-#     if request.method == 'POST':
-#         if 'file' not in request.files:
-#             return jsonify(Error="File error")
-#         file = request.files['file']
-#         if file.filename == '':
-#             return jsonify(Error="File error")
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             if filename:
-#                 resume = BytesIO(file.read())
-#                 resume.name = filename
-#                 return ResumeHandler().parse_and_rank_resume(
-#                     resume_file=resume, resume_filename=filename,
-#                     skills_file='./resume_parser/skills_dataset.csv',
-#                     form=request.form)
-#             return jsonify(Error="Filename not secure")
-#     return jsonify(Error="Method not allowed")
+
+
+@app.route('/Resumes', methods=['POST'])
+@flask_praetorian.roles_required("applicant")
+def parse_resume():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify(Error="File error")
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify(Error="File error")
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            if filename:
+                resume = BytesIO(file.read())
+                resume.name = filename
+                return ResumeHandler().parse_resume(
+                    resume_file=resume, resume_filename=filename,
+                    skills_file='./resume_parser/skills_dataset.csv')
+            return jsonify(Error="Filename not secure")
+    return jsonify(Error="Method not allowed")
 
 
 ###########################################

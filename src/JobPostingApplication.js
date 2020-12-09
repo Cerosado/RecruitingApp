@@ -37,8 +37,7 @@ function JobPostingForm({
                 //         error
                 //     });
                 // }
-    )}, []);
-
+    )}, [id]);
     return (
         <Container component="main" >
             <CssBaseline />
@@ -104,10 +103,9 @@ function JobPostingForm({
                 <br/>
                 <div id="SubmitDiv">
                     <Grid item xs={12} sm={12}>
-                            <Button id="${id}" type="submit"
-                                      variant="contained"
-                                      color="primary"
-                                      disabled={jwtDecode(localStorage.getItem('jwt_token'))['rls'] === 'recruiter'}>Apply
+                            <Button id='submit_button' type="submit" variant="contained" color="primary"
+                                    disabled={jwtDecode(localStorage.getItem('jwt_token'))['rls'] === 'recruiter'}>
+                                Apply
                             </Button>
                     </Grid>
                 </div>
@@ -146,7 +144,7 @@ const CreateJobPosting = withFormik({
     },
 
     handleSubmit: (values, { props, setStatus} ) => {
-            let url = `http://localhost:5000/Applications/`;
+            let url = `http://localhost:5000/Applications/${props.match.params.id}`;
             authFetch(url, {
                 method: 'post',
             })
