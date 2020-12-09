@@ -91,12 +91,12 @@ class App extends React.Component{
                                           component={Secret}
                                           roles={["applicant"]}>
                             </PrivateRoute>
-                            <Route path="/JobPostingForm" component={JobPostingForm} roles={["recruiter"]}
+                            <Route path="/JobPostingForm" roles={["recruiter"]}
                                    render={routerProps => (
                                        <JobPostingForm {...routerProps}/>
                                    )}>
                             </Route>
-                            <Route path="/JobPostingApplication/:id" component={JobPostingApplication} roles={["applicant"]}
+                            <Route path="/JobPostingApplication/:id" roles={["applicant"]}
                                    render={routerProps => (
                                        <JobPostingApplication {...routerProps}/>
                                    )}>
