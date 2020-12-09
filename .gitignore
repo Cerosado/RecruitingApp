@@ -25,4 +25,4 @@ yarn-error.log*
 /.idea/
 /src/backend/.idea/
 
-/__pycache__/
+__pycache__/
