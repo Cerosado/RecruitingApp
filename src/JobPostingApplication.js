@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import jwtDecode from "jwt-decode";
 import Button from "@material-ui/core/Button";
 import {withFormik} from "formik";
-import {authFetch} from "../auth";
+import {authFetch} from "./auth";
 import React, {useEffect} from "react";
 import {useParams} from "react-router-dom";
 

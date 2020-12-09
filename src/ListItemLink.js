@@ -19,7 +19,7 @@ function ListItemLink(props) {
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
                 {isApplicant ? <ListItemText primary={companyName} /> : null}
                 <ListItemText primary={primary} />
-                <ListItemText primary={location} />
+                <ListItemText id='location' primary={location} />
                 <ListItemText primary={presentationDate} />
                 <ListItemText primary={deadline} />
             </ListItem>

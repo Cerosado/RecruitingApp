@@ -59,7 +59,13 @@ class JobPostingsList extends React.Component{
         } else {
             const localToken = localStorage.getItem('jwt_token');
             const decoded = jwtDecode(localToken);
-
+            let url = ''
+            if (decoded['rls'] === 'recruiter') {
+                url = '/jobPostings/';
+            }
+            else {
+                url = '/JobPostingApplication/';
+            }
             return (
                 <Paper className='jobPostingsList' elevation={0}>
                     <h1>My Job Postings</h1>
@@ -69,16 +75,16 @@ class JobPostingsList extends React.Component{
                                 direction="row"
                                 justify="left"
                                 alignItems="left"
-                                spacing={5}>
+                                spacing={3}>
                             {(decoded['rls'] === 'applicant') ?
-                                <Grid item xs={2}><div className=' JobPostingTitle' ><p>Company Name</p></div></Grid>:null}
+                                <Grid item xs={2}><div className=' positionName JobPostingTitle' ><p>Company</p></div></Grid>:null}
                             <Grid item xs={2}>
-                                <div className=' JobPostingTitle' ><p>Position Name</p></div>
+                                <div className=' JobPostingTitle' ><p>Position</p></div>
                             </Grid>
                             <Grid item xs={2}>
                                 <div className='JobPostingTitle'><p>Location</p></div>
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <div className='JobPostingTitle'><p>Presentation Date</p></div>
                             </Grid>
                             <Grid item xs={2}>
@@ -93,7 +99,7 @@ class JobPostingsList extends React.Component{
                                 key={posting.posting_id}
                                 companyName = {posting.first_name}
                                 primary={posting.position_name}
-                                to={'/jobPostings/' + posting.posting_id}
+                                to={url + posting.posting_id}
                                 location={posting.location}
                                 presentationDate={formatDate(posting.presentationdate)}
                                 deadline={formatDate(posting.deadline)}

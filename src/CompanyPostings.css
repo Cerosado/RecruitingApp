@@ -18,14 +18,13 @@ p, .MuiListItemText-primary {
 }
 
 .positionName {
-    width: 220px;
-    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .JobPostingsContainer {
     display: inline-grid;
     width: 100%;
-    grid-template-columns: 27.6% 20.4% 27.6% 11%;
+    /*grid-template-columns: 27.6% 20.4% 27.6% 11%;*/
 }
 
 .JobPostingTitle {
@@ -37,7 +36,7 @@ p, .MuiListItemText-primary {
     width: 25%;
 }
 
-.Location {
+.location {
     width: 20%;
 }
 
@@ -50,3 +49,9 @@ p, .MuiListItemText-primary {
      background-color: #3f51b5;
      margin-left: 12px;
  }
+
+.MuiGrid-grid-xs-2 {
+    flex-grow: 0;
+    max-width: 26.666667% !important;
+    padding-right: 61px !important;
+}
