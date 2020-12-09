@@ -11,6 +11,7 @@ from ..DAO.applicationsDAO import ApplicationsDao
 from ..DAO.resumeDAO import ResumeDao
 from ..DAO.userDAO import UserDao
 from ..resume_parser.custom_resume_parser import CustomResumeParser
+from ..DAO.modelsDAO import ModelsDAO
 
 
 class ResumeHandler:
@@ -127,4 +128,19 @@ class ResumeHandler:
 
         # TODO: Handle errors and rollback
         return jsonify(user_id=result)
+
+    @staticmethod
+    def rank_resume(resume_dict, posting_id):
+        df = pandas.DataFrame.from_dict(resume_dict)[['skills', 'experience', 'education_section']]
+        df.fillna('no_info')
+        models_dao = ModelsDAO()
+        model_info = models_dao.get_model_name(posting_id)
+        model_pipeline = load('../ranking_models/%s%s.pkl' %
+                              (model_info['model_name'], '' if model_info['use_education'] else '_no_edu',))
+        prob = model_pipeline.predict_proba(df)
+        rank = int(prob[0, 1] * 100)
+        return rank
+
+
+
 
