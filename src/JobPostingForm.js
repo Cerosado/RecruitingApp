@@ -20,40 +20,6 @@ import {authFetch} from "./auth";
 import {classes} from "istanbul-lib-coverage";
 import jwtDecode from "jwt-decode";
 
-// export default class JobPostingForm extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             PositionName: null,
-//             Location: null,
-//             Description: null,
-//             KeyDetails: null,
-//             PayType: null,
-//             PayAmount: null,
-//             Deadline: null,
-//         };
-//     }
-//
-//     render() {
-//         return (
-
-//         );
-//     }
-// }
-// var Content = React.createClass({
-//     getInitialState: function () {
-//         return {
-//             textFieldValue: ''
-//         };
-//     },
-//
-//     _handleTextFieldChange: function (e) {
-//         this.setState({
-//             textFieldValue: e.target.value
-//         });
-//     },
-// });
-
 
 function JobPostingForm({
                             errors,
@@ -77,7 +43,6 @@ function JobPostingForm({
                 spacing={2}>
                     <Grid item xs={6}>
                         <TextField id="PositionName" label="Position name" variant="outlined" required
-                            // autoComplete="fname"
                                    name="positionName"
                                    fullWidth
                                    onChange={handleChange}
@@ -90,7 +55,6 @@ function JobPostingForm({
                     </Grid>
                     <Grid item xs={6}>
                         <TextField id="Location" label="Location" variant="outlined" required
-                            // autoComplete="fname"
                                    name="location"
                                    fullWidth
                                    onChange={handleChange}
@@ -102,7 +66,6 @@ function JobPostingForm({
                     </Grid>
                     <Grid item xs>
                         <TextField id="Description" label="Description" variant="outlined" required
-                            // autoComplete="fname"
                                    name="description"
                                    fullWidth
                                    onChange={handleChange}
@@ -114,7 +77,6 @@ function JobPostingForm({
                     </Grid>
                     <Grid item xs>
                         <TextField id="KeyDetails" label="Key details" variant="outlined" required
-                            // autoComplete="fname"
                                    name="keyDetails"
                                    fullWidth
                                    onChange={handleChange}
@@ -126,7 +88,6 @@ function JobPostingForm({
                     </Grid>
                     <Grid item xs={4}>
                         <TextField id="PayType" label="Pay type" variant="outlined"
-                            // autoComplete="fname"
                                    name="payType"
                                    fullWidth
                                    onChange={handleChange}
@@ -138,7 +99,6 @@ function JobPostingForm({
                     </Grid>
                     <Grid item xs={4}>
                         <TextField id="PayAmount" label="Pay amount" variant="outlined"
-                            // autoComplete="fname"
                                    name="payAmount"
                                    fullWidth
                                    onChange={handleChange}
