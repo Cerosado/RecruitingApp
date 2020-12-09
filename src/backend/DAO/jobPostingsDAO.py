@@ -14,14 +14,19 @@ class JobPostingsDao:
 
     def getAllJobPostings(self):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT * FROM jobpostings"
+        query = "SELECT posting_id, first_name, position_name, location, presentationDate, deadline " \
+                "FROM jobpostings INNER JOIN accounts ON jobpostings.user_id = accounts.user_id ;"  #TODO WHERE deadline > CURRENT_DATE
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
         return result
     def getJobPostingById(self, posting_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT * from jobpostings WHERE posting_id = %s;"
+        query = "SELECT * " \
+                "from " \
+                "   jobpostings " \
+                "   INNER JOIN accounts ON jobpostings.user_id = accounts.user_id " \
+                "WHERE posting_id = %s;"
         cursor.execute(query, (posting_id,))
         result = cursor.fetchone()
         cursor.close()

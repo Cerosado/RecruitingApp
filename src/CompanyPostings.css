@@ -4,13 +4,13 @@ h1 {
 }
 
 .jobPostingsList {
-    background-color: #14274e !important;
+    background-color: aliceblue !important;
     min-height: 816px;
 
 }
 
 p, .MuiListItemText-primary {
-    color: white;
+    color: black;
 }
 
 .Deadline, .PresentationDate {
@@ -18,14 +18,13 @@ p, .MuiListItemText-primary {
 }
 
 .positionName {
-    width: 220px;
-    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .JobPostingsContainer {
     display: inline-grid;
     width: 100%;
-    grid-template-columns: 27.6% 20.4% 27.6% 11%;
+    /*grid-template-columns: 27.6% 20.4% 27.6% 11%;*/
 }
 
 .JobPostingTitle {
@@ -37,6 +36,22 @@ p, .MuiListItemText-primary {
     width: 25%;
 }
 
-.Location {
+.location {
     width: 20%;
+}
+
+.MuiButton-label {
+    color: white;
+}
+
+.MuiButton-containedPrimary {
+     color: #fff;
+     background-color: #3f51b5;
+     margin-left: 12px;
+ }
+
+.MuiGrid-grid-xs-2 {
+    flex-grow: 0;
+    max-width: 26.666667% !important;
+    padding-right: 61px !important;
 }

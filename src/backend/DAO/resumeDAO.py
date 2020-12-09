@@ -26,10 +26,19 @@ class ResumeDao:
         result = cursor.fetchone()
         cursor.close()
         return result
-    def registerResume(self, resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id):
+
+    def get_resume_ranking_parameters(self, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "INSERT INTO resumes(resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING user_id;"
-        cursor.execute(query, (resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id))
+        query = "SELECT skills, experience, education_section from resumes WHERE user_id = %s;"
+        cursor.execute(query, (user_id,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result
+
+    def registerResume(self, resume_data, resume_extension, education, college_name, degree, designation, experience, education_section, company_names, skills, total_experience, last_updated, user_id):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "INSERT INTO resumes(resume_data, resume_extension, education, college_name, degree, designation, experience, education_section, company_names, skills, total_experience, last_updated, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING user_id;"
+        cursor.execute(query, (resume_data, resume_extension, education, college_name, degree, designation, experience, education_section, company_names, skills, total_experience, last_updated, user_id))
         user_id = cursor.fetchone()['user_id']
         self.conn.commit()
         cursor.close()
