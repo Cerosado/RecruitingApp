@@ -1,4 +1,4 @@
-from src.backend.config.dbconfig import pg_config
+from ..config.dbconfig import pg_config
 import psycopg2
 import psycopg2.extras
 
@@ -37,6 +37,15 @@ class JobPostingsDao:
         result = cursor.fetchall()
         cursor.close()
         return result
+
+    def get_recruiter_id(self, posting_id):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "SELECT user_id FROM jobpostings WHERE posting_id = %s"
+        cursor.execute(query, (posting_id,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result['user_id'] if result else None
+
     def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "INSERT INTO jobpostings(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING posting_id;"

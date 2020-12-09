@@ -1,7 +1,6 @@
 import os
 from functools import wraps
 from io import BytesIO
-
 import flask_praetorian
 import flask_sqlalchemy
 from flask import Flask, request, flash, redirect, url_for, session, jsonify
@@ -11,6 +10,7 @@ from werkzeug.utils import secure_filename
 
 from backend.Handlers.applications import ApplicationsHandler
 from .Handlers.jobPosting import JobPostingHandler
+from .Handlers.user import UserHandler
 from .Handlers.resume import ResumeHandler
 
 guard = flask_praetorian.Praetorian()
@@ -74,6 +74,26 @@ class User(db.Model):
 # Initialize the flask-praetorian instance for the app
 guard.init_app(app, User)
 
+@app.route('/Profile', methods=['GET'])
+@flask_praetorian.auth_required
+def userDetail():
+    if request.method == 'GET':
+        current_user=flask_praetorian.current_user()
+        user=UserHandler().getUsersById(current_user.user_id)
+        return user
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
+
+@app.route('/update/email', methods=['POST'])
+@flask_praetorian.auth_required
+def updateEmail():
+    if request.method == 'POST':
+        current_user=flask_praetorian.current_user()
+        UserHandler().editUser({'email':request.get_json(force=True).get("email","NONE FOUND")},current_user.user_id)
+        return "Email posted!"
+    else:
+        return jsonify(Error="Method not allowed"), 405
 
 ###########################################
 #             Job Postings                #

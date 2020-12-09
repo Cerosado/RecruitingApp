@@ -18,6 +18,7 @@ import EmailConfirm from "./components/EmailConfirm";
 import JobPostingForm from "./JobPostingForm";
 import EventForm from "./EventForm";
 import jwtDecode from "jwt-decode";
+import Profile from "./components/Profile"
 import JobPostingApplication from "./Resources/JobPostingApplication";
 
 function Secret() {
@@ -70,7 +71,9 @@ class App extends React.Component{
                         <Switch>
                             <PrivateRoute path="/JobPostings/:id" component={ApplicantsList} roles={["recruiter"]}>
                             </PrivateRoute>
-                            <PrivateRoute path="/JobPostings" component={JobPostingsList} >
+                            <PrivateRoute path="/JobPostings" component={JobPostingsList} roles={["recruiter"]}>
+                            </PrivateRoute>
+                            <PrivateRoute path="/Profile" component={Profile}>
                             </PrivateRoute>
                             <Route path="/Login"
                                    render={routerProps => (
