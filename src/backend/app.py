@@ -14,6 +14,7 @@ from backend.Handlers.applications import ApplicationsHandler
 from .Handlers.jobPosting import JobPostingHandler
 from .Handlers.user import UserHandler
 from .Handlers.resume import ResumeHandler
+from .Handlers.models import ModelsHandler
 
 guard = flask_praetorian.Praetorian()
 
@@ -145,6 +146,18 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ('pdf', 'doc', 'docx')
 
 
+@app.route('/Models', methods=['GET'])
+@flask_praetorian.roles_required("recruiter")
+def get_fields_of_work():
+    if request.method == 'GET':
+        return ModelsHandler().get_all_models()
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
+
+###########################################
+#        Resumes and Applications         #
+###########################################
 @app.route('/Applications/<int:posting_id>', methods=['POST'])
 @flask_praetorian.roles_required("applicant")
 def create_application(posting_id):

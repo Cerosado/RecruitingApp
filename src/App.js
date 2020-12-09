@@ -15,11 +15,11 @@ import SignUp from "./components/SignUp";
 import {authFetch, useAuth} from "./auth";
 import Homepage from "./components/Homepage";
 import EmailConfirm from "./components/EmailConfirm";
-import JobPostingForm from "./JobPostingForm";
 import EventForm from "./EventForm";
 import jwtDecode from "jwt-decode";
 import Profile from "./components/Profile"
 import JobPostingApplication from "./JobPostingApplication";
+import JobPostingFormController from "./JobPostingForm";
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -93,7 +93,7 @@ class App extends React.Component{
                             </PrivateRoute>
                             <Route path="/JobPostingForm" roles={["recruiter"]}
                                    render={routerProps => (
-                                       <JobPostingForm {...routerProps}/>
+                                       <JobPostingFormController {...routerProps}/>
                                    )}>
                             </Route>
                             <Route path="/JobPostingApplication/:id" roles={["applicant"]}

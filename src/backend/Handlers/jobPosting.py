@@ -72,7 +72,7 @@ class JobPostingHandler:
     #             POST                        #
     ###########################################
     def createJobPosting(self, data, user_id):
-        if len(data) != 7:
+        if len(data) != 9:
             return jsonify(Error="Malformed post request"), 400
         else:
             position_name = data['positionName']
@@ -82,11 +82,12 @@ class JobPostingHandler:
             pay_type = data['payType']
             pay_amount = data['payAmount']
             deadline = data['deadline']
+            model_id = data['fieldOfWork']
+            use_education = data['useEducation']
             user_id = user_id
             dao = JobPostingsDao()
-            jid = dao.registerJobPosting(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline)
-            # result = self.build_chat_attributes(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline)
-            return jsonify(CreatedJobPosting=jid), 201
+            jid = dao.registerJobPosting(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education)
+            return jsonify(message="Successfully creating job posting with id: %s " % (jid,)), 201
 
     def editJobPosting(self, data, posting_id):
         dao = JobPostingsDao()

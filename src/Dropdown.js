@@ -18,27 +18,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Dropdown(props) {
-    const {label, menuItems} = props;
+const Dropdown = ({
+                      field,
+                      ...props
+                  }) => {
     const classes = useStyles();
-
-    const [value, setValue] = React.useState('');
-
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
 
     return (
         <FormControl className={classes.formControl}>
-            <InputLabel id="DropdownLabel">{label}</InputLabel>
+            <InputLabel id="DropdownLabel">{props.label}</InputLabel>
             <Select
                 labelId="DropdownLabel"
                 id="DropdownSelect"
-                value={value}
-                onChange={handleChange}
+                {...field}
             >
-                {menuItems.map((item) =>
-                    <MenuItem value={item.weight}>{item.label}</MenuItem>)}
+                {props.menuItems.map((item) =>
+                    <MenuItem key={item.weight} value={item.weight}>{item.label}</MenuItem>)}
             </Select>
         </FormControl>
     );

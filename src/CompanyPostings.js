@@ -10,15 +10,24 @@ import {authFetch} from "./auth";
 import jwtDecode from "jwt-decode";
 import {Link as RouterLink} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import PropTypes from "prop-types";
 
 
 class JobPostingsList extends React.Component{
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             isLoaded: false,
-            postings: []
+            postings: [],
         };
     }
 
@@ -46,6 +55,8 @@ class JobPostingsList extends React.Component{
 
     render() {
         const { error, isLoaded, postings } = this.state;
+        const { match, location, history } = this.props;
+        const msg = location.state && location.state.message;
 
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -63,18 +74,26 @@ class JobPostingsList extends React.Component{
             }
             return (
                 <Paper className='jobPostingsList' elevation={0}>
+                    <Snackbar open={msg}>
+                        <Alert severity={"success"}>
+                            {msg}
+                        </Alert>
+                    </Snackbar>
                     <h1>My Job Postings</h1>
-                    <Button component={RouterLink} color='primary' variant='contained' to="/JobPostingForm">New job posting</Button>
+                    <Button component={RouterLink} color='primary' variant='contained' to="/JobPostingForm">New job
+                        posting</Button>
                     <div className=''>
-                        <Grid   container
-                                direction="row"
-                                justify="left"
-                                alignItems="left"
-                                spacing={3}>
+                        <Grid container
+                              direction="row"
+                              justify="flex-start"
+                              alignItems="flex-start"
+                              spacing={3}>
                             {(decoded['rls'] === 'applicant') ?
-                                <Grid item xs={2}><div className=' positionName JobPostingTitle' ><p>Company</p></div></Grid>:null}
+                                <Grid item xs={2}>
+                                    <div className=' positionName JobPostingTitle'><p>Company</p></div>
+                                </Grid> : null}
                             <Grid item xs={2}>
-                                <div className=' JobPostingTitle' ><p>Position</p></div>
+                                <div className=' JobPostingTitle'><p>Position</p></div>
                             </Grid>
                             <Grid item xs={2}>
                                 <div className='JobPostingTitle'><p>Location</p></div>
@@ -92,13 +111,13 @@ class JobPostingsList extends React.Component{
                         {postings.map(posting => (
                             <ListItemLink
                                 key={posting.posting_id}
-                                companyName = {posting.first_name}
+                                companyName={posting.first_name}
                                 primary={posting.position_name}
                                 to={url + posting.posting_id}
                                 location={posting.location}
                                 presentationDate={formatDate(posting.presentationdate)}
                                 deadline={formatDate(posting.deadline)}
-                                isApplicant = {decoded['rls'] === 'applicant'}
+                                isApplicant={decoded['rls'] === 'applicant'}
                             >
                             </ListItemLink>
                         ))}
