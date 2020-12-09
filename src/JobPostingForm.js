@@ -1,23 +1,13 @@
 import React from "react";
 import './JobPostingForm.css';
-import DateTimePicker from "./DateTimeField";
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
 import Dropdown from "./Dropdown";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Snackbar from "@material-ui/core/Snackbar";
-import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Link from "@material-ui/core/Link";
-import {Link as RouterLink} from "react-router-dom";
 import {withFormik} from "formik";
 import {authFetch} from "./auth";
-import {classes} from "istanbul-lib-coverage";
 import jwtDecode from "jwt-decode";
 
 // export default class JobPostingForm extends React.Component {

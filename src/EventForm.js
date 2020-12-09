@@ -3,9 +3,7 @@ import './EventForm.css';
 import DateTimePicker from "./DateTimeField";
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
-import Dropdown from "./Dropdown";
 import Button from "@material-ui/core/Button";
-import jwtDecode from "jwt-decode";
 
 export default class EventForm extends React.Component {
     constructor(props) {
