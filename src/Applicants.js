@@ -1,6 +1,7 @@
 import React from 'react';
 import './Applicants.css';
 import icon from './Resources/resume.jpg';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -9,6 +10,12 @@ import Typography from '@material-ui/core/Typography';
 import {List} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {authFetch} from "./auth";
+import Select from '@material-ui/core/Select';
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import {classes} from "istanbul-lib-coverage";
+import Dropdown from "./Dropdown";
 
 
 class Applicant extends React.Component {

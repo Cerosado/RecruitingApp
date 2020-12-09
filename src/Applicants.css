@@ -62,11 +62,11 @@
     margin-right: 0;
 }
 
-.MuiContainer-root {
-    background-color: #14274e;
-    /*outline-style: auto;*/
-    /*outline-color: #14274e;*/
-}
+/*.MuiContainer-root {*/
+/*    background-color: #14274e;*/
+/*    !*outline-style: auto;*!*/
+/*    !*outline-color: #14274e;*!*/
+/*}*/
 
 .MuiToolbar-root {
     background-color: #394867;
@@ -78,7 +78,7 @@
 }
 
 h1, .title{
-    color: white !important;
+    color: black !important;
 }
 
 h1 {

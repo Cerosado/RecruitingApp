@@ -6,7 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import * as PropTypes from "prop-types";
 
 function ListItemLink(props) {
-    const { icon, primary, to, location, presentationDate, deadline} = props;
+    const { icon, companyName, primary, to, location, presentationDate, deadline, isApplicant} = props;
 
     const renderLink = React.useMemo(
         () => React.forwardRef((itemProps, ref) => <RouterLink to={to} ref={ref} {...itemProps} />),
@@ -17,6 +17,7 @@ function ListItemLink(props) {
         <li>
             <ListItem button component={renderLink}>
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+                {isApplicant ? <ListItemText primary={companyName} /> : null}
                 <ListItemText primary={primary} />
                 <ListItemText primary={location} />
                 <ListItemText primary={presentationDate} />

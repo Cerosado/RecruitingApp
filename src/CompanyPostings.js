@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ListItemLink from "./ListItemLink";
 import List from "@material-ui/core/List";
 import {Paper} from "@material-ui/core";
@@ -7,44 +7,14 @@ import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import CardActions from "@material-ui/core/CardActions";
+import Button from "@material-ui/core/Button";
+import icon from "./Resources/resume.jpg";
 import {withRouter} from "react-router";
 import {authFetch} from "./auth";
-
-class JobPosting extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            PositionName: null,
-            Location: null,
-            PresentationDate: null,
-            Deadline: null,
-        };
-    }
-
-    render() {
-        return (
-            <Card className='applicant' variant="outlined">
-                <CardContent>
-                    <div className='container' row>
-                        <Typography className='positionName' variant="h5" component="h2">
-                            {this.props.PositionName}
-                        </Typography>
-                        <Typography className='location' variant="h5" component="h2">
-                            {this.props.Location}
-                        </Typography>
-                        <Typography className='presentationDate' color="textSecondary" variant="h5">
-                            {this.props.PresentationDate}
-                        </Typography>
-                        <Typography className="Deadline" variant="body2" component="p">
-                            {this.props.Deadline}
-                        </Typography>
-                    </div>
-                </CardContent>
-                <Divider/>
-            </Card>
-        );
-    }
-}
+import jwtDecode from "jwt-decode";
+import {Link as RouterLink} from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
 
 
 class JobPostingsList extends React.Component{
@@ -58,8 +28,10 @@ class JobPostingsList extends React.Component{
     }
 
     componentDidMount() {
-        let url = `http://localhost:5000/JobPosting?user_id=2`;
-        authFetch(url)
+        let url = `http://localhost:5000/JobPosting`;
+        authFetch(url, {
+            method: 'get',
+        })
             .then(response => response.json())
             .then(
                 (data) => {
@@ -85,41 +57,55 @@ class JobPostingsList extends React.Component{
         } else if (!isLoaded) {
             return <div>Loading...</div>
         } else {
+            const localToken = localStorage.getItem('jwt_token');
+            const decoded = jwtDecode(localToken);
+
             return (
                 <Paper className='jobPostingsList' elevation={0}>
                     <h1>My Job Postings</h1>
-                    <div className='JobPostingsContainer' row>
-                    <div className='positionName JobPostingTitle'><p>Position Name</p></div>
-                    <div className='JobPostingTitle'><p>Location</p></div>
-                    <div className='JobPostingTitle'><p>Presentation Date</p></div>
-                    <div className='JobPostingTitle'><p>Deadline</p></div>
+                    <Button component={RouterLink} color='primary' variant='contained' to="/JobPostingForm">New job posting</Button>
+                    <div className=''>
+                        <Grid   container
+                                direction="row"
+                                justify="left"
+                                alignItems="left"
+                                spacing={5}>
+                            {(decoded['rls'] === 'applicant') ?
+                                <Grid item xs={2}><div className=' JobPostingTitle' ><p>Company Name</p></div></Grid>:null}
+                            <Grid item xs={2}>
+                                <div className=' JobPostingTitle' ><p>Position Name</p></div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className='JobPostingTitle'><p>Location</p></div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className='JobPostingTitle'><p>Presentation Date</p></div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className='JobPostingTitle'><p>Deadline</p></div>
+                            </Grid>
+                        </Grid>
                     </div>
                     <Divider/>
                     <List>
                         {postings.map(posting => (
                             <ListItemLink
                                 key={posting.posting_id}
+                                companyName = {posting.first_name}
                                 primary={posting.position_name}
                                 to={'/jobPostings/' + posting.posting_id}
                                 location={posting.location}
                                 presentationDate={formatDate(posting.presentationdate)}
                                 deadline={formatDate(posting.deadline)}
+                                isApplicant = {decoded['rls'] === 'applicant'}
                             >
                             </ListItemLink>
-                            // <li key={posting.posting_id}>
-                            //     <JobPosting
-                            //         PositionName={posting.position_name}
-                            //         Location={posting.location}
-                            //         PresentationDate={posting.presentationDate}
-                            //         Deadline={posting.deadline}
-                            //         // new Intl.DateTimeFormat('en-US').format(date)
-                            //     />
-                            // </li>
                         ))}
                     </List>
                 </Paper>
             );
         }
+
     }
 }
 
