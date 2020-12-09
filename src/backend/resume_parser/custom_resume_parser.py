@@ -93,13 +93,13 @@ class CustomResumeParser(ResumeParser):
 
         for keyword in [*EDUCATION_KEYWORDS, 'education']:
             if keyword in entities and entities[keyword]:
-                self.__details['education_section'] = entities[keyword]
+                self.__details['education_section'] = '\n'.join(entities[keyword])
 
         # if 'education' in entities:
         #     gpa = extract_gpa(entities['education'])
 
         # extract skills
-        self.__details['skills'] = skills
+        self.__details['skills'] = ','.join(skills)
 
         # Tuple of Degree,Year and Gpa
         self.__details['education'] = edu
@@ -131,12 +131,13 @@ class CustomResumeParser(ResumeParser):
         try:
             for keyword in [*EXPERIENCE_KEYWORDS, 'experience', 'professional experience']:
                 if keyword in entities and entities[keyword]:
+                    experience = '\n'.join(entities[keyword])
                     if self.__details['experience'] is None:
-                        self.__details['experience'] = entities[keyword]
-                        self.__details['experience_section'] = entities[keyword]
+                        self.__details['experience'] = experience
+                        self.__details['experience_section'] = experience
                     else:
-                        self.__details['experience'].extend(entities[keyword])
-                        self.__details['experience_section'].extend(entities[keyword])
+                        self.__details['experience'] += '\n' + experience
+                        self.__details['experience_section'] += '\n' + experience
             try:
                 exp = round(
                     utils.get_total_experience(self.__details['experience']) / 12,
