@@ -19,7 +19,7 @@ import JobPostingForm from "./JobPostingForm";
 import EventForm from "./EventForm";
 import jwtDecode from "jwt-decode";
 import Profile from "./components/Profile"
-import JobPostingApplication from "./Resources/JobPostingApplication";
+import JobPostingApplication from "./JobPostingApplication";
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -71,7 +71,7 @@ class App extends React.Component{
                         <Switch>
                             <PrivateRoute path="/JobPostings/:id" component={ApplicantsList} roles={["recruiter"]}>
                             </PrivateRoute>
-                            <PrivateRoute path="/JobPostings" component={JobPostingsList} roles={["recruiter"]}>
+                            <PrivateRoute path="/JobPostings" component={JobPostingsList}>
                             </PrivateRoute>
                             <PrivateRoute path="/Profile" component={Profile}>
                             </PrivateRoute>
@@ -91,7 +91,7 @@ class App extends React.Component{
                                           component={Secret}
                                           roles={["applicant"]}>
                             </PrivateRoute>
-                            <Route path="/JobPostingForm/:id" component={JobPostingForm} roles={["recruiter"]}
+                            <Route path="/JobPostingForm" component={JobPostingForm} roles={["recruiter"]}
                                    render={routerProps => (
                                        <JobPostingForm {...routerProps}/>
                                    )}>

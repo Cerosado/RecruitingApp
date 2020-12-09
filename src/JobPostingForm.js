@@ -125,7 +125,7 @@ function JobPostingForm({
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField id="PayType" label="Pay type" variant="outlined" required
+                        <TextField id="PayType" label="Pay type" variant="outlined"
                             // autoComplete="fname"
                                    name="payType"
                                    fullWidth
@@ -137,7 +137,7 @@ function JobPostingForm({
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField id="PayAmount" label="Pay amount" variant="outlined" required
+                        <TextField id="PayAmount" label="Pay amount" variant="outlined"
                             // autoComplete="fname"
                                    name="payAmount"
                                    fullWidth
@@ -243,7 +243,7 @@ const CreateJobPosting = withFormik({
                 payAmount: values.payAmount,
                 deadline: values.deadline,
             }
-            let url = `http://localhost:5000/JobPosting`;
+            let url = `http://localhost:5000/JobPostingForm`;
             console.log(opts)
             authFetch(url, {
                 method: 'post',
@@ -258,7 +258,7 @@ const CreateJobPosting = withFormik({
                 .then(
                     json_response => {
                         props.history.push({
-                            pathname: '/JobPostingForm',
+                            pathname: '/JobPosting',
                             state: {message: json_response.message, from: {pathname: "/"}},
                             from: '/'
                         });
