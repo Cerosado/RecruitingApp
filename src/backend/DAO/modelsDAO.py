@@ -20,3 +20,12 @@ class ModelsDAO:
         result = cursor.fetchone()
         cursor.close()
         return result
+
+    def get_models_id_and_desc(self):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "SELECT model_id, description from models"
+        cursor.execute(query)
+        results = cursor.fetchall()
+        cursor.close()
+        return results
+

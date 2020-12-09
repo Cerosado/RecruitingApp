@@ -1,61 +1,55 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './JobPostingForm.css';
-import DateTimePicker from "./DateTimeField";
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
 import Dropdown from "./Dropdown";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Snackbar from "@material-ui/core/Snackbar";
-import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Link from "@material-ui/core/Link";
-import {Link as RouterLink} from "react-router-dom";
-import {withFormik} from "formik";
+import {Field, withFormik} from "formik";
 import {authFetch} from "./auth";
-import {classes} from "istanbul-lib-coverage";
 import jwtDecode from "jwt-decode";
+import ProgressBar from "./components/ProgressBar";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
-// export default class JobPostingForm extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             PositionName: null,
-//             Location: null,
-//             Description: null,
-//             KeyDetails: null,
-//             PayType: null,
-//             PayAmount: null,
-//             Deadline: null,
-//         };
-//     }
-//
-//     render() {
-//         return (
+class JobPostingFormController extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false,
+            modelOptions: []
+        }
+    }
 
-//         );
-//     }
-// }
-// var Content = React.createClass({
-//     getInitialState: function () {
-//         return {
-//             textFieldValue: ''
-//         };
-//     },
-//
-//     _handleTextFieldChange: function (e) {
-//         this.setState({
-//             textFieldValue: e.target.value
-//         });
-//     },
-// });
+    componentDidMount() {
+        let url = "http://localhost:5000/Models"
+        authFetch(url)
+            .then(
+                response => response.json()
+            )
+            .then(
+                data => this.setState({
+                    modelOptions: data.fieldOfWorkOptions,
+                    isLoaded: true
+                })
+            )
+    }
 
+    render() {
+        {
+            if (this.state.isLoaded){
+                return <CreateJobPosting modelOptions={this.state.modelOptions}/>
+            }
+            else{
+                return <ProgressBar/>
+            }
+        }
+    }
+}
 
-function JobPostingForm({
+    function JobPostingForm({
+                            props,
                             errors,
                             handleBlur,
                             handleChange,
@@ -171,20 +165,31 @@ function JobPostingForm({
                 <Grid   container
                         direction="row"
                         justify="center"
-                        alignItems="center">
-                    <Grid item xs={6}>
-                        <Dropdown label={"Field of work"}
-                                  menuItems={[{weight: 1, label: "Software development"},
-                                      {weight: 2, label: "Finance"},
-                                      {weight: 3, label: "Human resources"},]}>
-                        </Dropdown>
+                        alignItems="center"
+                        spacing={1}
+                >
+                    <Grid item xs={4}>
+                        <Field name='fieldOfWork' component={Dropdown}
+                               label="Field of work"
+                               menuItems={values.modelOptions.map(option =>
+                                   ({
+                                       weight: option.model_id,
+                                       label: option.description})
+                               )}
+                        />
                     </Grid>
-                    <Grid item xs={6}>
-                        <Dropdown label={"Education"}
-                                  menuItems={[{weight: 30, label: "Very important"},
-                                      {weight: 20, label: "Important"},
-                                      {weight: 10, label: "Not important"},]}>
-                        </Dropdown>
+                    <Grid item xs={4}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    name="useEducation"
+                                    checked={values.useEducation}
+                                    onChange={() => setFieldValue("useEducation", !values.useEducation)}
+                                    color="primary"
+                                />
+                            }
+                            label="Consider Education"
+                        />
                     </Grid>
                 </Grid>
                 <br/>
@@ -205,7 +210,8 @@ function JobPostingForm({
 }
 
 const CreateJobPosting = withFormik({
-    mapPropsToValues: () => ({
+    enableReinitialize: true,
+    mapPropsToValues: (props) => ({
         positionName: '',
         location: '',
         description: '',
@@ -213,6 +219,9 @@ const CreateJobPosting = withFormik({
         payType: '',
         payAmount: '',
         deadline: '',
+        fieldOfWork: '',
+        useEducation: true,
+        modelOptions: props.modelOptions
     }),
 
     validate: values => {
@@ -242,6 +251,8 @@ const CreateJobPosting = withFormik({
                 payType: values.payType,
                 payAmount: values.payAmount,
                 deadline: values.deadline,
+                fieldOfWork: values.fieldOfWork,
+                useEducation: values.useEducation
             }
             let url = `http://localhost:5000/JobPostingForm`;
             console.log(opts)
@@ -276,5 +287,5 @@ const CreateJobPosting = withFormik({
     },
 })(JobPostingForm);
 
-export default CreateJobPosting;
+export default JobPostingFormController;
 
