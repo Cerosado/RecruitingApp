@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import {withRouter} from "react-router";
 import {authFetch} from "../auth";
-
+import FileUpload from "../fileUpload"
 
 class Profile extends React.Component {
     constructor(props) {
@@ -92,6 +92,13 @@ class Profile extends React.Component {
             <CardContent>
                     <Typography className='role' variant="h5" component="h2">
                         Role: <Divider/>{this.state.profile.roles}
+                    </Typography>
+            </CardContent>
+            </Card>
+            <Card variant="outlined">
+            <CardContent>
+                    <Typography className='role' variant="h5" component="h2">
+                        Resume: <Divider/><FileUpload/>
                     </Typography>
             </CardContent>
             </Card>
