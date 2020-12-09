@@ -42,26 +42,29 @@ def resume_result_wrapper(resume_file, skills_file, custom_regex):
     return CustomResumeParser(resume_file, skills_file, custom_regex).get_extracted_data()
 
 
-def parse_dataset_to_csv():
+def parse_dataset_to_csv(csv_file, resumes_path):
     """
     Function parses resumes from a directory and writes the parsed information in a csv file
     :return: None
     """
-    csv_file = 'parsed_results_dec3_v4.csv'
     with open(csv_file, mode='w', encoding='utf-8') as parse_results_file:
         field_names = ['skills', 'education', 'college_name', 'degree',
                        'designation', 'experience', 'company_names',
-                       'total_experience', 'education_section', 'experience_section', 'label']
+                       'total_experience', 'education_section', 'experience_section', 'label', 'resume']
         # field_names = ['skills', 'education_section', 'experience_section', 'label']
-        if os.environ.get('INCLUDE_RESUME_PATHS', None):
-            field_names.append('resume')
+        # if os.environ.get('INCLUDE_RESUME_PATHS', None):
+        #     field_names.append('resume')
         parse_writer = csv.DictWriter(parse_results_file, fieldnames=field_names)
         parse_writer.writeheader()
-        for resume_type in ('Experienced', 'Inexperienced', 'kaggle_dataset'):
-            results = parse_resume_directory('resumes/%s' % (resume_type,))
-            for parse_result in results:
-                parse_result['label'] = 1 if resume_type in ('Experienced', 'kaggle_dataset') else 0
-                parse_writer.writerow(parse_result)
+        education_important = bool('no_edu' not in csv_file)
+        flags = ['unfit']
+        if education_important:
+            flags.append('no_education')
+        # for resume_type in (resumes_path, resumes_path + '/unfit'):
+        results = parse_resume_directory('resumes/%s' % (resumes_path,))
+        for parse_result in results:
+            parse_result['label'] = 0 if any(flag in parse_result['resume'] for flag in flags) else 1
+            parse_writer.writerow(parse_result)
 
 
 def parse_directory_to_csv(directory, csv_file):
@@ -120,12 +123,14 @@ if __name__ == '__main__':
     # pp(parse_resume_directory('resume_parser/resumes/Experienced', skills_file='resume_parser/skills_dataset.csv'))
 
     # Parse training set resumes
-    parse_dataset_to_csv()
+    parse_dataset_to_csv(csv_file='dataset_csvs/management_no_edu.csv',
+                         resumes_path='datasets/management')
 
     # parse_dict = CustomResumeParser(
-    #     resume='resumes/additional/RESUME_EduardoAPerezVega2020sinAcentos.pdf',
+    #     resume='resumes/kaggle_dataset/Resume - PM Agile-Scrum.docx',
     #     skills_file='skills_dataset.csv'
     # ).get_extracted_data()
+    # print(parse_dict)
 
     # test_model()
 
