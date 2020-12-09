@@ -139,7 +139,7 @@ class Profile extends React.Component {
                 type="update"
                 variant="contained"
                 color="primary"
-                style={{height:40, left:"8px", top:"23px"}}
+                style={{height:40, left:"4px", top:"26px"}}
                 onClick={this.submitEmail}
                 >
                     Submit

@@ -17,18 +17,37 @@ export default class FileUpload extends React.Component {
         );}
 
   onChange(e) {
-    this.setState({file:e.target.files[0],resume:this.state.resume,resumeLink:this.state.resumeLink})
+    this.setState({
+      file:e.target.files[0],
+      resume:this.state.resume,
+      resumeLink:this.state.resumeLink})
   }
   
+  //Not functional yet
+  base64ToLink(base64, ext) {
+  let binaryString = window.atob(base64);
+  this.state.debug=ext
+  let binaryLen = binaryString.length;
+  let bytes = new Uint8Array(binaryLen);
+  for (let i = 0; i < binaryLen; i++) {
+      let ascii = binaryString.charCodeAt(i);
+      bytes[i] = ascii;
+  }
+  let blob = new Blob([bytes], {type: `application/${ext}`});
+  return window.URL.createObjectURL(blob);
+}
+
   constructor(props) {
     super(props);
     this.state ={
       file:null,
       resume:null,
+      debug:'',
       resumeLink:null
     }
     this.onChange=this.onChange.bind(this)
     this.submitResume=this.submitResume.bind(this)
+    this.base64ToLink=this.base64ToLink.bind(this)
   }
 
 
@@ -44,7 +63,7 @@ export default class FileUpload extends React.Component {
                     this.setState({
                       file:null,
                       resume: data,
-                      resumeLink: base64ToLink(data['resume_data'],data['resume_extension'])
+                      resumeLink: this.base64ToLink(data['resume_data'],data['resume_extension'])
                   });
                   }
                 },
@@ -63,9 +82,9 @@ export default class FileUpload extends React.Component {
         <Button
         variant="contained"
         color="primary"
-        style={{height: '30px', width : '190px', marginLeft:"5px", float:"right"}}
+        style={{height: '30px', width : '100px', marginLeft:"5px", float:"right"}}
         link={this.state.resumeLink}
-        >Download Resume</Button>
+        >Download</Button>
         <Input type="file" onChange={this.onChange}/>
         <Button
         type="submit"
@@ -73,24 +92,13 @@ export default class FileUpload extends React.Component {
         color="primary"
         style={{height: '30px', width : '100px', float:"right"}}
         onClick={this.submitResume}
-        >Upload</Button>
+        >Update</Button>
       </div>
    )
   }
 }
 
 //Used to render resume
-function base64ToLink(base64, ext) {
-  let binaryString = window.atob(base64);
-  let binaryLen = binaryString.length;
-  let bytes = new Uint8Array(binaryLen);
-  for (let i = 0; i < binaryLen; i++) {
-      let ascii = binaryString.charCodeAt(i);
-      bytes[i] = ascii;
-  }
-  let blob = new Blob([bytes], {type: `application/${ext}`});
-  return window.URL.createObjectURL(blob);
-}
 
 
 
