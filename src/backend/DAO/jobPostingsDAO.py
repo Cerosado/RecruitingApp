@@ -1,4 +1,4 @@
-from src.backend.config.dbconfig import pg_config
+from ..config.dbconfig import pg_config
 import psycopg2
 import psycopg2.extras
 

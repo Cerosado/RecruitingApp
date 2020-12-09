@@ -1,5 +1,5 @@
 from flask import jsonify
-from src.backend.DAO.userDAO import UserDao
+from ..DAO.userDAO import UserDao
 
 
 
@@ -38,7 +38,6 @@ class UserHandler:
     def getUsersById(self, uid):
         dao = UserDao()
         result = dao.getUserById(uid)
-        result = self.map_to_User(result)
         return jsonify(result)
 
     def getUserByUsername(self, username):
