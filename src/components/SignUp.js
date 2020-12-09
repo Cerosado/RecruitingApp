@@ -16,19 +16,20 @@ import Switch from "@material-ui/core/Switch";
 import {withFormik} from "formik";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import './SignUp.css';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Copyright() {
+//     return (
+//         <Typography variant="body2" color="textSecondary" align="center">
+//             {'Copyright © '}
+//             <Link color="inherit" href="https://material-ui.com/">
+//                 Your Website
+//             </Link>{' '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props}/>;
@@ -216,9 +217,9 @@ function SignUpForm({
                     </Grid>
                 </form>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
+            {/*<Box mt={8}>*/}
+            {/*    <Copyright />*/}
+            {/*</Box>*/}
         </Container>
     );
 }
