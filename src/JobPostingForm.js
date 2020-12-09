@@ -39,7 +39,7 @@ class JobPostingFormController extends React.Component {
     render() {
         {
             if (this.state.isLoaded){
-                return <CreateJobPosting modelOptions={this.state.modelOptions}/>
+                return <CreateJobPosting modelOptions={this.state.modelOptions} {...this.props}/>
             }
             else{
                 return <ProgressBar/>
@@ -270,10 +270,8 @@ const CreateJobPosting = withFormik({
                     json_response => {
                         props.history.push({
                             pathname: '/JobPosting',
-                            state: {message: json_response.message, from: {pathname: "/"}},
-                            from: '/'
+                            state: {message: json_response.message},
                         });
-                        console.log(json_response.message)
                     }
                 )
                 .catch(error => {

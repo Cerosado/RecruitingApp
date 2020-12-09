@@ -47,7 +47,7 @@ function JobPostingForm({
                 //         error
                 //     });
                 // }
-    )}, []);
+    )}, [id]);
         // const { companyName,
         //     positionName,
         //     location,

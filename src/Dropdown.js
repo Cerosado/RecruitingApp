@@ -33,7 +33,7 @@ const Dropdown = ({
                 {...field}
             >
                 {props.menuItems.map((item) =>
-                    <MenuItem value={item.weight}>{item.label}</MenuItem>)}
+                    <MenuItem key={item.weight} value={item.weight}>{item.label}</MenuItem>)}
             </Select>
         </FormControl>
     );
