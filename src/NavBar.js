@@ -1,6 +1,7 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import jwtDecode from "jwt-decode";
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -85,6 +86,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+    
+    const localToken = localStorage.getItem('jwt_token');
+    const decoded = jwtDecode(localToken);
+    const isRecruiter = decoded['rls']=='recruiter'
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -122,18 +127,20 @@ export default function PrimarySearchAppBar() {
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={isMenuOpen}
             onClose={handleMenuClose}
-        >
+        > 
+        {!isRecruiter?
             <MenuItem onClick={ () => {
                 handleMenuClose();
                 history.push("/Profile");
             }
-        }>Profile</MenuItem>
+        }>Profile</MenuItem>:null}
+        {!isRecruiter?
             <MenuItem onClick={()=>{
                 handleMenuClose();
                 history.push("/Applications")
             }
                 }>
-                My applications</MenuItem>
+                My applications</MenuItem>:null}
             <MenuItem onClick={()=>{
                 handleMenuClose();
                 history.push("/Events")
