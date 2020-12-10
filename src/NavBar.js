@@ -150,7 +150,7 @@ export default function PrimarySearchAppBar() {
                 history.push("/Events")
             }
             }>
-                My Events</MenuItem>
+                My events</MenuItem>
             <MenuItem onClick={ () => {
                 handleMenuClose();
                 logout();
