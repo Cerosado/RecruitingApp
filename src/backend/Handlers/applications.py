@@ -4,6 +4,7 @@ from ..DAO.resumeDAO import ResumeDao
 from ..DAO.modelsDAO import ModelsDAO
 import joblib
 from ..Handlers.resume import ResumeHandler
+import sys
 
 
 class ApplicationsHandler:
@@ -20,10 +21,10 @@ class ApplicationsHandler:
         result = self.map_to_Application(result)
         return jsonify(result)
 
-    def getApplicationByUserId(self, uid, name):
+    def getApplicationsByUserId(self, uid):
         dao = ApplicationsDao()
         result = dao.getApplicationsByUser(uid)
-        result = self.map_to_Application(result)
+        # result = self.map_to_Application(result)
         return jsonify(result)
 
     def getApplication(self, uid, pid):

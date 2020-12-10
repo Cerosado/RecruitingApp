@@ -15,7 +15,7 @@ import Alert from "@material-ui/lab/Alert";
 import PropTypes from "prop-types";
 
 
-class JobPostingsList extends React.Component{
+class ApplicationsList extends React.Component{
     static propTypes = {
         match: PropTypes.object.isRequired,
         location: PropTypes.object.isRequired,
@@ -55,7 +55,7 @@ class JobPostingsList extends React.Component{
 
     render() {
         const { error, isLoaded, postings } = this.state;
-        const { match, location, history } = this.props;
+        const { location } = this.props;
         const msg = location.state && location.state.message;
 
         if (error) {
@@ -79,9 +79,7 @@ class JobPostingsList extends React.Component{
                             {msg}
                         </Alert>
                     </Snackbar>
-                    <h1>My Job Postings</h1>
-                    <Button component={RouterLink} color='primary' variant='contained' to="/JobPostingForm">New job
-                        posting</Button>
+                    <h1>My Applications</h1>
                     <div className=''>
                         <Grid container
                               direction="row"
@@ -141,4 +139,4 @@ function formatDate(timestamp) {
     return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
 }
 
-export default withRouter(JobPostingsList);
+export default withRouter(ApplicationsList);

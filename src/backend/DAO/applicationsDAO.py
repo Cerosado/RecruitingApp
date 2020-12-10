@@ -22,7 +22,10 @@ class ApplicationsDao:
     #Get all applications by user_id
     def getApplicationsByUser(self, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT * from applications WHERE user_id = %s;"
+        query = "SELECT * FROM applications "\
+        "INNER JOIN jobpostings "\
+        "ON applications.posting_id = jobpostings.posting_id "\
+        "WHERE applications.user_id = %s;"
         cursor.execute(query, (user_id,))
         result = cursor.fetchall()
         cursor.close()

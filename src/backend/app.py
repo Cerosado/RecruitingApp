@@ -118,8 +118,7 @@ def jobPostings():
         if (flask_praetorian.current_user().rolenames[0] == 'recruiter'):
             return JobPostingHandler().getJobPostingsByUserId(user_id)
         else:
-            test = JobPostingHandler().getAllJobPostings()
-            return test
+            return ApplicationsHandler().getApplicationsByUserId(user_id)
     else:
         return jsonify(Error="Method not allowed"), 405
 
