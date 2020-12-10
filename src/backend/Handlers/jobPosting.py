@@ -59,7 +59,7 @@ class JobPostingHandler:
             user_id = user_id
             dao = JobPostingsDao()
             jid = dao.registerJobPosting(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education)
-            return jsonify(message="Successfully creating job posting with id: %s " % (jid,)), 201
+            return jsonify(message="Successfully created job posting"), 201
 
     def editJobPosting(self, data, posting_id):
         dao = JobPostingsDao()
