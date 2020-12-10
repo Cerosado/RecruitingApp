@@ -3,6 +3,7 @@ import inspect
 import os
 from datetime import datetime
 from pathlib import Path
+import sys
 
 import pandas
 from flask import jsonify
@@ -12,6 +13,7 @@ import flask_praetorian
 from ..DAO.applicationsDAO import ApplicationsDao
 from ..DAO.resumeDAO import ResumeDao
 from ..DAO.userDAO import UserDao
+from ..DAO.modelsDAO import ModelsDAO
 from ..resume_parser.custom_resume_parser import CustomResumeParser
 from ..DAO.modelsDAO import ModelsDAO
 
@@ -20,26 +22,27 @@ class ResumeHandler:
 
     def map_to_Resume(self, row):
         result = {}
-        result['resume_data']=row[0]
-        result['resume_extension']=row[1]
-        result['education']=row[2]
-        result['college_name']=row[3]
-        result['degree']=row[4]
-        result['designation']=row[5]
-        result['experience']=row[6]
-        result['company_names']=row[7]
-        result['skills']=row[8]
-        result['total_experience']=row[9]
-        result['last_updated']=row[10]
-        result['user_id']=row[11]
+        result['resume_data']=row['resume_data']
+        result['resume_extension']=row['resume_extension']
+        result['education']=row['education']
+        result['college_name']=row['college_name']
+        result['degree']=row['degree']
+        result['designation']=row['designation']
+        result['experience']=row['experience']
+        result['company_names']=row['company_names']
+        result['skills']=row['skills']
+        result['total_experience']=row['total_experience']
+        result['last_updated']=row['last_updated']
+        result['user_id']=row['user_id']
         return result
 
     def getResumeByUserId(self, uid):
         dao = ResumeDao()
         result = dao.getResumeById(uid)
-        result = self.map_to_Resume(result)
-        return jsonify(result)
-
+        if(result):
+            result = self.map_to_Resume(result)        
+        return result
+        
     # Create resume, must provide all data.
     def createResume(self, data):
         if len(data) != 12:

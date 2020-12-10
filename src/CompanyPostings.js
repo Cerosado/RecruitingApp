@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import ListItemLink from "./ListItemLink";
 import List from "@material-ui/core/List";
 import {Paper} from "@material-ui/core";
 import './CompanyPostings.css';
-import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";

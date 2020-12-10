@@ -7,6 +7,8 @@ from flask import Flask, request, flash, redirect, url_for, session, jsonify
 from flask_cors import CORS
 from flask_mail import Mail
 from werkzeug.utils import secure_filename
+import sys
+import base64
 
 from backend.Handlers.applications import ApplicationsHandler
 from .Handlers.jobPosting import JobPostingHandler
@@ -166,10 +168,11 @@ def create_application(posting_id):
         return jsonify(Error="Method not allowed"), 405
 
 
-@app.route('/Resumes', methods=['POST'])
+@app.route('/Resumes', methods=['GET','POST'])
 @flask_praetorian.roles_required("applicant")
 def parse_resume():
     if request.method == 'POST':
+        print(request.files, file=sys.stderr)
         if 'file' not in request.files:
             return jsonify(Error="File error")
         file = request.files['file']
@@ -184,6 +187,17 @@ def parse_resume():
                     resume_file=resume, resume_filename=filename,
                     skills_file='./resume_parser/skills_dataset.csv')
             return jsonify(Error="Filename not secure")
+    if request.method == 'GET':
+        resume = ResumeHandler().getResumeByUserId(flask_praetorian.current_user().user_id)
+        if(resume):
+            #just send the essentials
+            b64Data=base64.b64encode(resume['resume_data'].tobytes())
+            data = b64Data.decode('utf-8')
+            ext=resume['resume_extension']
+            applicantResume = {'resume_data':data,'resume_extension':ext}
+            # print(applicantResume, file=sys.stderr)
+            return applicantResume
+        return jsonify(Error="Resource not found")
     return jsonify(Error="Method not allowed")
 
 

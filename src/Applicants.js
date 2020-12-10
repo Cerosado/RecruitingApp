@@ -63,7 +63,6 @@ class Applicant extends React.Component {
                     </div>
                 </CardContent>
             </Card>
-
         );
     }
 }
@@ -197,19 +196,6 @@ class ApplicantsList extends React.Component {
                     </div>
                     <Divider/>
                     <div>
-                        {/*<List>*/}
-                        {/*    {applicants.map(applicant => (*/}
-                        {/*        <li key={applicant.user_id}>*/}
-                        {/*            <Applicant*/}
-                        {/*                Name={applicant.first_name + applicant.last_name}*/}
-                        {/*                University={'Placeholder university'}*/}
-                        {/*                Gpa={'4.00'}*/}
-                        {/*                Rank={applicant.rank}*/}
-                        {/*                Link={base64ToLink(applicant.resume_data, applicant.resume_extension)}*/}
-                        {/*            />*/}
-                        {/*        </li>*/}
-                        {/*    ))}*/}
-                        {/*</List>*/}
                         <List>
                             {applicants.map(applicant => (
                                 <RankedParticipantItem

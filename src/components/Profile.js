@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import {withRouter} from "react-router";
 import {authFetch} from "../auth";
-
+import FileUpload from "../fileUpload"
 
 class Profile extends React.Component {
     constructor(props) {
@@ -97,6 +97,13 @@ class Profile extends React.Component {
             </Card>
             <Card variant="outlined">
             <CardContent>
+                    <Typography className='role' variant="h5" component="h2">
+                        Resume: <Divider/><FileUpload/>
+                    </Typography>
+            </CardContent>
+            </Card>
+            <Card variant="outlined">
+            <CardContent>
                     <Typography className='email' variant="h5" component="h2">
                         Email: <Divider/>
                     </Typography>
@@ -132,7 +139,7 @@ class Profile extends React.Component {
                 type="update"
                 variant="contained"
                 color="primary"
-                style={{height:40, left:"8px", top:"23px"}}
+                style={{height:40, left:"4px", top:"26px"}}
                 onClick={this.submitEmail}
                 >
                     Submit
