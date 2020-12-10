@@ -105,9 +105,6 @@ class JobPostingsList extends React.Component{
                             <Grid item xs={gridSize}>
                                 <div className='JobPostingTitle'><p>Location</p></div>
                             </Grid>
-                            {/*<Grid item xs={3}>*/}
-                            {/*    <div className='JobPostingTitle'><p>Presentation Date</p></div>*/}
-                            {/*</Grid>*/}
                             <Grid item xs={gridSize}>
                                 <div className='JobPostingTitle'><p>Deadline</p></div>
                             </Grid>

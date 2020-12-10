@@ -18,7 +18,7 @@ function ListItemLink(props) {
             <ListItem button component={renderLink}>
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
                 {isApplicant ? <ListItemText primary={companyName} /> : null}
-                <ListItemText primary={primary}  style={{width: "100%"}}/>
+                <ListItemText primary={primary} />
                 <ListItemText id='location' primary={location} />
                 <ListItemText primary={deadline} />
             </ListItem>
