@@ -200,7 +200,7 @@ class ApplicantsList extends React.Component {
                             {applicants.map(applicant => (
                                 <RankedParticipantItem
                                     key={applicant.user_id}
-                                    name = {applicant.first_name + applicant.last_name}
+                                    name = {applicant.first_name + ' ' + applicant.last_name}
                                     resume= {base64ToLink(applicant.resume_data, applicant.resume_extension)}
                                     rank={applicant.rank}
                                     to={'/EventForm/' + applicant.user_id}
