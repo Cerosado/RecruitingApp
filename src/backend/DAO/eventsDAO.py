@@ -20,6 +20,28 @@ class EventsDao:
         cursor.close()
         return result
 
+    def get_events_by_applicant_id(self, user_id):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "SELECT * " \
+                "FROM events inner join invites i on events.event_id = i.event_id " \
+                "WHERE applicant_id = %s" % (user_id,)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        return result
+
+    def get_events_by_recruiter_id(self, user_id):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "SELECT e.*, a.first_name " \
+                "FROM events e " \
+                "inner join invites i on e.event_id = i.event_id " \
+                "inner join accounts a on a.user_id = i.recruiter_id " \
+                "WHERE recruiter_id = %s" % (user_id,)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        return result
+
     def getEventById(self, event_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * from events WHERE event_id = %s;"

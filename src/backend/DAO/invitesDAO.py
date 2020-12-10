@@ -47,7 +47,7 @@ class InvitesDao:
 
     def registerInvite(self, event_id, applicant_id, recruiter_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "INSERT INTO events(event_id, applicant_id, recruiter_id) VALUES (%s, %s,%s) RETURNING event_id;"
+        query = "INSERT INTO invites(event_id, applicant_id, recruiter_id) VALUES (%s, %s,%s) RETURNING event_id;"
         cursor.execute(query, (event_id, applicant_id, recruiter_id))
         event_id = cursor.fetchone()['event_id']
         self.conn.commit()
@@ -57,7 +57,7 @@ class InvitesDao:
     #Delete one application by both ids
     def deleteInvite(self, event_id, applicant_id, recruiter_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "DELETE FROM events WHERE event_id=%s, applicant_id=%s, recruiter_id=%s RETURNING event_id;"
+        query = "DELETE FROM invites WHERE event_id=%s and applicant_id=%s and recruiter_id=%s RETURNING event_id;"
         cursor.execute(query, (event_id, applicant_id, recruiter_id))
         event_id = cursor.fetchone()['event_id']
         self.conn.commit()

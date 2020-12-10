@@ -81,10 +81,11 @@ function EventForm ({
 
 
 const CreateEvent = withFormik({
-    mapPropsToValues: () => ({
+    mapPropsToValues: (props) => ({
         location: '',
         date: '',
         additionalDetails: '',
+        applicant_id: props.match.params.id
     }),
 
     validate: values => {
@@ -110,10 +111,10 @@ const CreateEvent = withFormik({
             location: values.location,
             date: values.date,
             additionalDetails: values.additionalDetails,
+            applicant_id: values.applicant_id
         }
         let user_id = jwtDecode(localStorage.getItem('jwt_token'))['id'];
-        let url = `http://localhost:5000/EventForm/`;
-console.log(jwtDecode(localStorage.getItem('jwt_token'))['id'])
+        let url = `http://localhost:5000/Events`;
         authFetch(url, {
             method: 'post',
             body: JSON.stringify(opts)

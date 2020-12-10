@@ -105,7 +105,7 @@ class App extends React.Component{
                                        <JobPostingApplication {...routerProps}/>
                                    )}>
                             </Route>
-                            <Route path="/EventForm"
+                            <Route path="/EventForm/:id"
                                    render={routerProps => (
                                        <EventForm {...routerProps}/>
                                    )}>
