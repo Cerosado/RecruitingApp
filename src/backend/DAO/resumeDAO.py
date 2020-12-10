@@ -19,6 +19,7 @@ class ResumeDao:
         result = cursor.fetchall()
         cursor.close()
         return result
+
     def getResumeById(self, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = "SELECT * from resumes WHERE user_id = %s;"
@@ -43,10 +44,11 @@ class ResumeDao:
         self.conn.commit()
         cursor.close()
         return user_id
-    def editResume(self, resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id):
+
+    def editResume(self, resume_data, resume_extension, education, college_name, degree, designation, experience, education_section, company_names, skills, total_experience, last_updated, user_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "UPDATE resumes SET resume_data=%s, resume_extension=%s, education=%s, college_name=%s, degree=%s, designation=%s, experience=%s, company_names=%s, skills=%s, total_experience=%s, last_updated=%s WHERE user_id =%s RETURNING user_id;"
-        cursor.execute(query, (resume_data, resume_extension, education, college_name, degree, designation, experience, company_names, skills, total_experience, last_updated, user_id))
+        query = "UPDATE resumes SET resume_data=%s, resume_extension=%s, education=%s, college_name=%s, degree=%s, designation=%s, experience=%s, education_section=%s, company_names=%s, skills=%s, total_experience=%s, last_updated=%s WHERE user_id =%s RETURNING user_id;"
+        cursor.execute(query, (resume_data, resume_extension, education, college_name, degree, designation, experience, education_section, company_names, skills, total_experience, last_updated, user_id))
         uid = cursor.fetchone()['user_id']
         self.conn.commit()
         cursor.close()

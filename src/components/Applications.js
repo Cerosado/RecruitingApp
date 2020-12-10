@@ -9,7 +9,7 @@ import {withRouter} from "react-router";
 import {authFetch} from "../auth";
 import FileUpload from "../fileUpload"
 
-class Profile extends React.Component {
+class Applications extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -152,4 +152,4 @@ class Profile extends React.Component {
 }
 
 
-export default withRouter(Profile);
+export default withRouter(Applications);
