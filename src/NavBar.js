@@ -128,7 +128,12 @@ export default function PrimarySearchAppBar() {
                 history.push("/Profile");
             }
         }>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={()=>{
+                handleMenuClose();
+                history.push("/Applications")
+            }
+                }>
+                My applications</MenuItem>
             <MenuItem onClick={ () => {
                 handleMenuClose();
                 logout();

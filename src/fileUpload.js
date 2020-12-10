@@ -63,7 +63,7 @@ export default class FileUpload extends React.Component {
                     this.setState({
                       file:null,
                       resume: data,
-                      resumeLink: this.base64ToLink(data['resume_data'],data['resume_extension'])
+                      //resumeLink: this.base64ToLink(data['resume_data'],data['resume_extension'])
                   });
                   }
                 },

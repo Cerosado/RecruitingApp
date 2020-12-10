@@ -98,10 +98,17 @@ class ResumeHandler:
         last_updated = datetime.now()
 
         resume_dao = ResumeDao()
-        result = resume_dao.registerResume(
+        result = None
+        currentResume = resume_dao.getResumeById(user.user_id)
+        print(currentResume,file=sys.stderr)
+        if(currentResume):
+            result = resume_dao.editResume(
             resume_data.read(), resume_extension, education, college_name, degree, designation,
             experience, education_section, company_names, skills, total_experience, last_updated, user_id)
-
+        else:
+            result = resume_dao.registerResume(
+            resume_data.read(), resume_extension, education, college_name, degree, designation,
+            experience, education_section, company_names, skills, total_experience, last_updated, user_id)
         # TODO: Handle errors and rollback
         return jsonify(user_id=result)
 

@@ -4,34 +4,6 @@ from ..DAO.jobPostingsDAO import JobPostingsDao
 
 
 class JobPostingHandler:
-
-    # def build_jobPosting_dict(self, row):
-    #     result = {}
-    #     result['posting_id'] = row[0]
-    #     result['position_name'] = row[1]
-    #     result['location'] = row[2]
-    #     result['description'] = row[3]
-    #     result['key_details'] = row[4]
-    #     result['pay_type'] = row[5]
-    #     result['pay_amount'] = row[6]
-    #     result['user_id'] = row[7]
-    #     result['deadline'] = row[8]
-    #     result['presentationDate'] = row[9]
-    #     return result
-
-    # def build_jobPosting_attributes(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, presentationDate):
-    #     result = {}
-    #     result['position_name'] = position_name
-    #     result['location'] = location
-    #     result['description'] = description
-    #     result['key_details'] = key_details
-    #     result['pay_type'] = pay_type
-    #     result['pay_amount'] = pay_amount
-    #     result['user_id'] = user_id
-    #     result['deadline'] = deadline
-    #     result['presentationDate'] = presentationDate
-    #     return result
-
     ###########################################
     #             GETS                        #
     ###########################################

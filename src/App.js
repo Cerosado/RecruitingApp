@@ -18,6 +18,7 @@ import EmailConfirm from "./components/EmailConfirm";
 import EventForm from "./EventForm";
 import jwtDecode from "jwt-decode";
 import Profile from "./components/Profile"
+import Applications from "./components/Applications"
 import JobPostingApplication from "./JobPostingApplication";
 import JobPostingFormController from "./JobPostingForm";
 
@@ -74,6 +75,8 @@ class App extends React.Component{
                             <PrivateRoute path="/JobPostings" component={JobPostingsList}>
                             </PrivateRoute>
                             <PrivateRoute path="/Profile" component={Profile}>
+                            </PrivateRoute>
+                            <PrivateRoute path="/Applications" component={Applications}>
                             </PrivateRoute>
                             <Route path="/Login"
                                    render={routerProps => (
