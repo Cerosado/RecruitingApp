@@ -49,53 +49,53 @@ function JobPostingForm({
                         alignItems="center"
                         spacing={2}>
                     <Grid item xs={4}>
-                        <h2 id="CompanyName">
+                        <p id="CompanyName" style={{marginBottom: "0px", fontSize: "1.3rem"}}>
                             Company name:
-                        </h2>
-                        <h3>{posting.first_name}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.first_name}</b>
                     </Grid>
                     <Grid item xs={4}>
-                        <h2 id="PositionName">
+                        <p id="PositionName" style={{marginBottom: "0px", fontSize: "1.3rem"}}>
                             Position name:
-                        </h2>
-                        <h3>{posting.position_name}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.position_name}</b>
                     </Grid>
                     <Grid item xs={4}>
-                        <h2 id="Location">
+                        <p id="Location" style={{marginBottom: "0px", fontSize: "1.3rem"}}>
                             Location:
-                        </h2>
-                        <h3>{posting.location}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.location}</b>
                     </Grid>
                     <Grid item xs>
-                        <h2 id="Description">
+                        <p id="Description" style={{marginBottom: "0px", fontSize: "1.3rem"}}>
                             Description:
-                        </h2>
-                        <h3>{posting.description}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.description}</b>
                     </Grid>
                     <Grid item xs>
-                        <h2 id="KeyDetails">
+                        <p id="KeyDetails" style={{marginBottom: "0px", fontSize: "1.3rem"}}>
                             Key details:
-                        </h2>
-                        <h3>{posting.key_details}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.key_details}</b>
                     </Grid>
                     <Grid item xs={4}>
-                        <h2 id="PayType">
+                        <p id="PayType" style={{marginBottom: "0px", fontSize: "1.5rem"}}>
                             Pay type:
-                        </h2>
-                        <h3>{posting.pay_type}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.pay_type}</b>
                     </Grid>
                     <Grid item xs={4}>
-                        <h2 id="PayAmount">
+                        <p id="PayAmount" style={{marginBottom: "0px", fontSize: "1.3rem"}}>
                             Pay amount:
-                        </h2>
-                        <h3>{posting.pay_amount}</h3>
+                        </p>
+                        <b style={{fontSize: "1.3rem"}}>{posting.pay_amount}</b>
                     </Grid>
 
                     <Grid id='DatetimeGrid' item xs={4}>
-                        <h2 id="Deadline">
+                        <p id="Deadline" style={{marginBottom: "0px"}}>
                             Deadline:
-                        </h2>
-                        <h3>{posting.deadline}</h3>
+                        </p>
+                        <b style={{fontSize: "1.33rem"}}>{formatDate(posting.deadline)}</b>
                     </Grid>
                 </Grid>
                 <br/>
@@ -168,3 +168,15 @@ const CreateJobPosting = withFormik({
 })(JobPostingForm);
 
 export default CreateJobPosting;
+
+function formatDate(timestamp) {
+    var date = new Date(timestamp)
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+}

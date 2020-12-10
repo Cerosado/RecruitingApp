@@ -22,38 +22,42 @@ function EventForm ({
                         status
                     }) {
 
-        return (
-            <div>
-                <h1>Create interview</h1>
-                <form onSubmit={handleSubmit}>
-                    <Grid   container
-                            direction="row"
-                            spacing={3}>
-                        <Grid item xs={6}>
-                            <TextField id="Location" label="Location" variant="outlined" required
-                                       name="location"
-                                       onChange={handleChange}
-                                       onBlur={handleBlur}
-                                       value={values.location}
-                                       error={touched.location && Boolean(errors.location)}
-                                       helperText={touched.location && errors.location}/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                id="datetime-local"
-                                label="Date"
-                                type="datetime-local"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="date"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.date}
-                                error={touched.date && Boolean(errors.date)}
-                                helperText={touched.date && errors.date}
-                            />
-                        </Grid>
+    return (
+        <div>
+            <h1>Create interview</h1>
+            <form onSubmit={handleSubmit}>
+                <Grid   container
+                        direction="row"
+                        spacing={3}>
+                    <Grid item xs={6}>
+                        <TextField id="Location" label="Location" variant="outlined" required
+                                   name="location"
+                                   onChange={handleChange}
+                                   onBlur={handleBlur}
+                                   value={values.location}
+                                   error={touched.location && Boolean(errors.location)}
+                                   helperText={touched.location && errors.location}/>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            id="datetime-local"
+                            label="Date"
+                            type="datetime-local"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            name="date"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.date}
+                            error={touched.date && Boolean(errors.date)}
+                            helperText={touched.date && errors.date}
+                        />
+                    </Grid>
+                    </Grid>
+                    <Grid container
+                          direction="row"
+                          spacing={3}>
                         <Grid item xs={12}>
                             <TextField id="AdditionalDetails" label="Additional details" variant="outlined"
                                        multiline
@@ -74,10 +78,10 @@ function EventForm ({
                 <div id="SubmitDiv">
                     <Button id={"Submit"} type="submit">Create interview</Button>
                 </div>
-                </form>
-            </div>
-        );
-    }
+            </form>
+        </div>
+    );
+}
 
 
 const CreateEvent = withFormik({
@@ -113,7 +117,7 @@ const CreateEvent = withFormik({
         }
         let user_id = jwtDecode(localStorage.getItem('jwt_token'))['id'];
         let url = `http://localhost:5000/EventForm/`;
-console.log(jwtDecode(localStorage.getItem('jwt_token'))['id'])
+        console.log(jwtDecode(localStorage.getItem('jwt_token'))['id'])
         authFetch(url, {
             method: 'post',
             body: JSON.stringify(opts)

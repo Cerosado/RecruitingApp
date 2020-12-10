@@ -65,12 +65,16 @@ class JobPostingsList extends React.Component{
         } else {
             const localToken = localStorage.getItem('jwt_token');
             const decoded = jwtDecode(localToken);
-            let url = ''
+            let url = '';
             if (decoded['rls'] === 'recruiter') {
                 url = '/jobPostings/';
             }
             else {
                 url = '/JobPostingApplication/';
+            }
+            let gridSize = 3;
+            if (decoded['rls'] === 'recruiter'){
+                gridSize = 4;
             }
             return (
                 <Paper className='jobPostingsList' elevation={0}>
@@ -79,9 +83,12 @@ class JobPostingsList extends React.Component{
                             {msg}
                         </Alert>
                     </Snackbar>
-                    <h1>My Job Postings</h1>
+                    {(decoded['rls'] === 'recruiter') ?
+                    <h1>My Job Postings</h1> :
+                    <h1>Available Job Postings</h1>}
+                    {(decoded['rls'] === 'recruiter') ?
                     <Button component={RouterLink} color='primary' variant='contained' to="/JobPostingForm">New job
-                        posting</Button>
+                        posting</Button> : null}
                     <div className=''>
                         <Grid container
                               direction="row"
@@ -89,19 +96,19 @@ class JobPostingsList extends React.Component{
                               alignItems="flex-start"
                               spacing={3}>
                             {(decoded['rls'] === 'applicant') ?
-                                <Grid item xs={2}>
+                                <Grid item xs={3}>
                                     <div className=' positionName JobPostingTitle'><p>Company</p></div>
                                 </Grid> : null}
-                            <Grid item xs={2}>
+                            <Grid item xs={gridSize}>
                                 <div className=' JobPostingTitle'><p>Position</p></div>
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={gridSize}>
                                 <div className='JobPostingTitle'><p>Location</p></div>
                             </Grid>
-                            <Grid item xs={3}>
-                                <div className='JobPostingTitle'><p>Presentation Date</p></div>
-                            </Grid>
-                            <Grid item xs={2}>
+                            {/*<Grid item xs={3}>*/}
+                            {/*    <div className='JobPostingTitle'><p>Presentation Date</p></div>*/}
+                            {/*</Grid>*/}
+                            <Grid item xs={gridSize}>
                                 <div className='JobPostingTitle'><p>Deadline</p></div>
                             </Grid>
                         </Grid>
@@ -115,7 +122,6 @@ class JobPostingsList extends React.Component{
                                 primary={posting.position_name}
                                 to={url + posting.posting_id}
                                 location={posting.location}
-                                presentationDate={formatDate(posting.presentationdate)}
                                 deadline={formatDate(posting.deadline)}
                                 isApplicant={decoded['rls'] === 'applicant'}
                             >

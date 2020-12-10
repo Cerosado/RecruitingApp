@@ -111,7 +111,7 @@ class App extends React.Component{
                             </Route>
                             <Route path="/home" component={Homepage}>
                             </Route>
-                            <PrivateRoute path="/" component={JobPostingsList} roles={["recruiter"]}>
+                            <PrivateRoute path="/" component={JobPostingsList} roles={["recruiter", "applicant"]}>
                             </PrivateRoute>
                         </Switch>
                     </Container>
