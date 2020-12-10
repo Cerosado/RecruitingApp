@@ -14,6 +14,7 @@ class Profile extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
+            error:null,
             profile: {},
             emailValue: '',
             isUpdating:true
@@ -72,6 +73,11 @@ class Profile extends React.Component {
     }
 
     render() {
+    if (this.state.error) {
+        return <div>Error: {this.state.error.message}</div>;
+    } else if (!this.state.isLoaded) {
+        return <div>Loading...</div>;
+    } else {
         return (
             <div style={{paddingTop:"10px", paddingBottom:"10px", marginTop:"30px"}}>
             <Card variant="outlined" >
@@ -149,6 +155,7 @@ class Profile extends React.Component {
             </div>
         );
     }
+}
 }
 
 

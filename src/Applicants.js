@@ -1,71 +1,12 @@
 import React from 'react';
 import './Applicants.css';
-import icon from './Resources/resume.png';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {List} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {authFetch} from "./auth";
-import Select from '@material-ui/core/Select';
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import {classes} from "istanbul-lib-coverage";
-import Dropdown from "./Dropdown";
 import Grid from "@material-ui/core/Grid";
-import jwtDecode from "jwt-decode";
-import ListItemLink from "./ListItemLink";
 import RankedParticipantItem from "./RankedParticipantItem";
 import Divider from "@material-ui/core/Divider";
-
-
-class Applicant extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            Name: null,
-            University: null,
-            Gpa: null,
-            // Resume: resume,
-            Rank: null,
-        };
-    }
-
-    render() {
-        return (
-            <Card className='applicant' variant="outlined">
-                <CardContent>
-                    <div className='container' row>
-                        <Typography className='' gutterBottom variant="h5" component="h2">
-                            {this.props.Name}
-                        </Typography>
-                        {/*<Typography className='' variant="h5" component="h2">*/}
-                        {/*    {this.props.University}*/}
-                        {/*</Typography>*/}
-                        {/*<Typography className='' color="textSecondary" variant="h5">*/}
-                        {/*    {this.props.Gpa}*/}
-                        {/*</Typography>*/}
-                        <CardActions className=''>
-                            <Button
-                                href={this.props.Link}
-                                target="_blank"
-                            >
-                                <img className='' src={icon} alt="View resume"/>
-                            </Button>
-                        </CardActions>
-                        <Typography className="" variant="body2" component="p">
-                            {this.props.Rank}
-                        </Typography>
-                    </div>
-                </CardContent>
-            </Card>
-        );
-    }
-}
 
 
 class ApplicantsList extends React.Component {

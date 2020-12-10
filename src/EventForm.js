@@ -1,5 +1,4 @@
 import React from "react";
-import './EventForm.css';
 import DateTimePicker from "./DateTimeField";
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
@@ -22,62 +21,66 @@ function EventForm ({
                         status
                     }) {
 
-        return (
-            <div>
-                <h1>Create interview</h1>
-                <form onSubmit={handleSubmit}>
-                    <Grid   container
-                            direction="row"
-                            spacing={3}>
-                        <Grid item xs={6}>
-                            <TextField id="Location" label="Location" variant="outlined" required
-                                       name="location"
-                                       onChange={handleChange}
-                                       onBlur={handleBlur}
-                                       value={values.location}
-                                       error={touched.location && Boolean(errors.location)}
-                                       helperText={touched.location && errors.location}/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                id="datetime-local"
-                                label="Date"
-                                type="datetime-local"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="date"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.date}
-                                error={touched.date && Boolean(errors.date)}
-                                helperText={touched.date && errors.date}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField id="AdditionalDetails" label="Additional details" variant="outlined"
-                                       multiline
-                                       rowsMax={4}
-                                       required
-                                       name="additionalDetails"
-                                       onChange={handleChange}
-                                       onBlur={handleBlur}
-                                       value={values.additionalDetails}
-                                       error={touched.additionalDetails && Boolean(errors.additionalDetails)}
-                                       helperText={touched.additionalDetails && errors.additionalDetails}
-                            />
-                        </Grid>
+    return (
+        <div>
+            <h1>Create interview</h1>
+            <form onSubmit={handleSubmit}>
+                <Grid   container
+                        direction="column"
+                        justify="flex-start"
+                        alignItems="center"
+                >
+                    <Grid item xs={3}>
+                        <TextField
+                            id="datetime-local"
+                            label="Date"
+                            type="datetime-local"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            name="date"
+                            fullWidth
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.date}
+                            error={touched.date && Boolean(errors.date)}
+                            helperText={touched.date && errors.date}
+                        />
                     </Grid>
+                    <Grid item xs={3}>
+                        <TextField id="Location" label="Location" variant="outlined" required
+                                   name="location"
+                                   fullWidth
+                                   onChange={handleChange}
+                                   onBlur={handleBlur}
+                                   value={values.location}
+                                   error={touched.location && Boolean(errors.location)}
+                                   helperText={touched.location && errors.location}/>
+                    </Grid>
+                    <Grid >
+                        <TextField id="AdditionalDetail" label="Additional details" variant="outlined"
+                                   required
+                                   fullWidth
+                                   multiline={true}
+                                   name="additionalDetails"
+                                   onChange={handleChange}
+                                   onBlur={handleBlur}
+                                   value={values.additionalDetails}
+                                   error={touched.additionalDetails && Boolean(errors.additionalDetails)}
+                                   helperText={touched.additionalDetails && errors.additionalDetails}
+                        />
+                    </Grid>
+                </Grid>
                 <br/>
                 <br/>
                 <br/>
-                <div id="SubmitDiv">
+                <div style={{textAlign: "center"}}>
                     <Button id={"Submit"} type="submit">Create interview</Button>
                 </div>
-                </form>
-            </div>
-        );
-    }
+            </form>
+        </div>
+    );
+}
 
 
 const CreateEvent = withFormik({

@@ -119,11 +119,10 @@ def jobPostings():
         if (flask_praetorian.current_user().rolenames[0] == 'recruiter'):
             return JobPostingHandler().getJobPostingsByUserId(user_id)
         else:
-            test = JobPostingHandler().getAllJobPostings()
-            return test
+            view = JobPostingHandler().getAllJobPostings()
+            return view
     else:
         return jsonify(Error="Method not allowed"), 405
-
 @app.route('/JobPostingForm', methods=['POST'])
 @flask_praetorian.roles_required("recruiter")
 def jobPostingForm():
@@ -159,6 +158,16 @@ def get_fields_of_work():
 ###########################################
 #        Resumes and Applications         #
 ###########################################
+
+@app.route('/Applications', methods=['GET'])
+@flask_praetorian.roles_accepted("applicant")
+def applications():
+    user_id = flask_praetorian.current_user().identity
+    if request.method == 'GET' and user_id:
+        return ApplicationsHandler().getApplicationsByUserId(user_id)
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
 @app.route('/Applications/<int:posting_id>', methods=['POST'])
 @flask_praetorian.roles_required("applicant")
 def create_application(posting_id):
@@ -196,7 +205,6 @@ def parse_resume():
             data = b64Data.decode('utf-8')
             ext=resume['resume_extension']
             applicantResume = {'resume_data':data,'resume_extension':ext}
-            # print(applicantResume, file=sys.stderr)
             return applicantResume
         return jsonify(Error="Resource not found")
     return jsonify(Error="Method not allowed"), 405
