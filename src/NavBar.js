@@ -86,10 +86,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+
+    let isRecruiter=false;
     
-    const localToken = localStorage.getItem('jwt_token');
-    const decoded = jwtDecode(localToken);
-    const isRecruiter = decoded['rls']=='recruiter'
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -98,6 +97,11 @@ export default function PrimarySearchAppBar() {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     let [logged] = useAuth();
+    if(logged){
+        let localToken = localStorage.getItem('jwt_token');
+        let decoded = jwtDecode(localToken);
+        isRecruiter = (decoded['rls']=='recruiter');
+    }
     const history = useHistory();
 
     const handleProfileMenuOpen = (event) => {
