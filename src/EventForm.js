@@ -72,7 +72,7 @@ function EventForm ({
                 <br/>
                 <br/>
                 <div id="SubmitDiv">
-                    <Button id="Submit" type="submit">Create interview</Button>
+                    <Button id={"Submit"} type="submit">Create interview</Button>
                 </div>
                 </form>
             </div>
@@ -112,8 +112,8 @@ const CreateEvent = withFormik({
             additionalDetails: values.additionalDetails,
         }
         let user_id = jwtDecode(localStorage.getItem('jwt_token'))['id'];
-        let url = `http://localhost:5000/EventForm`;
-
+        let url = `http://localhost:5000/EventForm/`;
+console.log(jwtDecode(localStorage.getItem('jwt_token'))['id'])
         authFetch(url, {
             method: 'post',
             body: JSON.stringify(opts)

@@ -5,12 +5,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import * as PropTypes from "prop-types";
-import icon from "./Resources/resume.jpg";
+import icon from "./Resources/resume.png";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
 
 function RankedParticipantItem(props) {
-    const {name, university, to, gpa, resume, rank} = props;
+    const {name, to, resume, rank} = props;
 
     const renderLink = React.useMemo(
         () => React.forwardRef((itemProps, ref) => <RouterLink to={to} ref={ref} {...itemProps} />),
@@ -19,18 +21,28 @@ function RankedParticipantItem(props) {
 
     return (
         <li>
-            <ListItem button component={renderLink}>
-                <ListItemText primary={name} style={{width: "70px"}}/>
-                <ListItemText primary={university} style={{width: "185px"}}/>
-                <ListItemText id='gpa' primary={gpa} style={{width: "70px"}}/>
+                <Grid   container
+                        direction="row"
+                        justify="left"
+                        alignItems="center"
+                        spacing={1}>
+                    <ListItem button component={renderLink} style={{width: "75%"}}>
+                    <Grid item xs={12}>
+                        <ListItemText primary={name} style={{width: "70px"}}/>
+                    </Grid>
+                    <Grid item xs={2} style={{textAlign: "center !important"}}>
+                        <ListItemText primary={rank} style={{width: "100% !important"}}/>
+                    </Grid>
+                    </ListItem>
+            <Grid item xs={3} style={{textAlign: "center"}}>
                 <Button
                     href={resume}
-                    target="_blank"
-                >
-                    <img className='' src={icon} style={{width: "50px"}}/>
+                    target="_blank">
+                    <img className='' src={icon} style={{width: "50px"}} />
                 </Button>
-                <ListItemText primary={rank} style={{textAlign: "center", fontSize: "5 rem !important"}}/>
-            </ListItem>
+            </Grid>
+                </Grid>
+
         </li>
     );
 }
