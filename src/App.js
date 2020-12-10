@@ -21,6 +21,7 @@ import Profile from "./components/Profile"
 import Applications from "./components/Applications"
 import JobPostingApplication from "./JobPostingApplication";
 import JobPostingFormController from "./JobPostingForm";
+import InterviewList from "./Interviews";
 
 function Secret() {
     const [message, setMessage] = useState('')
@@ -104,11 +105,14 @@ class App extends React.Component{
                                        <JobPostingApplication {...routerProps}/>
                                    )}>
                             </Route>
-                            <Route path="/EventForm"
+                            <Route path="/EventForm/:id" roles={["recruiter"]}
                                    render={routerProps => (
                                        <EventForm {...routerProps}/>
                                    )}>
                             </Route>
+                            <PrivateRoute path="/Events"
+                                   component={InterviewList} roles={["recruiter", "applicant"]}>
+                            </PrivateRoute>
                             <Route path="/home" component={Homepage}>
                             </Route>
                             <PrivateRoute path="/" component={JobPostingsList} roles={["recruiter", "applicant"]}>

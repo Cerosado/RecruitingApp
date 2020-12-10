@@ -11,6 +11,7 @@ import sys
 import base64
 
 from backend.Handlers.applications import ApplicationsHandler
+from backend.Handlers.events import EventsHandler
 from .Handlers.jobPosting import JobPostingHandler
 from .Handlers.user import UserHandler
 from .Handlers.resume import ResumeHandler
@@ -179,7 +180,7 @@ def create_application(posting_id):
         return jsonify(Error="Method not allowed"), 405
 
 
-@app.route('/Resumes', methods=['GET','POST'])
+@app.route('/Resumes', methods=['GET', 'POST'])
 @flask_praetorian.roles_required("applicant")
 def parse_resume():
     if request.method == 'POST':
@@ -200,7 +201,7 @@ def parse_resume():
             return jsonify(Error="Filename not secure")
     if request.method == 'GET':
         resume = ResumeHandler().getResumeByUserId(flask_praetorian.current_user().user_id)
-        if(resume):
+        if resume:
             #just send the essentials
             b64Data=base64.b64encode(resume['resume_data'].tobytes())
             data = b64Data.decode('utf-8')
@@ -208,7 +209,20 @@ def parse_resume():
             applicantResume = {'resume_data':data,'resume_extension':ext}
             return applicantResume
         return jsonify(Error="Resource not found")
-    return jsonify(Error="Method not allowed")
+    return jsonify(Error="Method not allowed"), 405
+
+
+###########################################
+#                Events                   #
+###########################################
+@app.route('/Events', methods=['GET', 'POST'])
+@flask_praetorian.roles_accepted("applicant", "recruiter")
+def events():
+    if request.method == 'POST':
+        return EventsHandler().registerEvent(request.get_json(force=True))
+    elif request.method == 'GET':
+        return EventsHandler().get_events_by_user_id()
+    return jsonify(Error="Method not allowed"), 405
 
 
 ###########################################

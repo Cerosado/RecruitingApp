@@ -1,5 +1,4 @@
 import React from "react";
-import './EventForm.css';
 import DateTimePicker from "./DateTimeField";
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
@@ -27,18 +26,11 @@ function EventForm ({
             <h1>Create interview</h1>
             <form onSubmit={handleSubmit}>
                 <Grid   container
-                        direction="row"
-                        spacing={3}>
-                    <Grid item xs={6}>
-                        <TextField id="Location" label="Location" variant="outlined" required
-                                   name="location"
-                                   onChange={handleChange}
-                                   onBlur={handleBlur}
-                                   value={values.location}
-                                   error={touched.location && Boolean(errors.location)}
-                                   helperText={touched.location && errors.location}/>
-                    </Grid>
-                    <Grid item xs={6}>
+                        direction="column"
+                        justify="flex-start"
+                        alignItems="center"
+                >
+                    <Grid item xs={3}>
                         <TextField
                             id="datetime-local"
                             label="Date"
@@ -47,6 +39,7 @@ function EventForm ({
                                 shrink: true,
                             }}
                             name="date"
+                            fullWidth
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.date}
@@ -54,28 +47,34 @@ function EventForm ({
                             helperText={touched.date && errors.date}
                         />
                     </Grid>
+                    <Grid item xs={3}>
+                        <TextField id="Location" label="Location" variant="outlined" required
+                                   name="location"
+                                   fullWidth
+                                   onChange={handleChange}
+                                   onBlur={handleBlur}
+                                   value={values.location}
+                                   error={touched.location && Boolean(errors.location)}
+                                   helperText={touched.location && errors.location}/>
                     </Grid>
-                    <Grid container
-                          direction="row"
-                          spacing={3}>
-                        <Grid item xs={12}>
-                            <TextField id="AdditionalDetails" label="Additional details" variant="outlined"
-                                       multiline
-                                       rowsMax={4}
-                                       required
-                                       name="additionalDetails"
-                                       onChange={handleChange}
-                                       onBlur={handleBlur}
-                                       value={values.additionalDetails}
-                                       error={touched.additionalDetails && Boolean(errors.additionalDetails)}
-                                       helperText={touched.additionalDetails && errors.additionalDetails}
-                            />
-                        </Grid>
+                    <Grid >
+                        <TextField id="AdditionalDetail" label="Additional details" variant="outlined"
+                                   required
+                                   fullWidth
+                                   multiline={true}
+                                   name="additionalDetails"
+                                   onChange={handleChange}
+                                   onBlur={handleBlur}
+                                   value={values.additionalDetails}
+                                   error={touched.additionalDetails && Boolean(errors.additionalDetails)}
+                                   helperText={touched.additionalDetails && errors.additionalDetails}
+                        />
                     </Grid>
+                </Grid>
                 <br/>
                 <br/>
                 <br/>
-                <div id="SubmitDiv">
+                <div style={{textAlign: "center"}}>
                     <Button id={"Submit"} type="submit">Create interview</Button>
                 </div>
             </form>
@@ -85,10 +84,11 @@ function EventForm ({
 
 
 const CreateEvent = withFormik({
-    mapPropsToValues: () => ({
+    mapPropsToValues: (props) => ({
         location: '',
         date: '',
         additionalDetails: '',
+        applicant_id: props.match.params.id
     }),
 
     validate: values => {
@@ -114,10 +114,10 @@ const CreateEvent = withFormik({
             location: values.location,
             date: values.date,
             additionalDetails: values.additionalDetails,
+            applicant_id: values.applicant_id
         }
         let user_id = jwtDecode(localStorage.getItem('jwt_token'))['id'];
-        let url = `http://localhost:5000/EventForm/`;
-        console.log(jwtDecode(localStorage.getItem('jwt_token'))['id'])
+        let url = `http://localhost:5000/Events`;
         authFetch(url, {
             method: 'post',
             body: JSON.stringify(opts)

@@ -31,7 +31,6 @@ ListItemLink.propTypes = {
     primary: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
-    presentationDate: PropTypes.string.isRequired,
     deadline: PropTypes.string.isRequired,
 };
 

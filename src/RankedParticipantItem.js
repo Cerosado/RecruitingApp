@@ -23,16 +23,15 @@ function RankedParticipantItem(props) {
         <li>
                 <Grid   container
                         direction="row"
-                        justify="left"
                         alignItems="center"
                         spacing={1}>
                     <ListItem button component={renderLink} style={{width: "75%"}}>
-                    <Grid item xs={12}>
-                        <ListItemText primary={name} style={{width: "70px"}}/>
-                    </Grid>
-                    <Grid item xs={2} style={{textAlign: "center !important"}}>
-                        <ListItemText primary={rank} style={{width: "100% !important"}}/>
-                    </Grid>
+                        <Grid item xs={10}>
+                            <ListItemText primary={name} />
+                        </Grid>
+                        <Grid item xs={2} style={{textAlign: "center !important"}}>
+                            <ListItemText primary={rank} style={{width: "100% !important"}}/>
+                        </Grid>
                     </ListItem>
             <Grid item xs={3} style={{textAlign: "center"}}>
                 <Button
@@ -50,8 +49,6 @@ function RankedParticipantItem(props) {
 RankedParticipantItem.propTypes = {
     name: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
-    university: PropTypes.string.isRequired,
-    gpa: PropTypes.string.isRequired,
     resume: PropTypes.string.isRequired,
     rank: PropTypes.number.isRequired,
 };
