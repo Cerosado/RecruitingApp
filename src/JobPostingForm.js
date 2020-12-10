@@ -71,7 +71,6 @@ class JobPostingFormController extends React.Component {
                 spacing={2}>
                     <Grid item xs={6}>
                         <TextField id="PositionName" label="Position name" variant="outlined" required
-                            // autoComplete="fname"
                                    name="positionName"
                                    fullWidth
                                    onChange={handleChange}
@@ -84,7 +83,6 @@ class JobPostingFormController extends React.Component {
                     </Grid>
                     <Grid item xs={6}>
                         <TextField id="Location" label="Location" variant="outlined" required
-                            // autoComplete="fname"
                                    name="location"
                                    fullWidth
                                    onChange={handleChange}
@@ -96,7 +94,6 @@ class JobPostingFormController extends React.Component {
                     </Grid>
                     <Grid item xs>
                         <TextField id="Description" label="Description" variant="outlined" required
-                            // autoComplete="fname"
                                    name="description"
                                    fullWidth
                                    onChange={handleChange}
@@ -108,7 +105,6 @@ class JobPostingFormController extends React.Component {
                     </Grid>
                     <Grid item xs>
                         <TextField id="KeyDetails" label="Key details" variant="outlined" required
-                            // autoComplete="fname"
                                    name="keyDetails"
                                    fullWidth
                                    onChange={handleChange}
@@ -120,7 +116,6 @@ class JobPostingFormController extends React.Component {
                     </Grid>
                     <Grid item xs={4}>
                         <TextField id="PayType" label="Pay type" variant="outlined"
-                            // autoComplete="fname"
                                    name="payType"
                                    fullWidth
                                    onChange={handleChange}
@@ -132,7 +127,6 @@ class JobPostingFormController extends React.Component {
                     </Grid>
                     <Grid item xs={4}>
                         <TextField id="PayAmount" label="Pay amount" variant="outlined"
-                            // autoComplete="fname"
                                    name="payAmount"
                                    fullWidth
                                    onChange={handleChange}

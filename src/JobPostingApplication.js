@@ -29,17 +29,7 @@ function JobPostingForm({
             .then(response => response.json())
             .then(
                 (data) => {
-                    // this.setState({
                         setPosting(data);
-                        // companyName: data.companyName,
-                        // positionName: data.positionName,
-                        // location: data.location,
-                        // description: data.description,
-                        // keyDetails: data.keyDetails,
-                        // payType: data.payType,
-                        // payAmount: data.payAmount,
-                        // deadline: data.deadline,
-                    // })
                 },
                 // (error) => {
                 //     this.setState({
@@ -48,18 +38,10 @@ function JobPostingForm({
                 //     });
                 // }
     )}, [id]);
-        // const { companyName,
-        //     positionName,
-        //     location,
-        //     description,
-        //     keyDetails,
-        //     payType,
-        //     payAmount,
-        //     deadline,} = this.state;
     return (
         <Container component="main" >
             <CssBaseline />
-            <h1>Create Job Posting</h1>
+            <h1>Apply to job posting</h1>
             <form onSubmit={handleSubmit}>
                 <Grid   container
                         direction="row"

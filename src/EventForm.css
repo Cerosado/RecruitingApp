@@ -4,13 +4,11 @@
     background-color: aliceblue;
 }
 
-#AdditionalDetails{
-    min-width: 100%;
-}
 
 #PositionName, #Location{
     width: 412px;
 }
+
 
 /*#Datetime {*/
 /*    padding-left: 50px;*/
