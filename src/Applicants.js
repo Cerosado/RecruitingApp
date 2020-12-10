@@ -51,7 +51,7 @@ class ApplicantsList extends React.Component {
             return (
                 <div>
                     <h1 className="MainTitle"> {`${posting.position_name} (${posting.location})`}</h1>
-                    <div className='titleContainer' row>
+                    <div className='titleContainer'>
                         <div >
                             <Grid   container
                                     direction="row"
@@ -79,8 +79,6 @@ class ApplicantsList extends React.Component {
                                 </Grid>
                             <Grid   container
                                     direction="column"
-                                    justify="left"
-                                    alignItems="left"
                                     spacing={0}>
                                 <Grid item xs={6}>
                                     <p id="Description" style={{marginBottom: "0px"}}>
@@ -103,7 +101,6 @@ class ApplicantsList extends React.Component {
                         <div>
                             <Grid   container
                                     direction="row"
-                                    justify="left"
                                     alignItems="center"
                                     spacing={2}>
                                 <Grid item xs={6}>

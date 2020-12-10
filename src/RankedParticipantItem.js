@@ -23,7 +23,6 @@ function RankedParticipantItem(props) {
         <li>
                 <Grid   container
                         direction="row"
-                        justify="left"
                         alignItems="center"
                         spacing={1}>
                     <ListItem button component={renderLink} style={{width: "75%"}}>
@@ -50,8 +49,6 @@ function RankedParticipantItem(props) {
 RankedParticipantItem.propTypes = {
     name: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
-    university: PropTypes.string.isRequired,
-    gpa: PropTypes.string.isRequired,
     resume: PropTypes.string.isRequired,
     rank: PropTypes.number.isRequired,
 };
