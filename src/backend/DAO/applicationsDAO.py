@@ -25,6 +25,8 @@ class ApplicationsDao:
         query = "SELECT * FROM applications "\
         "INNER JOIN jobpostings "\
         "ON applications.posting_id = jobpostings.posting_id "\
+        "INNER JOIN accounts "\
+        "ON jobpostings.user_id = accounts.user_id "\
         "WHERE applications.user_id = %s;"
         cursor.execute(query, (user_id,))
         result = cursor.fetchall()

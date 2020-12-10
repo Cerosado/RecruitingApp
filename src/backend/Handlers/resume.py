@@ -100,7 +100,6 @@ class ResumeHandler:
         resume_dao = ResumeDao()
         result = None
         currentResume = resume_dao.getResumeById(user.user_id)
-        print(currentResume,file=sys.stderr)
         if(currentResume):
             result = resume_dao.editResume(
             resume_data.read(), resume_extension, education, college_name, degree, designation,
