@@ -1,65 +1,42 @@
 import React from "react";
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Card from "@material-ui/core/Card";
-import Divider from "@material-ui/core/Divider";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
 import {withRouter} from "react-router";
+import ListItemLink from "../ListItemLink";
+import List from "@material-ui/core/List";
+import {Paper} from "@material-ui/core";
+import '../CompanyPostings.css';
+import Divider from "@material-ui/core/Divider";
 import {authFetch} from "../auth";
-import FileUpload from "../fileUpload"
+import jwtDecode from "jwt-decode";
+import Grid from "@material-ui/core/Grid";
+import PropTypes from "prop-types";
 
-class Applications extends React.Component {
+
+class ApplicationsList extends React.Component{
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
+            error: null,
             isLoaded: false,
-            profile: {},
-            emailValue: '',
-            isUpdating:true
+            postings: [],
         };
-    }
-    changeEmail = () => {
-        this.setState({
-            isLoaded: true,
-            profile: this.state.profile,
-            emailValue: this.state.emailValue,
-            isUpdating:false
-        })
-    }
-    saveTextField = (e) => {
-        this.setState({
-            isLoaded: true,
-            profile:this.state.profile,
-            emailValue: e.target.value,
-            isUpdating:false
-        })
-    }
-    submitEmail = ()=>{
-        let url = `http://localhost:5000/update/email`;
-        authFetch(url, {
-            method: 'POST',
-            body: JSON.stringify({'email':this.state.emailValue})
-        }).then(r => r.json())
-            this.setState({
-                isLoaded: true,
-                profile: this.state.profile,
-                emailValue:this.state.emailValue,
-                isUpdating:true
-            });
     }
 
     componentDidMount() {
-        let url = `http://localhost:5000/Profile`;
-        authFetch(url)
+        let url = `http://localhost:5000/Applications`;
+        authFetch(url, {
+            method: 'get',
+        })
             .then(response => response.json())
             .then(
                 (data) => {
                     this.setState({
                         isLoaded: true,
-                        profile: data,
-                        emailValue: data['email'],
-                        isUpdating:true
+                        postings: data
                     });
                 },
                 (error) => {
@@ -72,84 +49,86 @@ class Applications extends React.Component {
     }
 
     render() {
-        return (
-            <div style={{paddingTop:"10px", paddingBottom:"10px", marginTop:"30px"}}>
-            <Card variant="outlined" >
-                <CardContent>
-                    <Typography fullWidth className='names' variant="h5" component="h3">
-                            First & Last Names: <Divider/>{this.state.profile.first_name} {this.state.profile.last_name}
-                    </Typography>
-                </CardContent>
-            </Card> <Card variant="outlined">
-            <CardContent>
-                    <Typography className='role' variant="h5" component="h2">
-                        Username: <Divider/>{this.state.profile.username}
-                    </Typography>
-            </CardContent>
-            </Card>
-            <Card variant="outlined">
-            <CardContent>
-                    <Typography className='role' variant="h5" component="h2">
-                        Role: <Divider/>{this.state.profile.roles}
-                    </Typography>
-            </CardContent>
-            </Card>
-            <Card variant="outlined">
-            <CardContent>
-                    <Typography className='role' variant="h5" component="h2">
-                        Resume: <Divider/><FileUpload/>
-                    </Typography>
-            </CardContent>
-            </Card>
-            <Card variant="outlined">
-            <CardContent>
-                    <Typography className='email' variant="h5" component="h2">
-                        Email: <Divider/>
-                    </Typography>
-                {this.state.isUpdating?
-                <div>
-                <Divider bottomMargin/>
-                <div className='container' style={{display:"flex"}}><Typography variant="h5" component="h2">{this.state.emailValue}</Typography>
-                <Button
-                type="update"
-                variant="contained"
-                color="primary"
-                style={{height: '30px', width : '150px', marginLeft:"auto"}}
-                onClick={this.changeEmail}
-                >
-                Update Email
-                </Button>
-                </div>
-                </div>
-                :
-                <div className='container' style={{display:"flex"}}>
-                <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="newEmail"
-                type="email"
-                id="email"
-                value={this.state.emailValue}
-                onChange={this.saveTextField}
-                />
-                <Button
-                type="update"
-                variant="contained"
-                color="primary"
-                style={{height:40, left:"4px", top:"26px"}}
-                onClick={this.submitEmail}
-                >
-                    Submit
-                </Button>
-                </div>}
-                </CardContent>
-            </Card>
-            </div>
-        );
+        const { error, isLoaded, postings } = this.state;
+
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return <div>Loading...</div>
+        } else {
+            const localToken = localStorage.getItem('jwt_token');
+            const decoded = jwtDecode(localToken);
+            return (
+                <Paper className='jobPostingsList' elevation={0}>
+                    <h1>My Applications</h1> 
+                    <div className=''>
+                        <Grid container
+                              direction="row"
+                              justify="flex-start"
+                              alignItems="flex-start"
+                              spacing={3}>
+                            {(decoded['rls'] === 'applicant') ?
+                                <Grid item xs={3}>
+                                    <div className=' positionName JobPostingTitle'><p>Company</p></div>
+                                </Grid> : null}
+                            <Grid item xs={3}>
+                                <div className=' JobPostingTitle'><p>Position</p></div>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <div className='JobPostingTitle'><p>Location</p></div>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <div className='JobPostingTitle'><p>Deadline</p></div>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <Divider/>
+                    <List>
+                        {postings.map(posting => (
+                            <ListItemLink
+                                key={posting.posting_id}
+                                companyName={posting.first_name}
+                                primary={posting.position_name}
+                                to={"jobPostingApplication/" + posting.posting_id}
+                                location={posting.location}
+                                deadline={formatDate(posting.deadline)}
+                                isApplicant={decoded['rls'] === 'applicant'}
+                            >
+                            </ListItemLink>
+                        ))}
+                    </List>
+                </Paper>
+            );
+        }
+
     }
 }
 
+function formatDate(timestamp) {
+    var date = new Date(timestamp)
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+}
 
-export default withRouter(Applications);
+class Applications extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false
+        }
+    }
+
+    render() {
+            return (
+                <ApplicationsList/>
+            );
+        }
+    }
+
+export default withRouter(Applications)
