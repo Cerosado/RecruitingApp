@@ -1,6 +1,8 @@
 import flask_praetorian
 from flask import jsonify
 from ..DAO.jobPostingsDAO import JobPostingsDao
+from ..DAO.applicationsDAO import ApplicationsDao
+
 
 
 class JobPostingHandler:
@@ -16,9 +18,10 @@ class JobPostingHandler:
         #     result_list.append(result)
         return jsonify(jobPostings_list)
 
-    def getJobPostingById(self, posting_id):
+    def getJobPostingById(self, posting_id,user_id):
         dao = JobPostingsDao()
-        result = dao.getJobPostingById(posting_id)
+        adao = ApplicationsDao()
+        result = {'posting':dao.getJobPostingById(posting_id), 'application':adao.getApplicationsByUser(user_id)}
         # result = self.build_jobPosting_dict(result)
         return jsonify(result)
 

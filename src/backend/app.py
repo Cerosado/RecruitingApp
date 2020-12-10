@@ -136,7 +136,8 @@ def jobPostingForm():
 def getJobPosting(posting_id):
     user_id = flask_praetorian.current_user().identity
     if request.method == 'GET' and user_id:
-        test = JobPostingHandler().getJobPostingById(posting_id)
+        test = JobPostingHandler().getJobPostingById(posting_id,user_id)
+        print(test.get_json(), file=sys.stderr)
         return test
     else:
         return jsonify(Error="Method not allowed"), 405
@@ -163,7 +164,8 @@ def get_fields_of_work():
 def applications():
     user_id = flask_praetorian.current_user().identity
     if request.method == 'GET' and user_id:
-        return ApplicationsHandler().getApplicationsByUserId(user_id)
+        application = ApplicationsHandler().getApplicationsByUserId(user_id)
+        return application
     else:
         return jsonify(Error="Method not allowed"), 405
 

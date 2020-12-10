@@ -19,25 +19,22 @@ function JobPostingForm({
                             status
                         }) {
     const [posting, setPosting] = React.useState('');
+    const [canApply, setCanApply] = React.useState(false);
     const { id } = useParams();
     useEffect(() => {
-
         let url = `http://localhost:5000/JobPostingForm/${id}`;
         authFetch(url, {
             method: 'get'
-        })
-            .then(response => response.json())
+        }).then(response => response.json())
             .then(
                 (data) => {
-                        setPosting(data);
-                },
-                // (error) => {
-                //     this.setState({
-                //         isLoaded: true,
-                //         error
-                //     });
-                // }
-    )}, [id]);
+                    setPosting(data['posting']);  
+                    data['application'].map(application=>{
+                    if (application['posting_id']==id){setCanApply(true);}
+                });
+                },)
+    }, [id]);
+
     return (
         <Container component="main" >
             <CssBaseline />
@@ -104,7 +101,7 @@ function JobPostingForm({
                 <div id="SubmitDiv">
                     <Grid item xs={12} sm={12}>
                             <Button id='submit_button' type="submit" variant="contained" color="primary"
-                                    disabled={jwtDecode(localStorage.getItem('jwt_token'))['rls'] === 'recruiter'}>
+                                    disabled={jwtDecode(localStorage.getItem('jwt_token'))['rls'] === 'recruiter' || canApply}>
                                 Apply
                             </Button>
                     </Grid>
