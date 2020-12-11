@@ -1,4 +1,4 @@
-from src.backend.config.dbconfig import pg_config
+from ..config.dbconfig import pg_config
 import psycopg2
 import psycopg2.extras
 
@@ -14,14 +14,20 @@ class JobPostingsDao:
 
     def getAllJobPostings(self):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT * FROM jobpostings"
+        query = "SELECT posting_id, first_name, position_name, location, presentationDate, deadline " \
+                "FROM jobpostings INNER JOIN accounts ON jobpostings.user_id = accounts.user_id " \
+                "WHERE deadline > CURRENT_DATE "  #TODO WHERE deadline > CURRENT_DATE
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
         return result
     def getJobPostingById(self, posting_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT * from jobpostings WHERE posting_id = %s;"
+        query = "SELECT * " \
+                "from " \
+                "   jobpostings " \
+                "   INNER JOIN accounts ON jobpostings.user_id = accounts.user_id " \
+                "WHERE posting_id = %s;"
         cursor.execute(query, (posting_id,))
         result = cursor.fetchone()
         cursor.close()
@@ -33,10 +39,19 @@ class JobPostingsDao:
         result = cursor.fetchall()
         cursor.close()
         return result
-    def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline):
+
+    def get_recruiter_id(self, posting_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "INSERT INTO jobpostings(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING posting_id;"
-        cursor.execute(query, (position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline))
+        query = "SELECT user_id FROM jobpostings WHERE posting_id = %s"
+        cursor.execute(query, (posting_id,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result['user_id'] if result else None
+
+    def registerJobPosting(self, position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education):
+        cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = "INSERT INTO jobpostings(position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING posting_id;"
+        cursor.execute(query, (position_name, location, description, key_details, pay_type, pay_amount, user_id, deadline, model_id, use_education))
         posting_id = cursor.fetchone()['posting_id']
         self.conn.commit()
         cursor.close()
@@ -67,7 +82,7 @@ class JobPostingsDao:
         return user_id
     def getRankedApplicationsByJobPostingId(self, posting_id):
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = "SELECT first_name, last_name, college_name, education, " \
+        query = "SELECT first_name, last_name, college_name, education, accounts.user_id, " \
                 "encode(resume_data, 'base64') as resume_data, resume_extension, rank " \
                 "FROM jobPostings " \
                 "     INNER JOIN applications ON jobPostings.posting_id = applications.posting_id " \

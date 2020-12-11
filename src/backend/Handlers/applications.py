@@ -1,5 +1,10 @@
 from flask import jsonify
-from src.backend.DAO.applicationsDAO import ApplicationsDao
+from ..DAO.applicationsDAO import ApplicationsDao
+from ..DAO.resumeDAO import ResumeDao
+from ..DAO.modelsDAO import ModelsDAO
+import joblib
+from ..Handlers.resume import ResumeHandler
+import sys
 
 
 class ApplicationsHandler:
@@ -16,10 +21,10 @@ class ApplicationsHandler:
         result = self.map_to_Application(result)
         return jsonify(result)
 
-    def getApplicationByUserId(self, uid, name):
+    def getApplicationsByUserId(self, uid):
         dao = ApplicationsDao()
         result = dao.getApplicationsByUser(uid)
-        result = self.map_to_Application(result)
+        # result = self.map_to_Application(result)
         return jsonify(result)
 
     def getApplication(self, uid, pid):
@@ -28,9 +33,10 @@ class ApplicationsHandler:
         result = self.map_to_Application(result)
         return jsonify(result)
 
-    def createApplication(self, data):
-        user_id = data['user_id']
-        posting_id = data['posting_id']
+    def createApplication(self, user_id, posting_id):
+        resume_dao = ResumeDao()
+        parsed_resume = resume_dao.get_resume_ranking_parameters(user_id)
+        rank = ResumeHandler.rank_resume(parsed_resume, posting_id)
         dao = ApplicationsDao()
-        id = dao.registerApplication(user_id, posting_id)
-        return jsonify(Appplicationid=id)
+        application_id = dao.registerApplication(user_id, posting_id, rank)
+        return jsonify(Appplicationid=application_id)

@@ -35,7 +35,7 @@ CREATE TABLE jobPostings (
 	pay_type VARCHAR ( 50 ) NOT NULL,
 	pay_amount INT NOT NULL,
 	user_id INT NOT NULL,
-	deadline TIMESTAMP  NOT NULL,
+	deadline TIMESTAMP NOT NULL,
 	presentationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY ( user_id ) REFERENCES accounts( user_id )
 );
@@ -47,4 +47,25 @@ CREATE TABLE applications (
 	PRIMARY KEY (user_id, posting_id),
 	FOREIGN KEY (user_id) REFERENCES accounts(user_id),
 	FOREIGN KEY (posting_id) REFERENCES jobPostings(posting_id)
+);
+
+CREATE TABLE events (
+	event_id SERIAL PRIMARY KEY,
+	location VARCHAR NOT NULL,
+	description VARCHAR,
+	is_interview BOOLEAN NOT NULL,
+	date TIMESTAMP NOT NULL
+);
+CREATE TABLE invites (
+	event_id INT NOT NULL,
+	applicant_id INT NOT NULL,
+	recruiter_id INT NOT NULL,
+	PRIMARY KEY(event_id,applicant_id,recruiter_id),
+	FOREIGN KEY (applicant_id) REFERENCES accounts(user_id),
+	FOREIGN KEY (recruiter_id) REFERENCES accounts(user_id)
+);
+CREATE TABLE models (
+	model_id SERIAL PRIMARY KEY,
+	description VARCHAR,
+	model_name VARCHAR
 );

@@ -2,40 +2,47 @@ import copy
 import inspect
 import os
 from datetime import datetime
+from pathlib import Path
+import sys
 
 import pandas
 from flask import jsonify
 from joblib import load
+import flask_praetorian
 
 from ..DAO.applicationsDAO import ApplicationsDao
 from ..DAO.resumeDAO import ResumeDao
+from ..DAO.userDAO import UserDao
+from ..DAO.modelsDAO import ModelsDAO
 from ..resume_parser.custom_resume_parser import CustomResumeParser
+from ..DAO.modelsDAO import ModelsDAO
 
 
 class ResumeHandler:
 
     def map_to_Resume(self, row):
         result = {}
-        result['resume_data']=row[0]
-        result['resume_extension']=row[1]
-        result['education']=row[2]
-        result['college_name']=row[3]
-        result['degree']=row[4]
-        result['designation']=row[5]
-        result['experience']=row[6]
-        result['company_names']=row[7]
-        result['skills']=row[8]
-        result['total_experience']=row[9]
-        result['last_updated']=row[10]
-        result['user_id']=row[11]
+        result['resume_data']=row['resume_data']
+        result['resume_extension']=row['resume_extension']
+        result['education']=row['education']
+        result['college_name']=row['college_name']
+        result['degree']=row['degree']
+        result['designation']=row['designation']
+        result['experience']=row['experience']
+        result['company_names']=row['company_names']
+        result['skills']=row['skills']
+        result['total_experience']=row['total_experience']
+        result['last_updated']=row['last_updated']
+        result['user_id']=row['user_id']
         return result
 
     def getResumeByUserId(self, uid):
         dao = ResumeDao()
         result = dao.getResumeById(uid)
-        result = self.map_to_Resume(result)
-        return jsonify(result)
-
+        if(result):
+            result = self.map_to_Resume(result)        
+        return result
+        
     # Create resume, must provide all data.
     def createResume(self, data):
         if len(data) != 12:
@@ -69,13 +76,18 @@ class ResumeHandler:
         result = self.map_to_Resume(result)
         return jsonify(result)
 
-    def parse_and_rank_resume(self, resume_file, resume_filename, skills_file=None):
+    def parse_resume(self, resume_file, resume_filename, skills_file=None):
         resume_file_copy = copy.deepcopy(resume_file)
         resume_file_copy.name = resume_filename
         resume = CustomResumeParser(resume_file_copy, skills_file=skills_file).get_extracted_data()
         resume_data = resume_file
         resume_extension = resume_filename.split('.')[1]
+
+        user = flask_praetorian.current_user()
+        user_id = user.identity
+
         education = resume['education']
+        education_section = resume['education_section']
         college_name = resume['college_name']
         degree = resume['degree']
         designation = resume['designation']
@@ -84,33 +96,36 @@ class ResumeHandler:
         skills = resume['skills']
         total_experience = resume['total_experience']
         last_updated = datetime.now()
-        user_id = 1
-
-        df = pandas.DataFrame.from_dict([resume])
-
-        # Load ML model
-        ranking_model = load('./resume_parser/ranking_model.joblib')
-
-        # Load Vectorizer
-        vect = load('./resume_parser/vectorizer.joblib')
-
-        # Get skills column and transform with Vectorizer
-        skills_col = df['skills'].map(lambda skills_list: str(skills_list))
-        vect_data = vect.transform(skills_col)
-
-        # Get predict probabilty of category 'Experienced'
-        prob = ranking_model.predict_proba(vect_data)
-        rank = int(prob[0, 1] * 100)
 
         resume_dao = ResumeDao()
-        result = resume_dao.registerResume(
+        result = None
+        currentResume = resume_dao.getResumeById(user.user_id)
+        if(currentResume):
+            result = resume_dao.editResume(
             resume_data.read(), resume_extension, education, college_name, degree, designation,
-            experience, company_names, skills, total_experience, last_updated, user_id)
-
-        # Call applications dao to create application to posting
-        app_dao = ApplicationsDao()
-        result_app = app_dao.registerApplication(user_id=user_id, posting_id=1, rank=rank)
-
+            experience, education_section, company_names, skills, total_experience, last_updated, user_id)
+        else:
+            result = resume_dao.registerResume(
+            resume_data.read(), resume_extension, education, college_name, degree, designation,
+            experience, education_section, company_names, skills, total_experience, last_updated, user_id)
         # TODO: Handle errors and rollback
         return jsonify(user_id=result)
+
+    @staticmethod
+    def rank_resume(resume_dict, posting_id):
+        models_dao = ModelsDAO()
+        model_info = models_dao.get_model_name(posting_id)
+        df = pandas.DataFrame.from_dict([resume_dict])[['skills', 'experience', 'education_section']]
+        df.fillna('no_info')
+        base_path = Path(__file__).parent
+        model_path = '../ranking_models/%s%s.pkl' % \
+                     (model_info['model_name'], '' if model_info['use_education'] else '_no_edu',)
+        file_path = (base_path / model_path).resolve()
+        model_pipeline = load(file_path)
+        prob = model_pipeline.predict_proba(df)
+        rank = int(prob[0, 1] * 100)
+        return rank
+
+
+
 

@@ -12,6 +12,7 @@
 /build
 
 # misc
+*.pyc
 .DS_Store
 .env.local
 .env.development.local
@@ -24,3 +25,6 @@ yarn-error.log*
 
 /.idea/
 /src/backend/.idea/
+
+__pycache__
+*.pyc
