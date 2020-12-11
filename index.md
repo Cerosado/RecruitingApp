@@ -11,13 +11,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     material-ui
     json-server
     react-router-dom
+    formik
+    jwt-decode
+    react-token-auth
 #### Python
     Pyreparser
     Spacy
-    Sklearn
+    scikit-learn
+    docx2txt
     pandas
     joblib
     flask
+    flask-praetorian
     pyscopg2
 #### Additional steps for python
     python -m spacy download en_core_web_sm
