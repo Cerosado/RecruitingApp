@@ -1,8 +1,11 @@
+---
+driveId: 19KEK7ZoycH5kxVOl379oyhCP0ODlbHR3/preview
+---
 # Streamline: A Platform to Enable an Efficient Recruitment Process Proposal
 
 A web application for screening/ranking resumes while also providing a platform for straightforward job recruitment and applications.
 
-{% include googleDrivePlayer.html id=19KEK7ZoycH5kxVOl379oyhCP0ODlbHR3/preview %}
+{% include googleDrivePlayer.html id=page.driveId %}
 
 ## Description
 Created using React and the Material UI framework as front end, with Python's Flask framework providing a RESTful api for backend database handling. The resume ranking algorithm is a logistic regression algorithm trained using SKLearn.
