@@ -2,36 +2,82 @@
 
 You can use the [editor on GitHub](https://github.com/Cerosado/RecruitingApp/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Streamline: A Platform to Enable an Efficient Recruitment Process Proposal
 
-### Markdown
+A web application for screening/ranking resumes while also providing a platform for straightforward job recruitment and applications.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Description
+Created using React and the Material UI framework as front end, with Python's Flask framework providing a RESTful api for backend database handling. The resume ranking algorithm is a logistic regression algorithm trained using SKLearn.
 
-```markdown
-Syntax highlighted code block
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Dependencies
+#### Javascript
+    material-ui
+    json-server
+    react-router-dom
+#### Python
+    Pyreparser
+    Spacy
+    Sklearn
+    pandas
+    joblib
+    flask
+    pyscopg2
+#### Additional steps for python
+    python -m spacy download en_core_web_sm
+    python -m nltk.downloader words
+## Available Scripts
+In ./src/backend, you can run:
+## set FLASK_APP=app.py
+(or equivalent export expression)
+## flask run
+This runs the Flask server.
 
-# Header 1
-## Header 2
-### Header 3
+Then, in the project directory you can run:
+### `npm start`
 
-- Bulleted
-- List
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-1. Numbered
-2. List
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
-**Bold** and _Italic_ and `Code` text
+### `npm run build`
 
-[Link](url) and ![Image](src)
-```
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
 
-### Jekyll Themes
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Cerosado/RecruitingApp/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Learn More
 
-### Support or Contact
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+
+### Analyzing the Bundle Size
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
