@@ -1,7 +1,3 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/Cerosado/RecruitingApp/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
 # Streamline: A Platform to Enable an Efficient Recruitment Process Proposal
 
 A web application for screening/ranking resumes while also providing a platform for straightforward job recruitment and applications.
