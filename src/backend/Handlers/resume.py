@@ -113,8 +113,6 @@ class ResumeHandler:
 
     @staticmethod
     def rank_resume(resume_dict, posting_id):
-        df = pandas.DataFrame.from_dict([resume_dict])[['skills', 'experience', 'education_section']]
-        df.fillna('no_info')
         models_dao = ModelsDAO()
         model_info = models_dao.get_model_name(posting_id)
         df = pandas.DataFrame.from_dict([resume_dict])[['skills', 'experience', 'education_section']]
