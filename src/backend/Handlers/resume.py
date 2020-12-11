@@ -117,6 +117,8 @@ class ResumeHandler:
         df.fillna('no_info')
         models_dao = ModelsDAO()
         model_info = models_dao.get_model_name(posting_id)
+        df = pandas.DataFrame.from_dict([resume_dict])[['skills', 'experience', 'education_section']]
+        df.fillna('no_info')
         base_path = Path(__file__).parent
         model_path = '../ranking_models/%s%s.pkl' % \
                      (model_info['model_name'], '' if model_info['use_education'] else '_no_edu',)
