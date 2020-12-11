@@ -2,7 +2,7 @@
 
 A web application for screening/ranking resumes while also providing a platform for straightforward job recruitment and applications.
 
-{% include googleDrivePlayer.html id=https://drive.google.com/file/d/19KEK7ZoycH5kxVOl379oyhCP0ODlbHR3/preview %}
+{% include googleDrivePlayer.html id=19KEK7ZoycH5kxVOl379oyhCP0ODlbHR3/preview %}
 
 ## Description
 Created using React and the Material UI framework as front end, with Python's Flask framework providing a RESTful api for backend database handling. The resume ranking algorithm is a logistic regression algorithm trained using SKLearn.
